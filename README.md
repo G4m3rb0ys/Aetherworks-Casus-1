@@ -88,6 +88,3 @@ Het primaire doel van de applicatie is om:
 - Link naar Source Control (GitHub)
 - Demo-video van de applicatie
 
-## Bronnen
-- [GitHub Repository](https://github.com/ZuydUniversity/CardgameWar#cardgamewar) - Voor referentie op requirements en diagrammen.
-- [Scrum Guidelines](https://scrumguides.org/) - Voor de Scrum-aanpak en methodiek.
