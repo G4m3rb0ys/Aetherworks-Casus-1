@@ -17,12 +17,6 @@ Dit project betreft de ontwikkeling van een webapplicatie voor **Victuz**, de st
 
 ## Doelstellingen
 Het primaire doel van de applicatie is om:
-- Leden en geïnteresseerden te informeren over activiteiten en nieuws van de vereniging.
-- Een systeem te bieden voor het plannen, aan- en afmelden voor activiteiten.
-- Leden in staat te stellen om zelf activiteiten voor te stellen en te organiseren.
-- Het bestuur te ondersteunen bij het toevoegen en beheren van activiteiten met verschillende beperkingen en filters.
-
-**Functionaliteiten die in eerste instantie vereist zijn:**
 1. Een bestuurslid moet activiteiten kunnen toevoegen en beheren.
 2. Leden moeten zich kunnen aanmelden voor en filteren op activiteiten.
 3. Leden moeten suggesties voor nieuwe activiteiten kunnen indienen.
