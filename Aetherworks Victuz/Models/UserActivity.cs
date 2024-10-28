@@ -10,7 +10,7 @@ namespace Aetherworks_Victuz.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public IdentityUser? User { get; set; }
+        public User? User { get; set; }
         public int ActivityId { get; set; }
         public VictuzActivity? Activity { get; set; }
     }
