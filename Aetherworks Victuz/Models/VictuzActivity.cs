@@ -7,7 +7,7 @@ namespace Aetherworks_Victuz.Models
 {
     public class VictuzActivity
     {
-        int Id { get; set; }
+        public int Id { get; set; }
         public string? Description { get; set; }
         public int HostId { get; set; }
         public IdentityUser? Host { get; set; }
