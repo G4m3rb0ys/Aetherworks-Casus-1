@@ -40,11 +40,11 @@ Het primaire doel van de applicatie is om:
 
 ## Installatie en Configuratie
 ### Vereisten
-- **.NET Core SDK**: Versie X.XX of hoger
-- **SQL Server**: Versie X.X of hoger
+- **.NET Core SDK**: Versie 8.0 of hoger
+- **SQL Server**: Versie 8.0.8 of hoger
 - **Git**: Voor versiebeheer en samenwerking
 
 ### Stappen om het project lokaal te draaien
 1. Clone de repository:
    ```bash
-   git clone [repository_url]
+   git clone https://github.com/G4m3rb0ys/Aetherworks-Casus-1
