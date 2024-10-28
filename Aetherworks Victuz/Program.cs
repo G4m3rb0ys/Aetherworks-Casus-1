@@ -1,6 +1,8 @@
 using Aetherworks_Victuz.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 
 namespace Aetherworks_Victuz
 {
