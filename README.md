@@ -40,11 +40,58 @@ Het primaire doel van de applicatie is om:
 
 ## Installatie en Configuratie
 ### Vereisten
-- **.NET Core SDK**: Versie 8.0 of hoger
-- **SQL Server**: Versie 8.0.8 of hoger
+- **.NET Core SDK**: Versie X.XX of hoger
+- **SQL Server**: Versie X.X of hoger
 - **Git**: Voor versiebeheer en samenwerking
 
 ### Stappen om het project lokaal te draaien
 1. Clone de repository:
    ```bash
-   git clone https://github.com/G4m3rb0ys/Aetherworks-Casus-1
+   git clone [repository_url]
+   ```
+2. Navigeer naar de projectmap en installeer de vereisten.
+3. Configureer de database door het SQL-script uit te voeren om de database op te zetten:
+   ```sql
+   [SQL installatie instructies]
+   ```
+4. Start de applicatie via Visual Studio of de CLI:
+   ```bash
+   dotnet run
+   ```
+
+## Projectstructuur
+- **/Controllers**: Bevat de controllers voor de API en webapplicatie.
+- **/Models**: Definieert de datamodellen die worden gebruikt voor database-interacties.
+- **/Views**: Bevat de UI-componenten voor het weergeven van pagina's.
+- **/wwwroot**: Statistische bestanden zoals CSS, JavaScript en afbeeldingen.
+- **/Database**: SQL scripts voor het opzetten van de database.
+
+## Samenwerkingsvereisten
+### Scrum-methodiek
+- **Sprint Planning**: Het project volgt de Scrum-aanpak, waarbij we in sprints werken. Voorafgaand aan elke sprint wordt het team geïnformeerd over de huidige stand en richting van het project.
+- **Versiebeheer**: Wijzigingen worden getraceerd via GitHub om rolverdeling en traceerbaarheid van bijdragen te waarborgen.
+- **Voortgangsrapportages**: Wekelijkse updates van voortgang en taken, inclusief een gedeeld samenwerkingscontract en logboeken in GitHub.
+
+## Prestatie Indicatoren
+1. **PI6**: Opstellen van een softwareontwerp op basis van requirements en een prototype ontwikkelen.
+   - **Product**: Portfolio, inclusief softwareontwerpdocument en gebruikersfeedback.
+2. **PI9**: Afspraken nakomen en verantwoordelijkheid delen binnen het team.
+   - **Producten**: Samenwerkingscontract, GitHub log, voortgangsrapportages.
+   
+**Verplichte documentatie voor beoordeling:**
+- SRS-document (Software Requirements Specification)
+- Ontwerpdossier
+- Onderzoeksdocumentatie
+- Testrapport
+- Database script
+- Applicatie met API
+- Link naar Source Control (GitHub)
+- Demo-video van de applicatie
+
+## Bronnen
+- [GitHub Repository](https://github.com/ZuydUniversity/CardgameWar#cardgamewar) - Voor referentie op requirements en diagrammen.
+- [Scrum Guidelines](https://scrumguides.org/) - Voor de Scrum-aanpak en methodiek.
+
+---
+
+Bij vragen of feedback, neem contact op met de opdrachtgever via het vermelde e-mailadres in de opdracht of raadpleeg Moodle voor aanvullende informatie.
