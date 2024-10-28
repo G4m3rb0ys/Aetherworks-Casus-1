@@ -4,12 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aetherworks_Victuz.Models
 {
-    public class BlackList
+    public class User
     {
         public int Id { get; set; }
-        public int RoleId { get; set; }
-        public IdentityRole? Role { get; set; }
-        public int UserId { get; set; }
-        public User? User { get; set; }
+        public int CredentialsId { get; set; }
+        public IdentityUser? Credentials { get; set; }
+        public ICollection<UserActivity>? UserActivities { get; set; }
     }
 }
