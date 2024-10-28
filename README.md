@@ -92,6 +92,3 @@ Het primaire doel van de applicatie is om:
 - [GitHub Repository](https://github.com/ZuydUniversity/CardgameWar#cardgamewar) - Voor referentie op requirements en diagrammen.
 - [Scrum Guidelines](https://scrumguides.org/) - Voor de Scrum-aanpak en methodiek.
 
----
-
-Bij vragen of feedback, neem contact op met de opdrachtgever via het vermelde e-mailadres in de opdracht of raadpleeg Moodle voor aanvullende informatie.
