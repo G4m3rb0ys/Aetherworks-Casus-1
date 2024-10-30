@@ -76,7 +76,7 @@ namespace Aetherworks_Victuz.Data.Migrations
                 newName: "LocationId");
 
             migrationBuilder.RenameColumn(
-                name: "ActivityTime",
+                name: "ActivityDate",
                 table: "VictuzActivities",
                 newName: "ActivityDate");
 
@@ -383,7 +383,7 @@ namespace Aetherworks_Victuz.Data.Migrations
             migrationBuilder.RenameColumn(
                 name: "ActivityDate",
                 table: "victuzActivities",
-                newName: "ActivityTime");
+                newName: "ActivityDate");
 
             migrationBuilder.RenameIndex(
                 name: "IX_VictuzActivities_HostId",

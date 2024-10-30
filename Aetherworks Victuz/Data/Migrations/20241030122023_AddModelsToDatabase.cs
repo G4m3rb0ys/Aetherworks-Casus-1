@@ -99,7 +99,7 @@ namespace Aetherworks_Victuz.Data.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
                     MemberPrice = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false),
-                    ActivityTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ActivityDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ParticipantLimit = table.Column<int>(type: "int", nullable: false),
                     Categories = table.Column<int>(type: "int", nullable: false)
                 },

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aetherworks_Victuz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241030122023_AddModelsToDatabase")]
-    partial class AddModelsToDatabase
+    [Migration("20241030182747_InsertTestData")]
+    partial class InsertTestData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Aetherworks_Victuz.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Aetherworks_Victuz.Models.BlackList", b =>
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,86 +33,44 @@ namespace Aetherworks_Victuz.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("MaxCapacity")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId")
-                        .IsUnique()
-                        .HasFilter("[RoleId] IS NOT NULL");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("blackLists");
-                });
-
-            modelBuilder.Entity("Aetherworks_Victuz.Models.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasPrecision(6, 2)
-                        .HasColumnType("decimal(6,2)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("products");
+                    b.ToTable("Location");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MaxCapacity = 24,
+                            Name = "B.3.211"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            MaxCapacity = 96,
+                            Name = "B.3.305"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MaxCapacity = 72,
+                            Name = "B.2.114"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MaxCapacity = 96,
+                            Name = "C.0.105"
+                        });
                 });
 
-            modelBuilder.Entity("Aetherworks_Victuz.Models.Suggestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("suggestions");
-                });
-
-            modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CredentialsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CredentialsId")
-                        .IsUnique()
-                        .HasFilter("[CredentialsId] IS NOT NULL");
-
-                    b.ToTable("user");
-                });
-
-            modelBuilder.Entity("Aetherworks_Victuz.Models.UserActivity", b =>
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Participation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,7 +90,212 @@ namespace Aetherworks_Victuz.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("userActivities");
+                    b.ToTable("Participation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActivityId = 1,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ActivityId = 2,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActivityId = 3,
+                            UserId = 3
+                        });
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Penalty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId")
+                        .IsUnique()
+                        .HasFilter("[RoleId] IS NOT NULL");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Penalties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndDate = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RoleId = "3",
+                            UserId = 2
+                        });
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Victuz T-Shirt",
+                            Price = 20.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Victuz Mok",
+                            Price = 20.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Victuz School Starter-Kit",
+                            Price = 20.00m
+                        });
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Suggestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Suggestions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "I was expecting more cheese. And I was disturbed by the lack of cheese.",
+                            Title = "More Cheese",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "I was expecting no cheese. And I was disturbed by the amount of cheese present.",
+                            Title = "Less Cheese",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "I was expecting there to not be enough cheese. And I was surprised by the perfect amount of cheese present.",
+                            Title = "Just enough Cheese",
+                            UserId = 2
+                        });
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CredentialId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CredentialId")
+                        .IsUnique()
+                        .HasFilter("[CredentialId] IS NOT NULL");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CredentialId = "1af7f355-2f08-4e24-ab82-eafdacb471a4"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CredentialId = "f17d8517-6643-4e91-ab17-b4c18d89f05e"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CredentialId = "8438c007-d757-4663-b064-a085090e230b"
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.VictuzActivity", b =>
@@ -146,7 +309,7 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.Property<DateTime>("ActivityDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Categories")
+                    b.Property<int>("Category")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -156,17 +319,20 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.Property<int>("HostId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("MemberPrice")
+                    b.Property<decimal?>("MemberPrice")
                         .HasPrecision(6, 2)
                         .HasColumnType("decimal(6,2)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ParticipantLimit")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasPrecision(6, 2)
                         .HasColumnType("decimal(6,2)");
 
@@ -174,7 +340,50 @@ namespace Aetherworks_Victuz.Data.Migrations
 
                     b.HasIndex("HostId");
 
-                    b.ToTable("victuzActivities");
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("VictuzActivities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityDate = new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            Category = 3,
+                            Description = "Book Club Meetup",
+                            HostId = 1,
+                            LocationId = 1,
+                            MemberPrice = 0.00m,
+                            Name = "Book Club Meetup",
+                            ParticipantLimit = 25,
+                            Price = 0.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityDate = new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Category = 1,
+                            Description = "Photography Workshop",
+                            HostId = 1,
+                            LocationId = 2,
+                            MemberPrice = 15.00m,
+                            Name = "Photography Workshop",
+                            ParticipantLimit = 20,
+                            Price = 25.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityDate = new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            Category = 0,
+                            Description = "Battlebot Wars",
+                            HostId = 1,
+                            LocationId = 2,
+                            MemberPrice = 12.00m,
+                            Name = "Battlebot Wars",
+                            ParticipantLimit = 10,
+                            Price = 0.00m
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -202,6 +411,23 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "Organization"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Member"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Guest"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -292,6 +518,56 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1af7f355-2f08-4e24-ab82-eafdacb471a4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "8438c007-d757-4663-b064-a085090e230b",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
+                            Email = "guest@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "GUEST@GMAIL.COM",
+                            NormalizedUserName = "GUEST@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP",
+                            TwoFactorEnabled = false,
+                            UserName = "guest@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "f17d8517-6643-4e91-ab17-b4c18d89f05e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
+                            Email = "member@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "MEMBER@GMAIL.COM",
+                            NormalizedUserName = "MEMBER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7",
+                            TwoFactorEnabled = false,
+                            UserName = "member@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -379,17 +655,40 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Aetherworks_Victuz.Models.BlackList", b =>
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Participation", b =>
+                {
+                    b.HasOne("Aetherworks_Victuz.Models.VictuzActivity", "Activity")
+                        .WithMany("ParticipantsList")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Aetherworks_Victuz.Models.User", "User")
+                        .WithMany("Participations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Penalty", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
                         .WithOne()
-                        .HasForeignKey("Aetherworks_Victuz.Models.BlackList", "RoleId");
+                        .HasForeignKey("Aetherworks_Victuz.Models.Penalty", "RoleId");
 
                     b.HasOne("Aetherworks_Victuz.Models.User", "User")
                         .WithOne()
-                        .HasForeignKey("Aetherworks_Victuz.Models.BlackList", "UserId")
+                        .HasForeignKey("Aetherworks_Victuz.Models.Penalty", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Aetherworks_Victuz.Models.User", null)
+                        .WithMany("Penalties")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Role");
 
@@ -409,30 +708,11 @@ namespace Aetherworks_Victuz.Data.Migrations
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Credentials")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Credential")
                         .WithOne()
-                        .HasForeignKey("Aetherworks_Victuz.Models.User", "CredentialsId");
+                        .HasForeignKey("Aetherworks_Victuz.Models.User", "CredentialId");
 
-                    b.Navigation("Credentials");
-                });
-
-            modelBuilder.Entity("Aetherworks_Victuz.Models.UserActivity", b =>
-                {
-                    b.HasOne("Aetherworks_Victuz.Models.VictuzActivity", "Activity")
-                        .WithMany("ParticipantsList")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Aetherworks_Victuz.Models.User", "User")
-                        .WithMany("UserActivities")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("User");
+                    b.Navigation("Credential");
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.VictuzActivity", b =>
@@ -443,7 +723,15 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Aetherworks_Victuz.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Host");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -499,9 +787,11 @@ namespace Aetherworks_Victuz.Data.Migrations
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
                 {
-                    b.Navigation("Suggestions");
+                    b.Navigation("Participations");
 
-                    b.Navigation("UserActivities");
+                    b.Navigation("Penalties");
+
+                    b.Navigation("Suggestions");
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.VictuzActivity", b =>
