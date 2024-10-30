@@ -46,20 +46,32 @@ namespace Aetherworks_Victuz.Controllers
             return View(victuzActivity);
         }
 
+        private string GetDisplayNameForCategory(ActivityCategories category)
+        {
+            return category switch
+            {
+                ActivityCategories.Free => "Free for Everyone",
+                ActivityCategories.MemFree => "Free for Members Only",
+                ActivityCategories.PayAll => "Paid for All",
+                ActivityCategories.MemOnlyFree => "Members Only - Free",
+                ActivityCategories.MemOnlyPay => "Members Only - Paid",
+                _ => category.ToString()
+            };
+        }
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
             ViewData["HostId"] = new SelectList(_context.user, "Id", "Id");
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                );
 
-            //ViewData["CategoryList"] = VictuzActivity.ActivityCategories.GetValues(typeof(ActivityCategories))
-            //             .Cast<ActivityCategories>()
-            //             .ToDictionary(
-            //                 category => category,
-            //                 category => category.GetDisplayName()
-            //             )
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View();
         }
-
         // POST: VictuzActivities/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

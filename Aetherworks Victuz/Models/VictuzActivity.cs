@@ -22,19 +22,10 @@ namespace Aetherworks_Victuz.Models
 
         public enum ActivityCategories
         {
-            [Display(Name = "Free Activity")]
             Free,
-
-            [Display(Name = "Members Free")]
             MemFree,
-
-            [Display(Name = "Pay for All")]
             PayAll,
-
-            [Display(Name = "Members Only - Free")]
             MemOnlyFree,
-
-            [Display(Name = "Members Only - Paid")]
             MemOnlyPay
         }
     }
