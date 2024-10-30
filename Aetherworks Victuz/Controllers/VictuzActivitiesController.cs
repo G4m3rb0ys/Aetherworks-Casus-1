@@ -23,7 +23,7 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.victuzActivities.Include(v => v.Host);
+            var applicationDbContext = _context.VictuzActivities.Include(v => v.Host).Include(v => v.Location);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,8 +35,9 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
 
-            var victuzActivity = await _context.victuzActivities
+            var victuzActivity = await _context.VictuzActivities
                 .Include(v => v.Host)
+                .Include(v => v.Location)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (victuzActivity == null)
             {
@@ -61,14 +62,14 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
-            ViewData["HostId"] = new SelectList(_context.user, "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
                     category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
                 );
-
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View();
         }
@@ -78,15 +79,24 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,HostId,Location,Price,MemberPrice,ActivityTime,ParticipantLimit,Categories")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
         {
+            Console.WriteLine(victuzActivity);
             if (ModelState.IsValid)
             {
                 _context.Add(victuzActivity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostId"] = new SelectList(_context.user, "Id", "Id", victuzActivity.HostId);
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View(victuzActivity);
         }
 
@@ -98,12 +108,13 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
 
-            var victuzActivity = await _context.victuzActivities.FindAsync(id);
+            var victuzActivity = await _context.VictuzActivities.FindAsync(id);
             if (victuzActivity == null)
             {
                 return NotFound();
             }
-            ViewData["HostId"] = new SelectList(_context.user, "Id", "Id", victuzActivity.HostId);
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
             return View(victuzActivity);
         }
 
@@ -112,7 +123,7 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,HostId,Location,Price,MemberPrice,ActivityTime,ParticipantLimit,Categories")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
         {
             if (id != victuzActivity.Id)
             {
@@ -139,7 +150,8 @@ namespace Aetherworks_Victuz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HostId"] = new SelectList(_context.user, "Id", "Id", victuzActivity.HostId);
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
             return View(victuzActivity);
         }
 
@@ -151,8 +163,9 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
 
-            var victuzActivity = await _context.victuzActivities
+            var victuzActivity = await _context.VictuzActivities
                 .Include(v => v.Host)
+                .Include(v => v.Location)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (victuzActivity == null)
             {
@@ -167,10 +180,10 @@ namespace Aetherworks_Victuz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var victuzActivity = await _context.victuzActivities.FindAsync(id);
+            var victuzActivity = await _context.VictuzActivities.FindAsync(id);
             if (victuzActivity != null)
             {
-                _context.victuzActivities.Remove(victuzActivity);
+                _context.VictuzActivities.Remove(victuzActivity);
             }
 
             await _context.SaveChangesAsync();
@@ -179,7 +192,7 @@ namespace Aetherworks_Victuz.Controllers
 
         private bool VictuzActivityExists(int id)
         {
-            return _context.victuzActivities.Any(e => e.Id == id);
+            return _context.VictuzActivities.Any(e => e.Id == id);
         }
     }
 }

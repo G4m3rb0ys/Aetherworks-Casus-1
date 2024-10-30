@@ -13,7 +13,7 @@ namespace Aetherworks_Victuz.Models
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
         public DateTime ActivityDate { get; set; }
         public int HostId { get; set; }
         public User? Host { get; set; }

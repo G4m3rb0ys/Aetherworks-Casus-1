@@ -12,22 +12,40 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ActivityDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ActivityDate)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Host)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Host.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Price)
@@ -42,22 +60,10 @@
             @Html.DisplayFor(model => model.MemberPrice)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ActivityTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActivityTime)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ParticipantLimit)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ParticipantLimit)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Categories)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Categories)
         </dd>
     </dl>
     
