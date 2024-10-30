@@ -12,12 +12,12 @@ namespace Aetherworks_Victuz.Data
         {
         }
 
-        public DbSet<VictuzActivity> victuzActivities { get; set; }
-        public DbSet<User> user { get; set; }
-        public DbSet<UserActivity> userActivities { get; set; }
-        public DbSet<BlackList> blackLists { get; set; }
-        public DbSet<Suggestion> suggestions { get; set; }
-        public DbSet<Product> products { get; set; }
+        public DbSet<VictuzActivity> VictuzActivities { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Participation> Participation { get; set; }
+        public DbSet<Penalty> Penalties { get; set; }
+        public DbSet<Suggestion> Suggestions { get; set; }
+        public DbSet<Product> Products { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -56,7 +56,7 @@ namespace Aetherworks_Victuz.Data
 
             // Relation for User <-> VictuzActivity
             modelBuilder.Entity<User>()
-                .HasMany(u => u.UserActivities)
+                .HasMany(u => u.Participations)
                 .WithOne(ua => ua.User)
                 .HasForeignKey(ua => ua.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
@@ -71,11 +71,11 @@ namespace Aetherworks_Victuz.Data
                 .WithOne(s => s.User)
                 .HasForeignKey(s => s.UserId);
 
-            // Relation for Blacklist -> User
-            modelBuilder.Entity<BlackList>()
+            // Relation for Penalty -> User
+            modelBuilder.Entity<Penalty>()
                 .HasOne(bl => bl.User)
                 .WithOne()
-                .HasForeignKey<BlackList>(bl => bl.UserId);
+                .HasForeignKey<Penalty>(bl => bl.UserId);
 
             /// 
             /// Relations for Authentications
@@ -83,15 +83,15 @@ namespace Aetherworks_Victuz.Data
 
             // Relation for User -> Credential
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Credentials)
+                .HasOne(u => u.Credential)
                 .WithOne()
-                .HasForeignKey<User>(u => u.CredentialsId);
+                .HasForeignKey<User>(u => u.CredentialId);
 
             // Relation for Blacklist -> Role
-            modelBuilder.Entity<BlackList>()
+            modelBuilder.Entity<Penalty>()
                 .HasOne(bl => bl.Role)
                 .WithOne()
-                .HasForeignKey<BlackList>(bl => bl.RoleId);
+                .HasForeignKey<Penalty>(bl => bl.RoleId);
 
             ///
             /// Testdata for all classes:
