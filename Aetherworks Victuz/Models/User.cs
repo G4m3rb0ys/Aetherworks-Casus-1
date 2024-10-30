@@ -7,8 +7,9 @@ namespace Aetherworks_Victuz.Models
     public class User
     {
         public int Id { get; set; }
-        public int CredentialsId { get; set; }
+        public string? CredentialsId { get; set; }
         public IdentityUser? Credentials { get; set; }
         public ICollection<UserActivity>? UserActivities { get; set; }
+        public ICollection<Suggestion>? Suggestions { get; set; }
     }
 }
