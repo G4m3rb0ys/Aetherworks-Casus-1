@@ -15,7 +15,7 @@ namespace Aetherworks_Victuz.Models
         public decimal Price { get; set; }
         public decimal MemberPrice { get; set; }
         public DateTime ActivityTime { get; set; }
-        public ICollection<User>? ParticipantsList { get; set; }
+        public ICollection<UserActivity>? ParticipantsList { get; set; }
         public int ParticipantLimit { get; set; }
         public ActivityCategories Categories { get; set; }
 
