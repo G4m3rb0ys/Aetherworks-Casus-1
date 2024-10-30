@@ -54,6 +54,13 @@ namespace Aetherworks_Victuz.Data
             ///  Relations for all classes:
             ///
 
+            // Relation for VictuzActivity -> Location
+            modelBuilder.Entity<VictuzActivity>()
+                .HasOne(a => a.Location)
+                .WithMany()
+                .HasForeignKey(a => a.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             // Relation for User <-> VictuzActivity
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Participations)
