@@ -13,5 +13,6 @@ namespace Aetherworks_Victuz.Models
         public User? User { get; set; }
         public int ActivityId { get; set; }
         public VictuzActivity? Activity { get; set; }
+        public bool Attended { get; set; }
     }
 }
