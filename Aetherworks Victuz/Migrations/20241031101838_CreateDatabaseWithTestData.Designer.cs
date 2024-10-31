@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Aetherworks_Victuz.Data.Migrations
+namespace Aetherworks_Victuz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241030144159_FixedClassnames")]
-    partial class FixedClassnames
+    [Migration("20241031101838_CreateDatabaseWithTestData")]
+    partial class CreateDatabaseWithTestData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,32 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Location");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MaxCapacity = 24,
+                            Name = "B.3.211"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            MaxCapacity = 96,
+                            Name = "B.3.305"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MaxCapacity = 72,
+                            Name = "B.2.114"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MaxCapacity = 96,
+                            Name = "C.0.105"
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.Participation", b =>
@@ -65,6 +91,44 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Participation");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityId = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityId = 2,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActivityId = 1,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ActivityId = 2,
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActivityId = 3,
+                            UserId = 3
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.Penalty", b =>
@@ -84,21 +148,24 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId")
                         .IsUnique()
                         .HasFilter("[RoleId] IS NOT NULL");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Penalties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndDate = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            RoleId = "099bf604-4ced-4a91-9cf0-4edda701d674",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.Product", b =>
@@ -119,6 +186,26 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Victuz T-Shirt",
+                            Price = 20.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Victuz Mok",
+                            Price = 20.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Victuz School Starter-Kit",
+                            Price = 20.00m
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.Suggestion", b =>
@@ -143,6 +230,29 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Suggestions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "I was expecting more cheese. And I was disturbed by the lack of cheese.",
+                            Title = "More Cheese",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "I was expecting no cheese. And I was disturbed by the amount of cheese present.",
+                            Title = "Less Cheese",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "I was expecting there to not be enough cheese. And I was surprised by the perfect amount of cheese present.",
+                            Title = "Just enough Cheese",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
@@ -163,6 +273,23 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasFilter("[CredentialId] IS NOT NULL");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CredentialId = "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CredentialId = "c4ce3496-6fd8-472c-b802-984959646714"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CredentialId = "d094e881-dac5-4a8b-aa4a-ab31e3732ae6"
+                        });
                 });
 
             modelBuilder.Entity("Aetherworks_Victuz.Models.VictuzActivity", b =>
@@ -210,6 +337,47 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("VictuzActivities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityDate = new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            Category = 3,
+                            Description = "Book Club Meetup",
+                            HostId = 1,
+                            LocationId = 1,
+                            MemberPrice = 0.00m,
+                            Name = "Book Club Meetup",
+                            ParticipantLimit = 25,
+                            Price = 0.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityDate = new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Category = 1,
+                            Description = "Photography Workshop",
+                            HostId = 1,
+                            LocationId = 2,
+                            MemberPrice = 15.00m,
+                            Name = "Photography Workshop",
+                            ParticipantLimit = 20,
+                            Price = 25.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityDate = new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            Category = 0,
+                            Description = "Battlebot Wars",
+                            HostId = 1,
+                            LocationId = 2,
+                            MemberPrice = 12.00m,
+                            Name = "Battlebot Wars",
+                            ParticipantLimit = 10,
+                            Price = 0.00m
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -237,6 +405,23 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "25a23bd6-a0df-4399-9e1c-91372693aebf",
+                            Name = "Organizer"
+                        },
+                        new
+                        {
+                            Id = "cd12415a-9195-4b69-abbb-bb1f4d60f536",
+                            Name = "Member"
+                        },
+                        new
+                        {
+                            Id = "099bf604-4ced-4a91-9cf0-4edda701d674",
+                            Name = "Guest"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -327,6 +512,56 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
+                            Email = "organizer@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "ORGANIZER@GMAIL.COM",
+                            NormalizedUserName = "ORGANIZER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76",
+                            TwoFactorEnabled = false,
+                            UserName = "organizer@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "c4ce3496-6fd8-472c-b802-984959646714",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
+                            Email = "member@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "MEMBER@GMAIL.COM",
+                            NormalizedUserName = "MEMBER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7",
+                            TwoFactorEnabled = false,
+                            UserName = "member@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "d094e881-dac5-4a8b-aa4a-ab31e3732ae6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
+                            Email = "guest@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "GUEST@GMAIL.COM",
+                            NormalizedUserName = "GUEST@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP",
+                            TwoFactorEnabled = false,
+                            UserName = "guest@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -391,6 +626,23 @@ namespace Aetherworks_Victuz.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c",
+                            RoleId = "25a23bd6-a0df-4399-9e1c-91372693aebf"
+                        },
+                        new
+                        {
+                            UserId = "c4ce3496-6fd8-472c-b802-984959646714",
+                            RoleId = "cd12415a-9195-4b69-abbb-bb1f4d60f536"
+                        },
+                        new
+                        {
+                            UserId = "d094e881-dac5-4a8b-aa4a-ab31e3732ae6",
+                            RoleId = "099bf604-4ced-4a91-9cf0-4edda701d674"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -440,14 +692,10 @@ namespace Aetherworks_Victuz.Data.Migrations
                         .HasForeignKey("Aetherworks_Victuz.Models.Penalty", "RoleId");
 
                     b.HasOne("Aetherworks_Victuz.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Aetherworks_Victuz.Models.Penalty", "UserId")
+                        .WithMany("Penalties")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Aetherworks_Victuz.Models.User", null)
-                        .WithMany("Penalties")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Role");
 

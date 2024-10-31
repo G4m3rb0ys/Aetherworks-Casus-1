@@ -22,7 +22,7 @@ namespace Aetherworks_Victuz.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string conn = @"Data Source=.;Initial Catalog=VictuzDb;Integrated Security=true;TrustServerCertificate=True;";
+            string conn = @"Data Source=.;Initial Catalog=VictuzDbTest;Integrated Security=true;TrustServerCertificate=True;";
             optionsBuilder.UseSqlServer(conn);
         }
 
@@ -81,8 +81,8 @@ namespace Aetherworks_Victuz.Data
             // Relation for Penalty -> User
             modelBuilder.Entity<Penalty>()
                 .HasOne(bl => bl.User)
-                .WithOne()
-                .HasForeignKey<Penalty>(bl => bl.UserId);
+                .WithMany(u => u.Penalties)
+                .HasForeignKey(bl => bl.UserId);
 
             /// 
             /// Relations for Authentications
@@ -103,7 +103,95 @@ namespace Aetherworks_Victuz.Data
             ///
             /// Testdata for all classes:
             /// 
-            
+
+            var RoleOrganizerId = Guid.NewGuid().ToString();
+            var UserOrganizerId = Guid.NewGuid().ToString();
+            var RoleMemberId = Guid.NewGuid().ToString();
+            var UserMemberId = Guid.NewGuid().ToString();
+            var RoleGuestId = Guid.NewGuid().ToString();
+            var UserGuestId = Guid.NewGuid().ToString();
+
+            // AspNetRoles
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole { Id = RoleOrganizerId, Name = "Organizer" },
+                new IdentityRole { Id = RoleMemberId, Name = "Member" },
+                new IdentityRole { Id = RoleGuestId, Name = "Guest" }
+                );
+
+            // AspNetUsers
+            modelBuilder.Entity<IdentityUser>().HasData(
+                new IdentityUser
+                {
+                    Id = UserOrganizerId,
+                    UserName = "organizer@gmail.com",
+                    NormalizedUserName = "ORGANIZER@GMAIL.COM",
+                    Email = "organizer@gmail.com",
+                    NormalizedEmail = "ORGANIZER@GMAIL.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==",
+                    SecurityStamp = "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76",
+                    ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
+                    PhoneNumberConfirmed = false,
+                    TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    AccessFailedCount = 0
+                },
+                new IdentityUser
+                {
+                    Id = UserMemberId,
+                    UserName = "member@gmail.com",
+                    NormalizedUserName = "MEMBER@GMAIL.COM",
+                    Email = "member@gmail.com",
+                    NormalizedEmail = "MEMBER@GMAIL.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==",
+                    SecurityStamp = "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7",
+                    ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
+                    PhoneNumberConfirmed = false,
+                    TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    AccessFailedCount = 0
+                },
+                new IdentityUser
+                {
+                    Id = UserGuestId,
+                    UserName = "guest@gmail.com",
+                    NormalizedUserName = "GUEST@GMAIL.COM",
+                    Email = "guest@gmail.com",
+                    NormalizedEmail = "GUEST@GMAIL.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==",
+                    SecurityStamp = "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP",
+                    ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
+                    PhoneNumberConfirmed = false,
+                    TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    AccessFailedCount = 0
+                }
+            );
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = UserOrganizerId,
+                    RoleId = RoleOrganizerId
+                },
+                new IdentityUserRole<string>
+                {
+                    UserId = UserMemberId,
+                    RoleId = RoleMemberId
+                },
+                new IdentityUserRole<string>
+                {
+                    UserId = UserGuestId,
+                    RoleId = RoleGuestId
+                }
+                );
+
+            /// 
+            /// Testdata for all classes:
+            /// 
+
 
             // Locations
             modelBuilder.Entity<Location>().HasData(
@@ -154,7 +242,7 @@ namespace Aetherworks_Victuz.Data
                     ParticipantLimit = 10,
                     Category = VictuzActivity.ActivityCategories.Free
                 }
-            );
+                );
 
             // Products
             modelBuilder.Entity<Product>().HasData(
@@ -163,69 +251,11 @@ namespace Aetherworks_Victuz.Data
                 new Product { Id = 3, Name = "Victuz School Starter-Kit", Price = 20.00m }
                 );
 
-            // AspNetRoles
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole { Id = "1", Name = "Organization" },
-                new IdentityRole { Id = "2", Name = "Member" },
-                new IdentityRole { Id = "3", Name = "Guest" }
-                );
-
-            // AspNetUsers
-            modelBuilder.Entity<IdentityUser>().HasData(
-                new IdentityUser {
-                    Id = "1af7f355-2f08-4e24-ab82-eafdacb471a4",
-                    UserName = "admin@gmail.com",
-                    NormalizedUserName = "ADMIN@GMAIL.COM",
-                    Email = "admin@gmail.com",
-                    NormalizedEmail = "ADMIN@GMAIL.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==",
-                    SecurityStamp = "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76",
-                    ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
-                    PhoneNumberConfirmed = false,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    AccessFailedCount = 0
-                },
-                new IdentityUser
-                {
-                    Id = "8438c007-d757-4663-b064-a085090e230b",
-                    UserName = "guest@gmail.com",
-                    NormalizedUserName = "GUEST@GMAIL.COM",
-                    Email = "guest@gmail.com",
-                    NormalizedEmail = "GUEST@GMAIL.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==",
-                    SecurityStamp = "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP",
-                    ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
-                    PhoneNumberConfirmed = false,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    AccessFailedCount = 0
-                },
-                new IdentityUser
-                {
-                    Id = "f17d8517-6643-4e91-ab17-b4c18d89f05e",
-                    UserName = "member@gmail.com",
-                    NormalizedUserName = "MEMBER@GMAIL.COM",
-                    Email = "member@gmail.com",
-                    NormalizedEmail = "MEMBER@GMAIL.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==",
-                    SecurityStamp = "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7",
-                    ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
-                    PhoneNumberConfirmed = false,
-                    TwoFactorEnabled = false,
-                    LockoutEnabled = true,
-                    AccessFailedCount = 0
-                }
-            );
-
             // Users
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, CredentialId = "1af7f355-2f08-4e24-ab82-eafdacb471a4" },
-                new User { Id = 2, CredentialId = "f17d8517-6643-4e91-ab17-b4c18d89f05e" },
-                new User { Id = 3, CredentialId = "8438c007-d757-4663-b064-a085090e230b" }
+                new User { Id = 1, CredentialId = UserOrganizerId },
+                new User { Id = 2, CredentialId = UserMemberId },
+                new User { Id = 3, CredentialId = UserGuestId }
                 );
 
             // Suggestions
@@ -237,7 +267,7 @@ namespace Aetherworks_Victuz.Data
 
             // Penalties
             modelBuilder.Entity<Penalty>().HasData(
-                new Penalty { Id = 1, UserId = 2, RoleId = "3", EndDate = new DateTime(2024, 10, 15)}
+                new Penalty { Id = 1, UserId = 2, RoleId = RoleGuestId, EndDate = new DateTime(2024, 10, 15)}
                 );
 
             // Participations
