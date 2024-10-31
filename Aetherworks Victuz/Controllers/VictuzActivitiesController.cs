@@ -1,13 +1,13 @@
-﻿using System;
+﻿// Controllers/VictuzActivitiesController.cs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
-using static Aetherworks_Victuz.Models.VictuzActivity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -47,18 +47,19 @@ namespace Aetherworks_Victuz.Controllers
             return View(victuzActivity);
         }
 
-        private string GetDisplayNameForCategory(ActivityCategories category)
+        private string GetDisplayNameForCategory(VictuzActivity.ActivityCategories category)
         {
             return category switch
             {
-                ActivityCategories.Free => "Free for Everyone",
-                ActivityCategories.MemFree => "Free for Members Only",
-                ActivityCategories.PayAll => "Paid for All",
-                ActivityCategories.MemOnlyFree => "Members Only - Free",
-                ActivityCategories.MemOnlyPay => "Members Only - Paid",
+                VictuzActivity.ActivityCategories.Free => "Free for Everyone",
+                VictuzActivity.ActivityCategories.MemFree => "Free for Members Only",
+                VictuzActivity.ActivityCategories.PayAll => "Paid for All",
+                VictuzActivity.ActivityCategories.MemOnlyFree => "Members Only - Free",
+                VictuzActivity.ActivityCategories.MemOnlyPay => "Members Only - Paid",
                 _ => category.ToString()
             };
         }
+
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
@@ -67,7 +68,7 @@ namespace Aetherworks_Victuz.Controllers
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
-                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                    category => GetDisplayNameForCategory(category)
                 );
             ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
@@ -75,8 +76,6 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // POST: VictuzActivities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
@@ -94,7 +93,7 @@ namespace Aetherworks_Victuz.Controllers
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
-                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                    category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View(victuzActivity);
@@ -119,8 +118,6 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // POST: VictuzActivities/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
@@ -193,6 +190,27 @@ namespace Aetherworks_Victuz.Controllers
         private bool VictuzActivityExists(int id)
         {
             return _context.VictuzActivities.Any(e => e.Id == id);
+        }
+
+        // Optional: If you want to display activities by date
+        public async Task<IActionResult> ActivitiesByDate(string date)
+        {
+            if (string.IsNullOrEmpty(date))
+            {
+                return NotFound();
+            }
+
+            DateTime selectedDate;
+            if (!DateTime.TryParse(date, out selectedDate))
+            {
+                return NotFound();
+            }
+
+            var activities = await _context.VictuzActivities
+                .Where(a => a.ActivityDate.Date == selectedDate.Date)
+                .ToListAsync();
+
+            return View(activities);
         }
     }
 }
