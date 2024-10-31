@@ -18,11 +18,12 @@ namespace Aetherworks_Victuz.Data
         public DbSet<Penalty> Penalties { get; set; }
         public DbSet<Suggestion> Suggestions { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string conn = @"Data Source=.;Initial Catalog=VictuzDbTest;Integrated Security=true;TrustServerCertificate=True;";
+            string conn = @"Data Source=.;Initial Catalog=VictuzDb;Integrated Security=true;TrustServerCertificate=True;";
             optionsBuilder.UseSqlServer(conn);
         }
 
@@ -191,7 +192,6 @@ namespace Aetherworks_Victuz.Data
             /// 
             /// Testdata for all classes:
             /// 
-
 
             // Locations
             modelBuilder.Entity<Location>().HasData(
