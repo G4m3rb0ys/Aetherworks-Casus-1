@@ -12,6 +12,7 @@ namespace Aetherworks_Victuz.Models
         public ActivityCategories Category { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public string? Picture { get; set; }
         public int LocationId { get; set; }
         public Location? Location { get; set; }
         public DateTime ActivityDate { get; set; }
