@@ -101,7 +101,75 @@
 
             <!-- Content Cards -->
             <div class="row">
-                <!-- Voeg hier je kaarten toe -->
+                <!-- Content Cards -->
+                <div class="row">
+                    @{
+                        var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Take(3).ToList();
+                    }
+                    @foreach (var activity in upcomingActivities)
+                    {
+                        // Bereken het aantal beschikbare plekken eenmaal per activiteit
+                        int spotsTaken = activity.ParticipantsList?.Count() ?? 0;
+                        int spotsAvailable = activity.ParticipantLimit - spotsTaken;
+
+                        <div class="col-12 mb-3">
+                            <div class="card">
+                                <div class="row no-gutters">
+                                    <!-- Linkerkant: Afbeelding Placeholder -->
+                                    <div class="col-md-2">
+                                        <img src="~/images/placeholder.png" class="card-img" alt="Afbeelding Placeholder">
+                                    </div>
+                                    <!-- Midden: Activiteit Details -->
+                                    <div class="col-md-7">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@activity.Name</h5>
+                                            @if (!string.IsNullOrEmpty(activity.Description))
+                                            {
+                                                <p class="card-text">
+                                                    @(activity.Description.Length > 100 ? activity.Description.Substring(0, 100) + "..." : activity.Description)
+                                                </p>
+                                            }
+                                            @if (activity.ParticipantLimit > 0)
+                                            {
+                                                <p class="card-text">
+                                                    <small class="text-muted">
+                                                        @spotsAvailable/@activity.ParticipantLimit plekken vrij
+                                                    </small>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">
+                                                    <small class="text-muted">Geen limiet op deelnemers</small>
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
+                                    <!-- Rechterkant: Actieknoppen -->
+                                    <div class="col-md-3 d-flex align-items-center justify-content-end">
+                                        <div class="d-flex flex-column align-items-end">
+                                            <a href="@Url.Action("Details", "VictuzActivities", new { id = activity.Id })" class="btn btn-primary mb-2">Meer info</a>
+                                            @{
+                                                if (activity.ParticipantLimit > 0 && spotsAvailable <= 0)
+                                                {
+                                                // Geen plekken meer vrij
+                                                    <button class="btn btn-danger" disabled>Vol</button>
+                                                }
+                                                else
+                                                {
+                                                // Plekken beschikbaar
+                                                    <button class="btn btn-secondary">Inschrijven</button>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
             </div>
 
             <!-- Aanvullende sectie voor meer inhoud -->

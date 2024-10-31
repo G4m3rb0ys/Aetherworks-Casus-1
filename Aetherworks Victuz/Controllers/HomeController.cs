@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
+using Microsoft.EntityFrameworkCore; // Toegevoegd voor Include
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -23,10 +24,12 @@ namespace Aetherworks_Victuz.Controllers
         public IActionResult Index()
         {
             var startDate = DateTime.Today;
-            var endDate = startDate.AddDays(30); // Next 31 days including today
+            var endDate = startDate.AddDays(30); // Volgende 31 dagen inclusief vandaag
 
             var activities = _context.VictuzActivities
                 .Where(a => a.ActivityDate.Date >= startDate && a.ActivityDate.Date <= endDate)
+                .OrderBy(a => a.ActivityDate) // Sorteer activiteiten op datum
+                .Include(a => a.ParticipantsList) // Laad de lijst met deelnemers
                 .ToList();
 
             var model = new CalendarViewModel
