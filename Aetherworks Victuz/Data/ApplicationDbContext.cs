@@ -171,6 +171,7 @@ namespace Aetherworks_Victuz.Data
                 }
             );
 
+            // AspNetUserRoles
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {

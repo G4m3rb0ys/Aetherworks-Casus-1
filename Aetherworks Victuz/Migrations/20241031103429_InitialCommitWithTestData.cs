@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Aetherworks_Victuz.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDatabaseWithTestData : Migration
+    public partial class InitialCommitWithTestData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,7 +53,7 @@ namespace Aetherworks_Victuz.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -63,7 +63,7 @@ namespace Aetherworks_Victuz.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -271,9 +271,9 @@ namespace Aetherworks_Victuz.Migrations
                 {
                     table.PrimaryKey("PK_VictuzActivities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VictuzActivities_Location_LocationId",
+                        name: "FK_VictuzActivities_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_VictuzActivities_User_HostId",
@@ -290,7 +290,8 @@ namespace Aetherworks_Victuz.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ActivityId = table.Column<int>(type: "int", nullable: false)
+                    ActivityId = table.Column<int>(type: "int", nullable: false),
+                    Attended = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,9 +314,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "099bf604-4ced-4a91-9cf0-4edda701d674", null, "Guest", null },
-                    { "25a23bd6-a0df-4399-9e1c-91372693aebf", null, "Organizer", null },
-                    { "cd12415a-9195-4b69-abbb-bb1f4d60f536", null, "Member", null }
+                    { "0878366e-a82f-47c2-83cb-9cba4c46fb8c", null, "Member", null },
+                    { "4e907c41-f3f4-492e-9802-9cf2e97b896d", null, "Guest", null },
+                    { "fdb0826b-a671-49ae-becf-7b17424f0818", null, "Organizer", null }
                 });
 
             migrationBuilder.InsertData(
@@ -323,13 +324,13 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER@GMAIL.COM", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "organizer@gmail.com" },
-                    { "c4ce3496-6fd8-472c-b802-984959646714", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER@GMAIL.COM", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "member@gmail.com" },
-                    { "d094e881-dac5-4a8b-aa4a-ab31e3732ae6", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST@GMAIL.COM", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "guest@gmail.com" }
+                    { "19275143-fed7-47af-bd78-1c04d9881856", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST@GMAIL.COM", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "guest@gmail.com" },
+                    { "329b43e3-fde8-4e41-9c1b-aba9d9a9de28", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER@GMAIL.COM", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "organizer@gmail.com" },
+                    { "c5030ee3-d06a-4c5d-a474-ae700701e68c", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER@GMAIL.COM", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "member@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Location",
+                table: "Locations",
                 columns: new[] { "Id", "MaxCapacity", "Name" },
                 values: new object[,]
                 {
@@ -354,9 +355,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "25a23bd6-a0df-4399-9e1c-91372693aebf", "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c" },
-                    { "cd12415a-9195-4b69-abbb-bb1f4d60f536", "c4ce3496-6fd8-472c-b802-984959646714" },
-                    { "099bf604-4ced-4a91-9cf0-4edda701d674", "d094e881-dac5-4a8b-aa4a-ab31e3732ae6" }
+                    { "4e907c41-f3f4-492e-9802-9cf2e97b896d", "19275143-fed7-47af-bd78-1c04d9881856" },
+                    { "fdb0826b-a671-49ae-becf-7b17424f0818", "329b43e3-fde8-4e41-9c1b-aba9d9a9de28" },
+                    { "0878366e-a82f-47c2-83cb-9cba4c46fb8c", "c5030ee3-d06a-4c5d-a474-ae700701e68c" }
                 });
 
             migrationBuilder.InsertData(
@@ -364,15 +365,15 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "CredentialId" },
                 values: new object[,]
                 {
-                    { 1, "4e1c9d5b-052c-4770-a087-25bb6d4d8a2c" },
-                    { 2, "c4ce3496-6fd8-472c-b802-984959646714" },
-                    { 3, "d094e881-dac5-4a8b-aa4a-ab31e3732ae6" }
+                    { 1, "329b43e3-fde8-4e41-9c1b-aba9d9a9de28" },
+                    { 2, "c5030ee3-d06a-4c5d-a474-ae700701e68c" },
+                    { 3, "19275143-fed7-47af-bd78-1c04d9881856" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Penalties",
                 columns: new[] { "Id", "EndDate", "RoleId", "UserId" },
-                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "099bf604-4ced-4a91-9cf0-4edda701d674", 2 });
+                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "4e907c41-f3f4-492e-9802-9cf2e97b896d", 2 });
 
             migrationBuilder.InsertData(
                 table: "Suggestions",
@@ -396,15 +397,15 @@ namespace Aetherworks_Victuz.Migrations
 
             migrationBuilder.InsertData(
                 table: "Participation",
-                columns: new[] { "Id", "ActivityId", "UserId" },
+                columns: new[] { "Id", "ActivityId", "Attended", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 1, 2 },
-                    { 2, 2, 2 },
-                    { 3, 3, 2 },
-                    { 4, 1, 3 },
-                    { 5, 2, 3 },
-                    { 6, 3, 3 }
+                    { 1, 1, false, 2 },
+                    { 2, 2, false, 2 },
+                    { 3, 3, false, 2 },
+                    { 4, 1, false, 3 },
+                    { 5, 2, false, 3 },
+                    { 6, 3, false, 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -528,7 +529,7 @@ namespace Aetherworks_Victuz.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "User");
