@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control"></select>
+                <select asp-for="Category" value="ViewBag.CurrentCategory" asp-items="ViewBag.Category" id="categorySelect" class="form-control"></select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,6 +27,11 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                <input asp-for="Picture" class="form-control" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LocationId" class="control-label"></label>
@@ -43,14 +48,14 @@
                 <select asp-for="HostId" class="form-control" asp-items="ViewBag.HostId"></select>
                 <span asp-validation-for="HostId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="lineMemFree-linePayAll" class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" type="number" min="0" step="0.01" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="lineMemberPrice" class="form-group">
                 <label asp-for="MemberPrice" class="control-label"></label>
-                <input asp-for="MemberPrice" class="form-control" />
+                <input asp-for="MemberPrice" type="number" min="0" step="0.01" class="form-control" />
                 <span asp-validation-for="MemberPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -72,3 +77,40 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#categorySelect').on('change', function() {
+            var selectedCategory = $(this).val();
+
+            // Hide both divs initially
+            $('#lineMemFree-linePayAll, #lineMemberPrice').hide();
+
+            // Binary display mapping for each category
+            switch (selectedCategory) {
+                case 'Free':          // 00
+                case 'MemOnlyFree':   // 00
+                    // Hide both divs
+                    break;
+
+                case 'MemFree':       // 10
+                    $('#lineMemFree-linePayAll').show(); // Show div 1
+                    break;
+
+                case 'PayAll':        // 11
+                    $('#lineMemFree-linePayAll').show(); // Show div 1
+                    $('#lineMemberPrice').show();        // Show div 2
+                    break;
+
+                case 'MemOnlyPay':    // 01
+                    $('#lineMemberPrice').show();        // Show div 2
+                    break;
+
+                default:
+                    // Hide both divs if no valid category is selected
+                    break;
+            }
+        });
+    });
+</script>

@@ -47,12 +47,12 @@ namespace Aetherworks_Victuz.Controllers
             return View(victuzActivity);
         }
 
-        private string GetDisplayNameForCategory(ActivityCategories category)
+        public string GetDisplayNameForCategory(ActivityCategories category)
         {
             return category switch
             {
-                ActivityCategories.Free => "Free for Everyone",
-                ActivityCategories.MemFree => "Free for Members Only",
+                ActivityCategories.Free => "Free Activity",
+                ActivityCategories.MemFree => "Free for Members",
                 ActivityCategories.PayAll => "Paid for All",
                 ActivityCategories.MemOnlyFree => "Members Only - Free",
                 ActivityCategories.MemOnlyPay => "Members Only - Paid",
@@ -63,13 +63,13 @@ namespace Aetherworks_Victuz.Controllers
         public IActionResult Create()
         {
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
-                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                    category => GetDisplayNameForCategory(category)
                 );
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View();
         }
@@ -79,9 +79,8 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,Picture,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
         {
-            Console.WriteLine(victuzActivity);
             if (ModelState.IsValid)
             {
                 _context.Add(victuzActivity);
@@ -89,12 +88,12 @@ namespace Aetherworks_Victuz.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
-                    category => GetDisplayNameForCategory(category) // Mapping each enum to a custom display name
+                    category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View(victuzActivity);
@@ -114,7 +113,15 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+            ViewData["CurrentCategory"] = GetDisplayNameForCategory(victuzActivity.Category);
             return View(victuzActivity);
         }
 
@@ -123,7 +130,7 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,Picture,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
         {
             if (id != victuzActivity.Id)
             {
@@ -151,7 +158,14 @@ namespace Aetherworks_Victuz.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View(victuzActivity);
         }
 
