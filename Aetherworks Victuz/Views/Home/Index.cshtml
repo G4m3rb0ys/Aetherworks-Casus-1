@@ -1,4 +1,4 @@
-﻿@model Aetherworks_Victuz.Models.CalendarViewModel
+﻿@model Aetherworks_Victuz.Models.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -7,7 +7,7 @@
 <!-- Bootstrap Container -->
 <div class="container my-5">
     <div class="row">
-        <!-- Left Sidebar with Calendar -->
+        <!-- Left Sidebar with Calendar and Suggestions -->
         <div class="col-md-3">
             <!-- Image or Logo for the Sidebar -->
             <div class="mb-4">
@@ -15,7 +15,7 @@
             </div>
 
             <!-- Calendar Section -->
-            <div class="calendar border p-3 rounded">
+            <div class="calendar border p-3 rounded mb-4">
                 <div class="table-responsive">
                     <table class="table table-bordered table-sm mb-0">
                         <thead>
@@ -85,6 +85,33 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Suggestions Section -->
+            <div class="suggestions border p-3 rounded">
+                <h5>Suggesties</h5>
+                @foreach (var suggestion in Model.Suggestions)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1">@suggestion.Title</h6>
+                            @if (!string.IsNullOrEmpty(suggestion.Description))
+                            {
+                                <p class="card-text mb-1">
+                                    @ShortenText(suggestion.Description, 25)
+                                </p>
+                            }
+                            <!-- Harticoon -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="far fa-heart text-secondary"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Knop naar Suggestiepagina -->
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary">Bekijk alle suggesties</button>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content Area -->
@@ -101,75 +128,70 @@
 
             <!-- Content Cards -->
             <div class="row">
-                <!-- Content Cards -->
-                <div class="row">
-                    @{
-                        var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Take(3).ToList();
-                    }
-                    @foreach (var activity in upcomingActivities)
-                    {
-                        // Bereken het aantal beschikbare plekken eenmaal per activiteit
-                        int spotsTaken = activity.ParticipantsList?.Count() ?? 0;
-                        int spotsAvailable = activity.ParticipantLimit - spotsTaken;
+                @{
+                    var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Take(3).ToList();
+                }
+                @foreach (var activity in upcomingActivities)
+                {
+                    // Bereken het aantal beschikbare plekken eenmaal per activiteit
+                    int spotsTaken = activity.ParticipantsList?.Count() ?? 0;
+                    int spotsAvailable = activity.ParticipantLimit - spotsTaken;
 
-                        <div class="col-12 mb-3">
-                            <div class="card">
-                                <div class="row no-gutters">
-                                    <!-- Linkerkant: Afbeelding Placeholder -->
-                                    <div class="col-md-2">
-                                        <img src="~/images/placeholder.png" class="card-img" alt="Afbeelding Placeholder">
+                    <div class="col-12 mb-3">
+                        <div class="card">
+                            <div class="row no-gutters">
+                                <!-- Linkerkant: Afbeelding Placeholder -->
+                                <div class="col-md-2">
+                                    <img src="~/images/placeholder.png" class="card-img" alt="Afbeelding Placeholder">
+                                </div>
+                                <!-- Midden: Activiteit Details -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@activity.Name</h5>
+                                        @if (!string.IsNullOrEmpty(activity.Description))
+                                        {
+                                            <p class="card-text">
+                                                @(activity.Description.Length > 100 ? activity.Description.Substring(0, 100) + "..." : activity.Description)
+                                            </p>
+                                        }
+                                        @if (activity.ParticipantLimit > 0)
+                                        {
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    @spotsAvailable/@activity.ParticipantLimit plekken vrij
+                                                </small>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="card-text">
+                                                <small class="text-muted">Geen limiet op deelnemers</small>
+                                            </p>
+                                        }
                                     </div>
-                                    <!-- Midden: Activiteit Details -->
-                                    <div class="col-md-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title">@activity.Name</h5>
-                                            @if (!string.IsNullOrEmpty(activity.Description))
+                                </div>
+                                <!-- Rechterkant: Actieknoppen -->
+                                <div class="col-md-3 d-flex align-items-center justify-content-end">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <a href="@Url.Action("Details", "VictuzActivities", new { id = activity.Id })" class="btn btn-primary mb-2">Meer info</a>
+                                        @{
+                                            if (activity.ParticipantLimit > 0 && spotsAvailable <= 0)
                                             {
-                                                <p class="card-text">
-                                                    @(activity.Description.Length > 100 ? activity.Description.Substring(0, 100) + "..." : activity.Description)
-                                                </p>
-                                            }
-                                            @if (activity.ParticipantLimit > 0)
-                                            {
-                                                <p class="card-text">
-                                                    <small class="text-muted">
-                                                        @spotsAvailable/@activity.ParticipantLimit plekken vrij
-                                                    </small>
-                                                </p>
+                                            // Geen plekken meer vrij
+                                                <button class="btn btn-danger" disabled>Vol</button>
                                             }
                                             else
                                             {
-                                                <p class="card-text">
-                                                    <small class="text-muted">Geen limiet op deelnemers</small>
-                                                </p>
+                                            // Plekken beschikbaar
+                                                <button class="btn btn-secondary">Inschrijven</button>
                                             }
-                                        </div>
-                                    </div>
-                                    <!-- Rechterkant: Actieknoppen -->
-                                    <div class="col-md-3 d-flex align-items-center justify-content-end">
-                                        <div class="d-flex flex-column align-items-end">
-                                            <a href="@Url.Action("Details", "VictuzActivities", new { id = activity.Id })" class="btn btn-primary mb-2">Meer info</a>
-                                            @{
-                                                if (activity.ParticipantLimit > 0 && spotsAvailable <= 0)
-                                                {
-                                                // Geen plekken meer vrij
-                                                    <button class="btn btn-danger" disabled>Vol</button>
-                                                }
-                                                else
-                                                {
-                                                // Plekken beschikbaar
-                                                    <button class="btn btn-secondary">Inschrijven</button>
-                                                }
-                                            }
-                                        </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
-                </div>
-
-
+                    </div>
+                }
             </div>
 
             <!-- Aanvullende sectie voor meer inhoud -->
@@ -183,3 +205,29 @@
         </div>
     </div>
 </div>
+
+@functions {
+    public static string ShortenText(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
+            return text;
+
+        // Vind de laatste spatie binnen de limiet
+        int lastSpace = text.Substring(0, maxLength).LastIndexOf(' ');
+        if (lastSpace > 0)
+        {
+            return text.Substring(0, lastSpace) + "...";
+        }
+        else
+        {
+            // Als er geen spatie is, toon dan de eerste maxLength karakters
+            return text.Substring(0, maxLength) + "...";
+        }
+    }
+}
+
+@section Scripts {
+    <!-- Voeg hier eventuele scripts toe -->
+    <!-- Zorg ervoor dat Font Awesome is toegevoegd voor de harticonen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+}
