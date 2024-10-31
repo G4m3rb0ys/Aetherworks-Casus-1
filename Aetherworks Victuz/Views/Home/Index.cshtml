@@ -1,8 +1,233 @@
-﻿@{
+﻿@model Aetherworks_Victuz.Models.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Bootstrap Container -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Left Sidebar with Calendar and Suggestions -->
+        <div class="col-md-3">
+            <!-- Image or Logo for the Sidebar -->
+            <div class="mb-4">
+                <img src="path-to-your-image.jpg" alt="Sidebar Image" class="img-fluid rounded">
+            </div>
+
+            <!-- Calendar Section -->
+            <div class="calendar border p-3 rounded mb-4">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Ma</th>
+                                <th class="text-center">Di</th>
+                                <th class="text-center">Wo</th>
+                                <th class="text-center">Do</th>
+                                <th class="text-center">Vr</th>
+                                <th class="text-center">Za</th>
+                                <th class="text-center">Zo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                DateTime startDate = Model.StartDate;
+                                DateTime endDate = Model.EndDate;
+
+                                // Groepeer activiteiten per datum
+                                var activitiesByDate = Model.Activities
+                                .GroupBy(a => a.ActivityDate.Date)
+                                .ToDictionary(g => g.Key, g => g.ToList());
+
+                                // Bereken de datum van de eerste maandag vóór of op de startdatum
+                                int diff = (7 + ((int)startDate.DayOfWeek - 1)) % 7;
+                                DateTime firstDayOfCalendar = startDate.AddDays(-diff);
+
+                                // Totale aantal dagen om weer te geven
+                                int totalDays = (endDate - firstDayOfCalendar).Days + 1;
+
+                                // Totale aantal weken om weer te geven
+                                int totalWeeks = (int)Math.Ceiling(totalDays / 7.0);
+
+                                DateTime currentDate = firstDayOfCalendar;
+
+                                for (int week = 0; week < totalWeeks; week++)
+                                {
+                                    <tr>
+                                        @for (int day = 0; day < 7; day++)
+                                        {
+                                            if (currentDate < startDate || currentDate > endDate)
+                                            {
+                                                <td class="p-1"></td>
+                                            }
+                                            else
+                                            {
+                                                bool hasActivity = activitiesByDate.ContainsKey(currentDate.Date);
+                                                if (hasActivity)
+                                                {
+                                                    <td class="bg-secondary text-black text-center p-1">
+                                                        <a href="@Url.Action("Details", "VictuzActivities", new { id = activitiesByDate[currentDate.Date].First().Id })" class="text-decoration-none text-black">
+                                                            @currentDate.Day
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center p-1">@currentDate.Day</td>
+                                                }
+                                            }
+                                            currentDate = currentDate.AddDays(1);
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Suggestions Section -->
+            <div class="suggestions border p-3 rounded">
+                <h5>Suggesties</h5>
+                @foreach (var suggestion in Model.Suggestions)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1">@suggestion.Title</h6>
+                            @if (!string.IsNullOrEmpty(suggestion.Description))
+                            {
+                                <p class="card-text mb-1">
+                                    @ShortenText(suggestion.Description, 25)
+                                </p>
+                            }
+                            <!-- Harticoon -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="far fa-heart text-secondary"></i>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Knop naar Suggestiepagina -->
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary">Bekijk alle suggesties</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-md-9">
+            <!-- Hoofdtitel en ondertitel -->
+            <h2 class="mb-3">Hoofdtitel</h2>
+            <h5 class="text-muted">Ondertitel</h5>
+            <p class="mb-4">
+                Hoofdtekst voor je hele artikel of bericht. We voegen wat lorem ipsum toe om te laten zien hoe een ingevulde pagina eruit zou kunnen zien.
+            </p>
+            <p>
+                Excepteur efficient emerging, multiple veniam anim aute carefully curated Ghana consectetur apologetic perfect nostrud sit amet content.
+            </p>
+
+            <!-- Content Cards -->
+            <div class="row">
+                @{
+                    var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Take(3).ToList();
+                }
+                @foreach (var activity in upcomingActivities)
+                {
+                    // Bereken het aantal beschikbare plekken eenmaal per activiteit
+                    int spotsTaken = activity.ParticipantsList?.Count() ?? 0;
+                    int spotsAvailable = activity.ParticipantLimit - spotsTaken;
+
+                    <div class="col-12 mb-3">
+                        <div class="card">
+                            <div class="row no-gutters">
+                                <!-- Linkerkant: Afbeelding Placeholder -->
+                                <div class="col-md-2">
+                                    <img src="~/images/placeholder.png" class="card-img" alt="Afbeelding Placeholder">
+                                </div>
+                                <!-- Midden: Activiteit Details -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@activity.Name</h5>
+                                        @if (!string.IsNullOrEmpty(activity.Description))
+                                        {
+                                            <p class="card-text">
+                                                @(activity.Description.Length > 100 ? activity.Description.Substring(0, 100) + "..." : activity.Description)
+                                            </p>
+                                        }
+                                        @if (activity.ParticipantLimit > 0)
+                                        {
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    @spotsAvailable/@activity.ParticipantLimit plekken vrij
+                                                </small>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p class="card-text">
+                                                <small class="text-muted">Geen limiet op deelnemers</small>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                                <!-- Rechterkant: Actieknoppen -->
+                                <div class="col-md-3 d-flex align-items-center justify-content-end">
+                                    <div class="d-flex flex-column align-items-end">
+                                        <a href="@Url.Action("Details", "VictuzActivities", new { id = activity.Id })" class="btn btn-primary mb-2">Meer info</a>
+                                        @{
+                                            if (activity.ParticipantLimit > 0 && spotsAvailable <= 0)
+                                            {
+                                            // Geen plekken meer vrij
+                                                <button class="btn btn-danger" disabled>Vol</button>
+                                            }
+                                            else
+                                            {
+                                            // Plekken beschikbaar
+                                                <button class="btn btn-secondary">Inschrijven</button>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Aanvullende sectie voor meer inhoud -->
+            <div class="mt-5">
+                <h2>Een andere titel</h2>
+                <h5 class="text-muted">Ondertitel</h5>
+                <p>
+                    Aanvullende hoofdtekst voor je artikel of bericht. Pas aan naar wens voor je inhoud.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
+
+@functions {
+    public static string ShortenText(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
+            return text;
+
+        // Vind de laatste spatie binnen de limiet
+        int lastSpace = text.Substring(0, maxLength).LastIndexOf(' ');
+        if (lastSpace > 0)
+        {
+            return text.Substring(0, lastSpace) + "...";
+        }
+        else
+        {
+            // Als er geen spatie is, toon dan de eerste maxLength karakters
+            return text.Substring(0, maxLength) + "...";
+        }
+    }
+}
+
+@section Scripts {
+    <!-- Voeg hier eventuele scripts toe -->
+    <!-- Zorg ervoor dat Font Awesome is toegevoegd voor de harticonen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+}
