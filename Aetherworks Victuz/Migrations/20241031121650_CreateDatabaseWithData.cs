@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Aetherworks_Victuz.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommitWithTestData : Migration
+    public partial class CreateDatabaseWithData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -260,6 +260,7 @@ namespace Aetherworks_Victuz.Migrations
                     Category = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LocationId = table.Column<int>(type: "int", nullable: false),
                     ActivityDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HostId = table.Column<int>(type: "int", nullable: false),
@@ -314,9 +315,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0878366e-a82f-47c2-83cb-9cba4c46fb8c", null, "Member", null },
-                    { "4e907c41-f3f4-492e-9802-9cf2e97b896d", null, "Guest", null },
-                    { "fdb0826b-a671-49ae-becf-7b17424f0818", null, "Organizer", null }
+                    { "5cc78e5a-bd90-4adc-91c6-1b0bf91708ad", null, "Member", null },
+                    { "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b", null, "Guest", null },
+                    { "b3cb4480-7af2-4cc5-90dc-0028c7b94190", null, "Organizer", null }
                 });
 
             migrationBuilder.InsertData(
@@ -324,9 +325,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "19275143-fed7-47af-bd78-1c04d9881856", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST@GMAIL.COM", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "guest@gmail.com" },
-                    { "329b43e3-fde8-4e41-9c1b-aba9d9a9de28", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER@GMAIL.COM", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "organizer@gmail.com" },
-                    { "c5030ee3-d06a-4c5d-a474-ae700701e68c", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER@GMAIL.COM", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "member@gmail.com" }
+                    { "2e333d4b-4c24-448f-a7aa-7608197d5fad", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER@GMAIL.COM", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "organizer@gmail.com" },
+                    { "37373097-0ed7-4677-b07f-954fb9eb08ae", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST@GMAIL.COM", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "guest@gmail.com" },
+                    { "eaab06bd-a9b6-4785-90bb-d84573827962", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER@GMAIL.COM", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "member@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -355,9 +356,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "4e907c41-f3f4-492e-9802-9cf2e97b896d", "19275143-fed7-47af-bd78-1c04d9881856" },
-                    { "fdb0826b-a671-49ae-becf-7b17424f0818", "329b43e3-fde8-4e41-9c1b-aba9d9a9de28" },
-                    { "0878366e-a82f-47c2-83cb-9cba4c46fb8c", "c5030ee3-d06a-4c5d-a474-ae700701e68c" }
+                    { "b3cb4480-7af2-4cc5-90dc-0028c7b94190", "2e333d4b-4c24-448f-a7aa-7608197d5fad" },
+                    { "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b", "37373097-0ed7-4677-b07f-954fb9eb08ae" },
+                    { "5cc78e5a-bd90-4adc-91c6-1b0bf91708ad", "eaab06bd-a9b6-4785-90bb-d84573827962" }
                 });
 
             migrationBuilder.InsertData(
@@ -365,15 +366,15 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "CredentialId" },
                 values: new object[,]
                 {
-                    { 1, "329b43e3-fde8-4e41-9c1b-aba9d9a9de28" },
-                    { 2, "c5030ee3-d06a-4c5d-a474-ae700701e68c" },
-                    { 3, "19275143-fed7-47af-bd78-1c04d9881856" }
+                    { 1, "2e333d4b-4c24-448f-a7aa-7608197d5fad" },
+                    { 2, "eaab06bd-a9b6-4785-90bb-d84573827962" },
+                    { 3, "37373097-0ed7-4677-b07f-954fb9eb08ae" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Penalties",
                 columns: new[] { "Id", "EndDate", "RoleId", "UserId" },
-                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "4e907c41-f3f4-492e-9802-9cf2e97b896d", 2 });
+                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b", 2 });
 
             migrationBuilder.InsertData(
                 table: "Suggestions",
@@ -387,12 +388,12 @@ namespace Aetherworks_Victuz.Migrations
 
             migrationBuilder.InsertData(
                 table: "VictuzActivities",
-                columns: new[] { "Id", "ActivityDate", "Category", "Description", "HostId", "LocationId", "MemberPrice", "Name", "ParticipantLimit", "Price" },
+                columns: new[] { "Id", "ActivityDate", "Category", "Description", "HostId", "LocationId", "MemberPrice", "Name", "ParticipantLimit", "Picture", "Price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified), 3, "Book Club Meetup", 1, 1, 0.00m, "Book Club Meetup", 25, 0.00m },
-                    { 2, new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, "Photography Workshop", 1, 2, 15.00m, "Photography Workshop", 20, 25.00m },
-                    { 3, new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified), 0, "Battlebot Wars", 1, 2, 12.00m, "Battlebot Wars", 10, 0.00m }
+                    { 1, new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified), 3, "Book Club Meetup", 1, 1, 0.00m, "Book Club Meetup", 25, "img\\BookClub.png", 0.00m },
+                    { 2, new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, "Photography Workshop", 1, 2, 15.00m, "Photography Workshop", 20, "img\\Photography.png", 25.00m },
+                    { 3, new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified), 0, "Battlebot Wars", 1, 2, 12.00m, "Battlebot Wars", 10, "img\\BattleBot.png", 0.00m }
                 });
 
             migrationBuilder.InsertData(
