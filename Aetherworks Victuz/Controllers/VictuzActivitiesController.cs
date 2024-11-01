@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
+using static Aetherworks_Victuz.Models.VictuzActivity;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Aetherworks_Victuz.Controllers
@@ -14,10 +16,12 @@ namespace Aetherworks_Victuz.Controllers
     public class VictuzActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public VictuzActivitiesController(ApplicationDbContext context)
+        public VictuzActivitiesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: VictuzActivities
@@ -47,15 +51,15 @@ namespace Aetherworks_Victuz.Controllers
             return View(victuzActivity);
         }
 
-        private string GetDisplayNameForCategory(VictuzActivity.ActivityCategories category)
+        public string GetDisplayNameForCategory(ActivityCategories category)
         {
             return category switch
             {
-                VictuzActivity.ActivityCategories.Free => "Free for Everyone",
-                VictuzActivity.ActivityCategories.MemFree => "Free for Members Only",
-                VictuzActivity.ActivityCategories.PayAll => "Paid for All",
-                VictuzActivity.ActivityCategories.MemOnlyFree => "Members Only - Free",
-                VictuzActivity.ActivityCategories.MemOnlyPay => "Members Only - Paid",
+                ActivityCategories.Free => "Free Activity",
+                ActivityCategories.MemFree => "Free for Members",
+                ActivityCategories.PayAll => "Paid for All",
+                ActivityCategories.MemOnlyFree => "Members Only - Free",
+                ActivityCategories.MemOnlyPay => "Members Only - Paid",
                 _ => category.ToString()
             };
         }
@@ -64,13 +68,13 @@ namespace Aetherworks_Victuz.Controllers
         public IActionResult Create()
         {
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
                     category => category,
                     category => GetDisplayNameForCategory(category)
                 );
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View();
         }
@@ -78,17 +82,37 @@ namespace Aetherworks_Victuz.Controllers
         // POST: VictuzActivities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile PictureFile)
         {
-            Console.WriteLine(victuzActivity);
             if (ModelState.IsValid)
             {
+                if (PictureFile != null && PictureFile.Length > 0)
+                {
+                    string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+
+                    if (!Directory.Exists(imgFolderPath))
+                    {
+                        Directory.CreateDirectory(imgFolderPath);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
+                    string filePath = Path.Combine(imgFolderPath, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await PictureFile.CopyToAsync(stream);
+                    }
+
+                    victuzActivity.Picture = "/img/" + uniqueFileName;
+                }
+
+                // Add the activity to the database and save changes
                 _context.Add(victuzActivity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -113,14 +137,22 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+            ViewData["CurrentCategory"] = GetDisplayNameForCategory(victuzActivity.Category);
             return View(victuzActivity);
         }
 
         // POST: VictuzActivities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile PictureFile)
         {
             if (id != victuzActivity.Id)
             {
@@ -131,8 +163,37 @@ namespace Aetherworks_Victuz.Controllers
             {
                 try
                 {
+                    // Handle new image upload
+                    if (PictureFile != null && PictureFile.Length > 0)
+                    {
+                        string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+
+                        if (!Directory.Exists(imgFolderPath))
+                        {
+                            Directory.CreateDirectory(imgFolderPath);
+                        }
+
+                        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
+                        string filePath = Path.Combine(imgFolderPath, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await PictureFile.CopyToAsync(stream);
+                        }
+
+                        victuzActivity.Picture = "/img/" + uniqueFileName;
+                    }
+
                     _context.Update(victuzActivity);
                     await _context.SaveChangesAsync();
+                    if (!string.IsNullOrEmpty(victuzActivity.Picture))
+                    {
+                        var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -147,8 +208,17 @@ namespace Aetherworks_Victuz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id", victuzActivity.LocationId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+
             return View(victuzActivity);
         }
 
@@ -184,6 +254,14 @@ namespace Aetherworks_Victuz.Controllers
             }
 
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(victuzActivity.Picture))
+            {
+                var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
