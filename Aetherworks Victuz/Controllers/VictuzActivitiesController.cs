@@ -10,6 +10,7 @@ using Aetherworks_Victuz.Models;
 using static Aetherworks_Victuz.Models.VictuzActivity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -82,7 +83,7 @@ namespace Aetherworks_Victuz.Controllers
         // POST: VictuzActivities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile PictureFile)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile? PictureFile)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +104,7 @@ namespace Aetherworks_Victuz.Controllers
                         await PictureFile.CopyToAsync(stream);
                     }
 
-                    victuzActivity.Picture = "/img/" + uniqueFileName;
+                    victuzActivity.Picture = "\\img\\" + uniqueFileName;
                 }
 
                 // Add the activity to the database and save changes
@@ -152,7 +153,7 @@ namespace Aetherworks_Victuz.Controllers
         // POST: VictuzActivities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile PictureFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile? PictureFile)
         {
             if (id != victuzActivity.Id)
             {
@@ -161,51 +162,38 @@ namespace Aetherworks_Victuz.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (PictureFile != null && PictureFile.Length > 0)
                 {
-                    // Handle new image upload
-                    if (PictureFile != null && PictureFile.Length > 0)
+                    string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+
+                    if (!Directory.Exists(imgFolderPath))
                     {
-                        string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
-
-                        if (!Directory.Exists(imgFolderPath))
-                        {
-                            Directory.CreateDirectory(imgFolderPath);
-                        }
-
-                        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
-                        string filePath = Path.Combine(imgFolderPath, uniqueFileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await PictureFile.CopyToAsync(stream);
-                        }
-
-                        victuzActivity.Picture = "/img/" + uniqueFileName;
-                    }
-
-                    _context.Update(victuzActivity);
-                    await _context.SaveChangesAsync();
-                    if (!string.IsNullOrEmpty(victuzActivity.Picture))
-                    {
-                        var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
-                        if (System.IO.File.Exists(oldFilePath))
-                        {
-                            System.IO.File.Delete(oldFilePath);
-                        }
-                    }
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VictuzActivityExists(victuzActivity.Id))
-                    {
-                        return NotFound();
+                        Directory.CreateDirectory(imgFolderPath);
                     }
                     else
                     {
-                        throw;
+                        string fullImagePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('\\'));
+                        if (System.IO.File.Exists(fullImagePath))
+                        {
+                            System.IO.File.Delete(fullImagePath);
+                        }
                     }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
+                    string filePath = Path.Combine(imgFolderPath, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await PictureFile.CopyToAsync(stream);
+                    }
+
+                    victuzActivity.Picture = "\\img\\" + uniqueFileName;
+
                 }
+
+                _context.Update(victuzActivity);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -252,11 +240,10 @@ namespace Aetherworks_Victuz.Controllers
             {
                 _context.VictuzActivities.Remove(victuzActivity);
             }
-
             await _context.SaveChangesAsync();
             if (!string.IsNullOrEmpty(victuzActivity.Picture))
             {
-                var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
+                var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('\\'));
                 if (System.IO.File.Exists(oldFilePath))
                 {
                     System.IO.File.Delete(oldFilePath);
