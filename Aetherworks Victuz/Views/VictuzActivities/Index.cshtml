@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Picture)
+                <img src="@item.Picture" style="max-width: 100px; max-height: 100px;" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Location.Id)
@@ -70,10 +70,10 @@
                 @Html.DisplayFor(modelItem => item.Host.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @item.Price?.ToString("C")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MemberPrice)
+                @item.MemberPrice?.ToString("C")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ParticipantLimit)

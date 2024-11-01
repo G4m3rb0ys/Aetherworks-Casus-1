@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
 using static Aetherworks_Victuz.Models.VictuzActivity;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Aetherworks_Victuz.Controllers
 {
     public class VictuzActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public VictuzActivitiesController(ApplicationDbContext context)
+        public VictuzActivitiesController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: VictuzActivities
@@ -79,10 +82,31 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,Picture,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile PictureFile)
         {
             if (ModelState.IsValid)
             {
+                if (PictureFile != null && PictureFile.Length > 0)
+                {
+                    string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+
+                    if (!Directory.Exists(imgFolderPath))
+                    {
+                        Directory.CreateDirectory(imgFolderPath);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
+                    string filePath = Path.Combine(imgFolderPath, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await PictureFile.CopyToAsync(stream);
+                    }
+
+                    victuzActivity.Picture = "/img/" + uniqueFileName;
+                }
+
+                // Add the activity to the database and save changes
                 _context.Add(victuzActivity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -130,7 +154,7 @@ namespace Aetherworks_Victuz.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,Picture,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile PictureFile)
         {
             if (id != victuzActivity.Id)
             {
@@ -141,8 +165,37 @@ namespace Aetherworks_Victuz.Controllers
             {
                 try
                 {
+                    // Handle new image upload
+                    if (PictureFile != null && PictureFile.Length > 0)
+                    {
+                        string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+
+                        if (!Directory.Exists(imgFolderPath))
+                        {
+                            Directory.CreateDirectory(imgFolderPath);
+                        }
+
+                        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(PictureFile.FileName);
+                        string filePath = Path.Combine(imgFolderPath, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await PictureFile.CopyToAsync(stream);
+                        }
+
+                        victuzActivity.Picture = "/img/" + uniqueFileName;
+                    }
+
                     _context.Update(victuzActivity);
                     await _context.SaveChangesAsync();
+                    if (!string.IsNullOrEmpty(victuzActivity.Picture))
+                    {
+                        var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -157,6 +210,7 @@ namespace Aetherworks_Victuz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
             ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
@@ -166,6 +220,7 @@ namespace Aetherworks_Victuz.Controllers
                     category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+
             return View(victuzActivity);
         }
 
@@ -201,6 +256,14 @@ namespace Aetherworks_Victuz.Controllers
             }
 
             await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(victuzActivity.Picture))
+            {
+                var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('/'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 

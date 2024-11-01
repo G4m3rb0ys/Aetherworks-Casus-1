@@ -10,6 +10,9 @@
     <h4>VictuzActivity</h4>
     <hr />
     <dl class="row">
+        <dt>
+            <img src="@Model.Picture" style="max-width: 200px; max-height: 200px;" />
+        </dt>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
@@ -27,12 +30,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Picture)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Picture)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Location)
@@ -56,13 +53,13 @@
             @Html.DisplayNameFor(model => model.Price)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Model.Price?.ToString("C")
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MemberPrice)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemberPrice)
+            @Model.MemberPrice?.ToString("C")
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ParticipantLimit)
