@@ -1,14 +1,15 @@
-﻿using System;
+﻿// Controllers/VictuzActivitiesController.cs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
 using static Aetherworks_Victuz.Models.VictuzActivity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -62,6 +63,7 @@ namespace Aetherworks_Victuz.Controllers
                 _ => category.ToString()
             };
         }
+
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
@@ -78,8 +80,6 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // POST: VictuzActivities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile PictureFile)
@@ -150,8 +150,6 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // POST: VictuzActivities/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile PictureFile)
@@ -270,6 +268,27 @@ namespace Aetherworks_Victuz.Controllers
         private bool VictuzActivityExists(int id)
         {
             return _context.VictuzActivities.Any(e => e.Id == id);
+        }
+
+        // Optional: If you want to display activities by date
+        public async Task<IActionResult> ActivitiesByDate(string date)
+        {
+            if (string.IsNullOrEmpty(date))
+            {
+                return NotFound();
+            }
+
+            DateTime selectedDate;
+            if (!DateTime.TryParse(date, out selectedDate))
+            {
+                return NotFound();
+            }
+
+            var activities = await _context.VictuzActivities
+                .Where(a => a.ActivityDate.Date == selectedDate.Date)
+                .ToListAsync();
+
+            return View(activities);
         }
     }
 }
