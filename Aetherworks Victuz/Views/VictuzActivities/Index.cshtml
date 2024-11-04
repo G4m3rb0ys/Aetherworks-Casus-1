@@ -1,89 +1,112 @@
-﻿@model IEnumerable<Aetherworks_Victuz.Models.VictuzActivity>
+﻿@model Aetherworks_Victuz.Models.CompositeViewModel
 
-@{
-    ViewData["Title"] = "Index";
-}
+<div class="container">
+    <div class="row">
+        <!-- Left Sidebar with Calendar -->
+        <div class="col-md-3 sidebar">
+            <div class="calendar-container">
+                <h5>Kalender</h5>
+                <div class="calendar">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Ma</th>
+                                <th>Di</th>
+                                <th>Wo</th>
+                                <th>Do</th>
+                                <th>Vr</th>
+                                <th>Za</th>
+                                <th>Zo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                DateTime startDate = Model.Calendar.StartDate;
+                                DateTime endDate = Model.Calendar.EndDate;
 
-<h1>Index</h1>
+                                var activitiesByDate = Model.Calendar.Activities
+                                .GroupBy(a => a.ActivityDate.Date)
+                                .ToDictionary(g => g.Key, g => g.ToList());
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Picture)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActivityDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Host)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MemberPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParticipantLimit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <img src="@item.Picture" style="max-width: 100px; max-height: 100px;" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActivityDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Host.Id)
-            </td>
-            <td>
-                @item.Price?.ToString("C")
-            </td>
-            <td>
-                @item.MemberPrice?.ToString("C")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParticipantLimit)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                                int diff = (7 + ((int)startDate.DayOfWeek - 1)) % 7;
+                                DateTime firstDayOfCalendar = startDate.AddDays(-diff);
+                                int totalDays = (endDate - firstDayOfCalendar).Days + 1;
+                                int totalWeeks = (int)Math.Ceiling(totalDays / 7.0);
+                                DateTime currentDate = firstDayOfCalendar;
+
+                                for (int week = 0; week < totalWeeks; week++)
+                                {
+                                    <tr>
+                                        @for (int day = 0; day < 7; day++)
+                                        {
+                                            if (currentDate < startDate || currentDate > endDate)
+                                            {
+                                                <td class="p-1"></td>
+                                            }
+                                            else
+                                            {
+                                                bool hasActivity = activitiesByDate.ContainsKey(currentDate.Date);
+                                                if (hasActivity)
+                                                {
+                                                    <td class="bg-secondary text-black text-center p-1">
+                                                        <a href="@Url.Action("Details", "VictuzActivities", new { id = activitiesByDate[currentDate.Date].First().Id })" class="text-decoration-none text-black">
+                                                            @currentDate.Day
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center p-1">@currentDate.Day</td>
+                                                }
+                                            }
+                                            currentDate = currentDate.AddDays(1);
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area with Activities Grid -->
+        <div class="col-md-9 activities-grid">
+            <div class="row">
+                @foreach (var activity in Model.Activities)
+                {
+                    int spotsTaken = activity.ParticipantsList?.Count() ?? 0;
+                    int spotsAvailable = activity.ParticipantLimit - spotsTaken;
+                    bool isFull = spotsAvailable <= 0;
+
+                    <div class="col-md-4 mb-4">
+                        <div class="activity-card">
+                            <a href="@Url.Action("Details", "VictuzActivities", new { id = activity.Id })" class="activity-card-link">
+                                <img src="@activity.Picture" alt="@activity.Name" class="activity-image">
+                                <div class="activity-details">
+                                    <h5>@activity.Name</h5>
+                                    <p>@spotsAvailable/@activity.ParticipantLimit plekken vrij</p>
+                                    <p>Locatie: @activity.Location</p>
+                                    <p>Kosten: @activity.Price?.ToString("C")</p>
+                                </div>
+                            </a>
+                            <div class="d-flex justify-content-end mt-2">
+                                @if (isFull)
+                                {
+                                    <button class="btn btn-danger" disabled>Vol</button>
+                                }
+                                else
+                                {
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <button class="btn btn-secondary">Inschrijven</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
