@@ -415,9 +415,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "ActivityDate", "Category", "Description", "HostId", "LocationId", "MemberPrice", "Name", "ParticipantLimit", "Picture", "Price" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified), 3, "Book Club Meetup", 1, 1, 0.00m, "Book Club Meetup", 25, "img\\BookClub.png", 0.00m },
-                    { 2, new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, "Photography Workshop", 1, 2, 15.00m, "Photography Workshop", 20, "img\\Photography.png", 25.00m },
-                    { 3, new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified), 0, "Battlebot Wars", 1, 2, 12.00m, "Battlebot Wars", 10, "img\\BattleBot.png", 0.00m }
+                    { 1, new DateTime(2024, 11, 25, 18, 30, 0, 0, DateTimeKind.Unspecified), 3, "Book Club Meetup", 1, 1, 0.00m, "Book Club Meetup", 25, "\\img\\BookClub.png", 0.00m },
+                    { 2, new DateTime(2024, 11, 20, 14, 0, 0, 0, DateTimeKind.Unspecified), 1, "Photography Workshop", 1, 2, 15.00m, "Photography Workshop", 20, "\\img\\Photography.png", 25.00m },
+                    { 3, new DateTime(2024, 11, 22, 17, 0, 0, 0, DateTimeKind.Unspecified), 0, "Battlebot Wars", 1, 2, 12.00m, "Battlebot Wars", 10, "\\img\\BattleBot.png", 0.00m }
                 });
 
             migrationBuilder.InsertData(
