@@ -129,7 +129,7 @@ body {
     text-transform: uppercase;
     margin-top: 10px;
     text-decoration: none;
-    color: white; /* Button text color */
+    color: white; /* Default button text color */
 }
 
 .btn-primary {
@@ -142,24 +142,38 @@ body {
         border-color: #004085;
     }
 
-.btn-danger {
-    background-color: #dc3545; /* Danger button color */
-    border: none;
-}
-
-.btn-secondary {
-    background-color: #6c757d; /* Secondary button color */
-    border: none;
-}
-
+/* Adjusted Outline Button Styles for Better Readability */
 .btn-outline-secondary {
     border-color: #6c757d;
     color: #6c757d;
 }
 
-    .btn-outline-secondary:hover {
+    .btn-outline-secondary:hover,
+    .btn-outline-secondary:focus {
         background-color: #6c757d;
-        color: #fff;
+        color: #fff; /* White text on hover */
+    }
+
+.btn-outline-info {
+    border-color: #17a2b8;
+    color: #17a2b8;
+}
+
+    .btn-outline-info:hover,
+    .btn-outline-info:focus {
+        background-color: #17a2b8;
+        color: #fff; /* White text on hover */
+    }
+
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+    .btn-outline-danger:hover,
+    .btn-outline-danger:focus {
+        background-color: #dc3545;
+        color: #fff; /* White text on hover */
     }
 
 /* Form Container Styles for Create Activity */
@@ -309,3 +323,50 @@ body {
         padding: 10px 20px; /* Add padding for a larger clickable area */
         font-size: 14px; /* Adjust font size for better readability */
     }
+
+/* Suggestions Page Styles */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #343a40; /* Darker text color for better readability */
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.text-truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.like-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+.like-count {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.suggestion-buttons .btn {
+    margin-left: 5px;
+}
+
+.g-4 {
+    gap: 20px; /* Adjust space between cards */
+}

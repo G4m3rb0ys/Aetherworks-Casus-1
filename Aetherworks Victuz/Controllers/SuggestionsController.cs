@@ -39,6 +39,8 @@ namespace Aetherworks_Victuz.Controllers
 
             var suggestions = await _context.Suggestions
                 .Include(s => s.SuggestionLikeds)
+                .Include(s => s.User)
+                .ThenInclude(u => u.Credential)
                 .Select(s => new SuggestionViewModel
                 {
                     Suggestion = s,
