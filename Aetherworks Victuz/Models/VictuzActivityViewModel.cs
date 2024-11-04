@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Aetherworks_Victuz.Models
 {
-    public class VictuzActivity
+    public class VictuzActivityViewModel
     {
         public int Id { get; set; }
         public ActivityCategories Category { get; set; }
@@ -22,7 +23,12 @@ namespace Aetherworks_Victuz.Models
         public decimal? MemberPrice { get; set; }
         public int ParticipantLimit { get; set; }
         public ICollection<Participation>? ParticipantsList { get; set; }
+        public string? OldPicture { get; set; }
 
+        public void SetOldPicture()
+        {
+            OldPicture = Picture;
+        }
         public enum ActivityCategories
         {
             [Display(Name = "Free Activity")]
