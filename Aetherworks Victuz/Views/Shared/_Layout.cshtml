@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Aetherworks_Victuz.styles.css" asp-append-version="true" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 NavBarGeneral">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Aetherworks_Victuz</a>
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/img/49e20123-0324-4778-8244-be706e895487.jpg" alt="Logo" style="height: 40px; margin-right: 10px;" />
+                    Aetherworks_Victuz
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,24 +25,49 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
                         </li>
-
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <div class="dropdown">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </button>
+                        }
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                            }
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
