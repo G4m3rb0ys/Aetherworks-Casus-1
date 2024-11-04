@@ -39,6 +39,9 @@
                                 <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestion</a>
+                        </li>
                     </ul>
                     <div class="dropdown">
                         @if (User.Identity.IsAuthenticated)

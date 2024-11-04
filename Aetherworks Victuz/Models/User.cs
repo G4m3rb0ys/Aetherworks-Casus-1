@@ -10,6 +10,7 @@ namespace Aetherworks_Victuz.Models
         public string? CredentialId { get; set; }
         public IdentityUser? Credential { get; set; }
         public ICollection<Participation>? Participations { get; set; }
+        public ICollection<SuggestionLiked>? SuggestionLikeds { get; set; }
         public ICollection<Suggestion>? Suggestions { get; set; }
         public ICollection<Penalty>? Penalties { get; set; }
     }

@@ -138,7 +138,21 @@ public async Task<IActionResult> Register(int activityId)
                 return NotFound();
             }
 
-            return View(victuzActivity);
+            var attendees = _context.Participation
+                .Include(p => p.User)
+                .ThenInclude(u => u.Credential)
+                .Where(p => p.ActivityId == id);
+
+            var viewModel = new VictuzActivityViewModel() 
+            { 
+                VictuzActivity = victuzActivity, 
+                Attendees = attendees.ToList() 
+            };
+            viewModel.SetOldPicture();
+
+
+
+            return View(viewModel);
         }
 
         // GET: VictuzActivities/Create
