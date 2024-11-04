@@ -15,7 +15,6 @@
             <th>@Html.DisplayNameFor(model => model.Suggestion.Title)</th>
             <th>@Html.DisplayNameFor(model => model.Suggestion.Description)</th>
             <th>@Html.DisplayNameFor(model => model.Suggestion.User.Credential.UserName)</th>
-            <th>Liked</th>
             <th>Like Count</th>
             <th></th>
         </tr>
@@ -27,9 +26,14 @@
                 <td>@Html.DisplayFor(modelItem => item.Suggestion.Title)</td>
                 <td>@Html.DisplayFor(modelItem => item.Suggestion.Description)</td>
                 <td>@Html.DisplayFor(modelItem => item.Suggestion.User.Credential.UserName)</td>
-                <td>@(item.IsLiked ? "Yes" : "No")</td>
-                <td>@item.LikeCount</td>
+                <td id="like-count-@item.Suggestion.Id">@item.LikeCount</td>
                 <td>
+                    <img id="like-icon-@item.Suggestion.Id"
+                         src="@(item.IsLiked ? "/img/Liked.png" : "/img/UnLiked.png")"
+                         alt="Like"
+                         style="cursor: pointer; width: 24px; height: 24px;"
+                         onclick="toggleLike(@item.Suggestion.Id)" />
+
                     <a asp-action="Edit" asp-route-id="@item.Suggestion.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Suggestion.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Suggestion.Id">Delete</a>
@@ -38,3 +42,28 @@
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function toggleLike(suggestionId) {
+            $.post('/Suggestions/ToggleLike', { suggestionId: suggestionId }, function (response) {
+                if (response.success) {
+                    // Update the UI dynamically based on the response
+                    const likeCountElement = document.getElementById(`like-count-${suggestionId}`);
+                    const likeIcon = document.getElementById(`like-icon-${suggestionId}`);
+
+                    if (response.liked) {
+                        likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+                        likeIcon.src = "/img/Liked.png"; // Change to the 'liked' image
+                    } else {
+                        likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1;
+                        likeIcon.src = "/img/UnLiked.png"; // Change to the 'unliked' image
+                    }
+                }
+            }).fail(function () {
+                alert('An unexpected error occurred. Please try again.');
+            });
+        }
+    </script>
+}

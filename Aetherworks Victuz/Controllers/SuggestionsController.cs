@@ -29,22 +29,21 @@ namespace Aetherworks_Victuz.Controllers
         // GET: Suggestions
         public async Task<IActionResult> Index()
         {
-            int? currentUserId = null;
+            var identityUserId = _userManager.GetUserId(User);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.CredentialId == identityUserId);
 
-            string userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int parsedUserId))
+            if (user == null)
             {
-                currentUserId = parsedUserId;
+                return NotFound("User not found.");
             }
 
             var suggestions = await _context.Suggestions
-                .Include(s => s.User)
-                .ThenInclude(u => u.Credential)
+                .Include(s => s.SuggestionLikeds)
                 .Select(s => new SuggestionViewModel
                 {
                     Suggestion = s,
-                    IsLiked = currentUserId.HasValue && _context.SuggestionLiked.Any(l => l.SuggestionId == s.Id && l.UserId == currentUserId.Value),
-                    LikeCount = _context.SuggestionLiked.Count(l => l.SuggestionId == s.Id)
+                    LikeCount = s.SuggestionLikeds.Count,
+                    IsLiked = s.SuggestionLikeds.Any(sl => sl.UserId == user.Id)
                 })
                 .ToListAsync();
 
@@ -216,6 +215,44 @@ namespace Aetherworks_Victuz.Controllers
         private bool SuggestionExists(int id)
         {
             return _context.Suggestions.Any(e => e.Id == id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleLike(int suggestionId)
+        {
+            // Get the current logged-in user's ID
+            var identityUserId = _userManager.GetUserId(User);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.CredentialId == identityUserId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Check if the user has already liked the suggestion
+            var existingLike = await _context.SuggestionLiked
+                .FirstOrDefaultAsync(sl => sl.SuggestionId == suggestionId && sl.UserId == user.Id);
+
+            if (existingLike != null)
+            {
+                // If a like exists, remove it (unlike)
+                _context.SuggestionLiked.Remove(existingLike);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, liked = false });
+            }
+            else
+            {
+                // If no like exists, add it (like)
+                var newLike = new SuggestionLiked
+                {
+                    SuggestionId = suggestionId,
+                    UserId = user.Id
+                };
+
+                _context.SuggestionLiked.Add(newLike);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true, liked = true });
+            }
         }
     }
 }
