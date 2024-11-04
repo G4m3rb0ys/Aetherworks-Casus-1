@@ -20,3 +20,154 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.btnLocation {
+    border-radius: 12px;
+}
+.NavBarGeneral {
+    background-color: #adc2c5;
+}
+.location {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px #adc2c5;
+}
+
+.location td, .location th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.location tr:nth-child(even) {
+    background-color: #adc2c5;
+}
+
+.location tr:hover {
+    background-color: #adc2c5;
+}
+
+.location th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #26939d;
+    color: white;
+}
+/* General Container Styles */
+.container {
+    padding: 20px;
+}
+
+/* Activities Grid Styles */
+.activities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between activity cards */
+    align-items: stretch; /* Ensure all cards have the same height */
+}
+
+/* Individual Activity Card Styles */
+.activity-card {
+    flex: 1 1 calc(33.333% - 20px); /* Three cards per row with equal spacing */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column; /* Ensure content stacks vertically */
+}
+
+    .activity-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+.activity-details {
+    padding: 15px;
+    text-align: left;
+    flex-grow: 1; /* Make the details section fill the remaining space */
+}
+
+    .activity-details h5 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .activity-details p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+.btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: not-allowed;
+}
+
+/* Make the entire card link clickable without looking like a link */
+.activity-card-link {
+    text-decoration: none; /* Remove the underline */
+    color: inherit; /* Inherit the text color to match the card's style */
+    display: block; /* Make the link cover the entire card */
+}
+
+/* Style the activity card */
+.activity-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    padding: 15px;
+}
+
+    .activity-card:hover {
+        transform: translateY(-5px); /* Hover effect */
+    }
+
+/* Style the image inside the activity card */
+.activity-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Button styles */
+.btn {
+    text-decoration: none;
+    color: white; /* Button text color */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Secondary button color */
+    border: none;
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Danger button color */
+    border: none;
+}

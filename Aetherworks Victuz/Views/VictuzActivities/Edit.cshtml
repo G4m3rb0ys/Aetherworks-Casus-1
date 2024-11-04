@@ -1,15 +1,13 @@
 ﻿@model Aetherworks_Victuz.Models.VictuzActivity
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit " + Model.Name;
 }
 
-<h1>Edit</h1>
+<h1>@Model.Name</h1>
 
-<h4>VictuzActivity</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -32,6 +30,9 @@
                 <label asp-for="Picture" class="control-label"></label>
                 <input type="file" name="PictureFile" class="form-control" />
                 <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <img src="@Model.Picture" style="max-width: 200px; max-height: 200px;"/>
             </div>
             <div class="form-group">
                 <label asp-for="LocationId" class="control-label"></label>
@@ -63,6 +64,10 @@
                 <input asp-for="ParticipantLimit" class="form-control" />
                 <span asp-validation-for="ParticipantLimit" class="text-danger"></span>
             </div>
+            <div id="hide" class="form-group">
+                <input value="@Model.Picture" asp-for="Picture" class="form-control" id="hide"/>
+                <span asp-validation-for="Picture" class="text-danger" class="text-danger" id="hide"/>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -74,12 +79,16 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $('#hide').hide();
+    });
     $(document).ready(function() {
         $('#categorySelect').on('change', function() {
             var selectedCategory = $(this).val();

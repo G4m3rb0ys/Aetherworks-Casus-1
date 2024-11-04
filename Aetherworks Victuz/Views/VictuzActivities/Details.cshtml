@@ -1,75 +1,104 @@
-﻿@model Aetherworks_Victuz.Models.VictuzActivity
+﻿@model Aetherworks_Victuz.Models.VictuzActivityViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.VictuzActivity.Name;
 }
 
-<h1>Details</h1>
+<h1>@(Model.VictuzActivity.Name)</h1>
 
-<div>
+<div class="row">
     <h4>VictuzActivity</h4>
-    <hr />
-    <dl class="row">
-        <dt>
-            <img src="@Model.Picture" style="max-width: 200px; max-height: 200px;" />
-        </dt>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ActivityDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActivityDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Host)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Host.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.Price?.ToString("C")
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemberPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.MemberPrice?.ToString("C")
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ParticipantLimit)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ParticipantLimit)
-        </dd>
-    </dl>
+    <div class="col-md-6"
+        <hr />
+        <dl class="row">
+            <dt>
+                <img src="@Model.VictuzActivity.Picture" style="max-width: 200px; max-height: 200px;" />
+            </dt>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Category)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.Category)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Name)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.Name)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Description)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.Description)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Location)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.Location.Id)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.ActivityDate)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.ActivityDate)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Host)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.Host.Id)
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.Price)
+            </dt>
+            <dd class = "col-sm-10">
+                @Model.VictuzActivity.Price?.ToString("C")
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.MemberPrice)
+            </dt>
+            <dd class = "col-sm-10">
+                @Model.VictuzActivity.MemberPrice?.ToString("C")
+            </dd>
+            <dt class = "col-sm-5">
+                @Html.DisplayNameFor(model => model.VictuzActivity.ParticipantLimit)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.VictuzActivity.ParticipantLimit)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Attendees)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Credential.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Credential.Email)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.VictuzActivity.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -1,0 +1,72 @@
+﻿/* General Container Styles */
+.container {
+    padding: 20px;
+}
+
+/* Activities Grid Styles */
+.activities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between activity cards */
+    align-items: stretch; /* Ensure all cards have the same height */
+}
+
+/* Individual Activity Card Styles */
+.activity-card {
+    flex: 1 1 calc(33.333% - 20px); /* Three cards per row with equal spacing */
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column; /* Ensure content stacks vertically */
+}
+
+    .activity-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+.activity-details {
+    padding: 15px;
+    text-align: left;
+    flex-grow: 1; /* Make the details section fill the remaining space */
+}
+
+    .activity-details h5 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .activity-details p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+.btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: not-allowed;
+}
