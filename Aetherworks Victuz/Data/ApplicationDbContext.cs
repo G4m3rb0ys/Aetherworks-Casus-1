@@ -19,6 +19,7 @@ namespace Aetherworks_Victuz.Data
         public DbSet<Suggestion> Suggestions { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<SuggestionLiked> SuggestionLiked { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -73,17 +74,29 @@ namespace Aetherworks_Victuz.Data
                 .WithOne(ua => ua.Activity)
                 .HasForeignKey(ua => ua.ActivityId);
 
-            // Relation for User -> Suggestion
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Suggestions)
-                .WithOne(s => s.User)
+            // Relation for Suggestion -> SuggestionLiked
+            modelBuilder.Entity<SuggestionLiked>()
+                .HasOne(sl => sl.Suggestion)
+                .WithMany(s => s.SuggestionLikeds)
+                .HasForeignKey(sl => sl.SuggestionId);
+
+            // Relation for User -> SuggestionLiked
+            modelBuilder.Entity<SuggestionLiked>()
+                .HasOne(sl => sl.User)
+                .WithMany(u => u.SuggestionLikeds)
+                .HasForeignKey(sl => sl.UserId);
+
+            // Relation for Suggestion -> User
+            modelBuilder.Entity<Suggestion>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.Suggestions)
                 .HasForeignKey(s => s.UserId);
 
             // Relation for Penalty -> User
             modelBuilder.Entity<Penalty>()
-                .HasOne(bl => bl.User)
-                .WithMany(u => u.Penalties)
-                .HasForeignKey(bl => bl.UserId);
+                .HasOne(bl => bl.Role)
+                .WithOne()
+                .HasForeignKey<Penalty>(bl => bl.RoleId);
 
             /// 
             /// Relations for Authentications
