@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.btnLocation {
+    border-radius: 12px;
+}
