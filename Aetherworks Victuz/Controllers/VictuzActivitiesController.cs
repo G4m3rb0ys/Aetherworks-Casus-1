@@ -27,8 +27,36 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.VictuzActivities.Include(v => v.Host).Include(v => v.Location);
-            return View(await applicationDbContext.ToListAsync());
+            // Define the date range for the calendar
+            var startDate = DateTime.Today;
+            var endDate = startDate.AddDays(30); // Next 31 days including today
+
+            // Retrieve activities within the date range and include related entities
+            var activities = await _context.VictuzActivities
+                .Where(a => a.ActivityDate.Date >= startDate && a.ActivityDate.Date <= endDate)
+                .OrderBy(a => a.ActivityDate)
+                .Include(v => v.Host)
+                .Include(v => v.Location)
+                .Include(v => v.ParticipantsList)
+                .ToListAsync();
+
+            // Create the CalendarViewModel
+            var calendarViewModel = new CalendarViewModel
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                Activities = activities
+            };
+
+            // Create the CompositeViewModel
+            var viewModel = new CompositeViewModel
+            {
+                Calendar = calendarViewModel,
+                Activities = activities // Add activities to the composite model
+            };
+
+            // Pass the composite view model to the view
+            return View(viewModel);
         }
 
         // GET: VictuzActivities/Details/5
