@@ -4,101 +4,86 @@
     ViewData["Title"] = Model.VictuzActivity.Name;
 }
 
-<h1>@(Model.VictuzActivity.Name)</h1>
+<div class="container my-5">
+    <!-- Activity Banner -->
+    <div class="text-center mb-4">
+        <h1 class="mb-3">@Model.VictuzActivity.Name</h1>
+        <img src="@Model.VictuzActivity.Picture" alt="Activity Image" class="img-fluid" />
+    </div>
 
-<div class="row">
-    <h4>VictuzActivity</h4>
-    <div class="col-md-6"
-        <hr />
-        <dl class="row">
-            <dt>
-                <img src="@Model.VictuzActivity.Picture" style="max-width: 200px; max-height: 200px;" />
-            </dt>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Category)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.Category)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Name)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.Name)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Description)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.Description)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Location)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.Location.Id)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.ActivityDate)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.ActivityDate)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Host)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.Host.Id)
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.Price)
-            </dt>
-            <dd class = "col-sm-10">
-                @Model.VictuzActivity.Price?.ToString("C")
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.MemberPrice)
-            </dt>
-            <dd class = "col-sm-10">
-                @Model.VictuzActivity.MemberPrice?.ToString("C")
-            </dd>
-            <dt class = "col-sm-5">
-                @Html.DisplayNameFor(model => model.VictuzActivity.ParticipantLimit)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.VictuzActivity.ParticipantLimit)
-            </dd>
-        </dl>
-    </div>
-    <div class="col-md-6">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Username
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Attendees)
-                {
+    <div class="row">
+        <!-- Activity Details Section -->
+        <div class="col-md-6 mb-4">
+            <h4 class="text-primary">Activity Details</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-5">Category</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Category)</dd>
+
+                <dt class="col-sm-5">Description</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Description)</dd>
+
+                <dt class="col-sm-5">Location</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Location.Id)</dd>
+
+                <dt class="col-sm-5">Date</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.ActivityDate)</dd>
+
+                <dt class="col-sm-5">Host</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Host.Id)</dd>
+
+                <dt class="col-sm-5">Price</dt>
+                <dd class="col-sm-7">@Model.VictuzActivity.Price?.ToString("C")</dd>
+
+                <dt class="col-sm-5">Member Price</dt>
+                <dd class="col-sm-7">@Model.VictuzActivity.MemberPrice?.ToString("C")</dd>
+
+                <dt class="col-sm-5">Participant Limit</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.ParticipantLimit)</dd>
+            </dl>
+        </div>
+
+        <!-- Attendees Section -->
+        <div class="col-md-6">
+            <h4 class="text-primary">Attendees</h4>
+            <hr />
+            <table class="table table-striped">
+                <thead class="table-dark">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.User.Credential.UserName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.User.Credential.Email)
-                        </td>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Attended</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var attendee in Model.Attendees)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
+                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
+                            <td>
+                                <!-- Form to toggle attendance status -->
+                                <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
+                                    <input type="hidden" name="participationId" value="@attendee.Id" />
+                                    <button type="submit" class="btn btn-link p-0">
+                                        <i class="fas @(attendee.Attended ? "fa-check-circle" : "fa-times-circle")"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.VictuzActivity.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.VictuzActivity.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+}
