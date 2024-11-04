@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Aetherworks_Victuz.styles.css" asp-append-version="true" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -26,9 +28,6 @@
                             <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
                         </li>
                         <li class="nav-item">
@@ -39,14 +38,31 @@
                         </li>
                     </ul>
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Account
-                        </button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </button>
+                        }
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
+                                <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
+                            }
                         </ul>
                     </div>
+
                 </div>
             </div>
         </nav>
