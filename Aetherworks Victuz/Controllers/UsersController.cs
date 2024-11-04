@@ -22,7 +22,8 @@ namespace Aetherworks_Victuz.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.User.Include(u => u.Credential);
+            var applicationDbContext = _context.User
+                .Include(u => u.Credential);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -41,6 +42,18 @@ namespace Aetherworks_Victuz.Controllers
             {
                 return NotFound();
             }
+            user.Suggestions = _context.Suggestions
+                .Where(s => s.UserId == id)
+                .ToList();
+
+            user.Participations = _context.Participation
+                .Where(p => p.UserId == id)
+                .ToList();
+
+            user.Penalties = _context.Penalties
+                .Where(p => p.UserId == id)
+                .ToList();
+                
 
             return View(user);
         }
