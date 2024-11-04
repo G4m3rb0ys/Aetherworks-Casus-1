@@ -52,6 +52,7 @@ namespace Aetherworks_Victuz.Controllers
                 Suggestions = suggestions // Voeg de suggesties toe aan het model
             };
 
+
             return View(model);
         }
 

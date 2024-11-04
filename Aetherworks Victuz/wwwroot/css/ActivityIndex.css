@@ -1,26 +1,4 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-/* General Container Styles */
+﻿/* General Container Styles */
 .container {
     padding: 20px;
 }
@@ -91,49 +69,4 @@ body {
     color: #fff;
     border: none;
     cursor: not-allowed;
-}
-
-/* Make the entire card link clickable without looking like a link */
-.activity-card-link {
-    text-decoration: none; /* Remove the underline */
-    color: inherit; /* Inherit the text color to match the card's style */
-    display: block; /* Make the link cover the entire card */
-}
-
-/* Style the activity card */
-.activity-card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    padding: 15px;
-}
-
-    .activity-card:hover {
-        transform: translateY(-5px); /* Hover effect */
-    }
-
-/* Style the image inside the activity card */
-.activity-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-/* Button styles */
-.btn {
-    text-decoration: none;
-    color: white; /* Button text color */
-}
-
-.btn-secondary {
-    background-color: #6c757d; /* Secondary button color */
-    border: none;
-}
-
-.btn-danger {
-    background-color: #dc3545; /* Danger button color */
-    border: none;
 }
