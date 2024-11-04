@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aetherworks_Victuz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241031121650_CreateDatabaseWithData")]
-    partial class CreateDatabaseWithData
+    [Migration("20241104111451_SuggestionNew")]
+    partial class SuggestionNew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace Aetherworks_Victuz.Migrations
                         {
                             Id = 1,
                             EndDate = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RoleId = "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b",
+                            RoleId = "7bbed690-54d4-44ad-9882-2b47f0083452",
                             UserId = 2
                         });
                 });
@@ -231,7 +231,7 @@ namespace Aetherworks_Victuz.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -264,6 +264,29 @@ namespace Aetherworks_Victuz.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Aetherworks_Victuz.Models.SuggestionLiked", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SuggestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SuggestionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SuggestionLiked");
+                });
+
             modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -287,17 +310,17 @@ namespace Aetherworks_Victuz.Migrations
                         new
                         {
                             Id = 1,
-                            CredentialId = "2e333d4b-4c24-448f-a7aa-7608197d5fad"
+                            CredentialId = "9288abf6-80aa-4264-adfe-aa2bde37aee7"
                         },
                         new
                         {
                             Id = 2,
-                            CredentialId = "eaab06bd-a9b6-4785-90bb-d84573827962"
+                            CredentialId = "f332a963-f2f8-4d08-a36c-893e41d48d93"
                         },
                         new
                         {
                             Id = 3,
-                            CredentialId = "37373097-0ed7-4677-b07f-954fb9eb08ae"
+                            CredentialId = "c0838d66-a525-4ab8-bcc4-604831cc3e01"
                         });
                 });
 
@@ -424,17 +447,17 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b3cb4480-7af2-4cc5-90dc-0028c7b94190",
+                            Id = "df38c467-05d2-436b-b8ee-8e13038bdcd3",
                             Name = "Organizer"
                         },
                         new
                         {
-                            Id = "5cc78e5a-bd90-4adc-91c6-1b0bf91708ad",
+                            Id = "a533c6bd-4793-48da-ba1d-40d76f974fb2",
                             Name = "Member"
                         },
                         new
                         {
-                            Id = "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b",
+                            Id = "7bbed690-54d4-44ad-9882-2b47f0083452",
                             Name = "Guest"
                         });
                 });
@@ -531,7 +554,7 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2e333d4b-4c24-448f-a7aa-7608197d5fad",
+                            Id = "9288abf6-80aa-4264-adfe-aa2bde37aee7",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
                             Email = "organizer@gmail.com",
@@ -547,7 +570,7 @@ namespace Aetherworks_Victuz.Migrations
                         },
                         new
                         {
-                            Id = "eaab06bd-a9b6-4785-90bb-d84573827962",
+                            Id = "f332a963-f2f8-4d08-a36c-893e41d48d93",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
                             Email = "member@gmail.com",
@@ -563,7 +586,7 @@ namespace Aetherworks_Victuz.Migrations
                         },
                         new
                         {
-                            Id = "37373097-0ed7-4677-b07f-954fb9eb08ae",
+                            Id = "c0838d66-a525-4ab8-bcc4-604831cc3e01",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
                             Email = "guest@gmail.com",
@@ -645,18 +668,18 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "2e333d4b-4c24-448f-a7aa-7608197d5fad",
-                            RoleId = "b3cb4480-7af2-4cc5-90dc-0028c7b94190"
+                            UserId = "9288abf6-80aa-4264-adfe-aa2bde37aee7",
+                            RoleId = "df38c467-05d2-436b-b8ee-8e13038bdcd3"
                         },
                         new
                         {
-                            UserId = "eaab06bd-a9b6-4785-90bb-d84573827962",
-                            RoleId = "5cc78e5a-bd90-4adc-91c6-1b0bf91708ad"
+                            UserId = "f332a963-f2f8-4d08-a36c-893e41d48d93",
+                            RoleId = "a533c6bd-4793-48da-ba1d-40d76f974fb2"
                         },
                         new
                         {
-                            UserId = "37373097-0ed7-4677-b07f-954fb9eb08ae",
-                            RoleId = "b136b696-dd1d-4ca8-bc09-dc9a242a8f9b"
+                            UserId = "c0838d66-a525-4ab8-bcc4-604831cc3e01",
+                            RoleId = "7bbed690-54d4-44ad-9882-2b47f0083452"
                         });
                 });
 
@@ -721,9 +744,24 @@ namespace Aetherworks_Victuz.Migrations
                 {
                     b.HasOne("Aetherworks_Victuz.Models.User", "User")
                         .WithMany("Suggestions")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Aetherworks_Victuz.Models.SuggestionLiked", b =>
+                {
+                    b.HasOne("Aetherworks_Victuz.Models.Suggestion", "Suggestion")
+                        .WithMany("SuggestionLikeds")
+                        .HasForeignKey("SuggestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Aetherworks_Victuz.Models.User", "User")
+                        .WithMany("SuggestionLikeds")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Suggestion");
 
                     b.Navigation("User");
                 });
@@ -807,11 +845,18 @@ namespace Aetherworks_Victuz.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Aetherworks_Victuz.Models.Suggestion", b =>
+                {
+                    b.Navigation("SuggestionLikeds");
+                });
+
             modelBuilder.Entity("Aetherworks_Victuz.Models.User", b =>
                 {
                     b.Navigation("Participations");
 
                     b.Navigation("Penalties");
+
+                    b.Navigation("SuggestionLikeds");
 
                     b.Navigation("Suggestions");
                 });
