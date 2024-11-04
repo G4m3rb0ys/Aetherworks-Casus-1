@@ -20,6 +20,40 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.btnLocation {
+    border-radius: 12px;
+}
+.NavBarGeneral {
+    background-color: #adc2c5;
+}
+.location {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px #adc2c5;
+}
+
+.location td, .location th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.location tr:nth-child(even) {
+    background-color: #adc2c5;
+}
+
+.location tr:hover {
+    background-color: #adc2c5;
+}
+
+.location th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #26939d;
+    color: white;
+}
 /* General Container Styles */
 .container {
     padding: 20px;
