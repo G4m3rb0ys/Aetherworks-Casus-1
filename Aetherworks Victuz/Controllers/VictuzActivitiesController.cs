@@ -2,15 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
 using static Aetherworks_Victuz.Models.VictuzActivity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Reflection;
+using System.Diagnostics;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -28,11 +30,9 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities
         public async Task<IActionResult> Index()
         {
-            // Define the date range for the calendar
             var startDate = DateTime.Today;
-            var endDate = startDate.AddDays(30); // Next 31 days including today
+            var endDate = startDate.AddDays(30);
 
-            // Retrieve activities within the date range and include related entities
             var activities = await _context.VictuzActivities
                 .Where(a => a.ActivityDate.Date >= startDate && a.ActivityDate.Date <= endDate)
                 .OrderBy(a => a.ActivityDate)
@@ -41,7 +41,6 @@ namespace Aetherworks_Victuz.Controllers
                 .Include(v => v.ParticipantsList)
                 .ToListAsync();
 
-            // Create the CalendarViewModel
             var calendarViewModel = new CalendarViewModel
             {
                 StartDate = startDate,
@@ -49,16 +48,78 @@ namespace Aetherworks_Victuz.Controllers
                 Activities = activities
             };
 
-            // Create the CompositeViewModel
             var viewModel = new CompositeViewModel
             {
                 Calendar = calendarViewModel,
-                Activities = activities // Add activities to the composite model
+                Activities = activities
             };
 
-            // Pass the composite view model to the view
             return View(viewModel);
         }
+
+// POST: VictuzActivities/Register
+[HttpPost]
+[Authorize]
+public async Task<IActionResult> Register(int activityId)
+{
+    var activity = await _context.VictuzActivities
+        .Include(a => a.ParticipantsList)
+        .FirstOrDefaultAsync(a => a.Id == activityId);
+
+    if (activity == null)
+    {
+        return NotFound();
+    }
+
+    if (activity.ParticipantLimit > 0 && activity.ParticipantsList.Count >= activity.ParticipantLimit)
+    {
+        TempData["ErrorMessage"] = "De activiteit zit vol.";
+        return RedirectToAction("Index");
+    }
+
+    // Haal het IdentityUserId op van de ingelogde gebruiker
+    var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (string.IsNullOrEmpty(identityUserId))
+    {
+        TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
+        return RedirectToAction("Index");
+    }
+
+    // Zoek de bijbehorende User in jouw database op basis van de Credential.Id van IdentityUser
+    var user = await _context.User
+        .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
+
+    if (user == null)
+    {
+        TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
+        return RedirectToAction("Index");
+    }
+
+    // Controleer of de gebruiker al is ingeschreven voor de activiteit
+    if (activity.ParticipantsList.Any(p => p.UserId == user.Id))
+    {
+        TempData["ErrorMessage"] = "Je bent al ingeschreven voor deze activiteit.";
+        return RedirectToAction("Index");
+    }
+
+    // Voeg de gebruiker toe aan de deelnemerslijst
+    var participation = new Participation
+    {
+        UserId = user.Id
+    };
+
+    activity.ParticipantsList.Add(participation);
+    _context.Update(activity);
+    await _context.SaveChangesAsync();
+
+    TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor de activiteit.";
+    return RedirectToAction("Index");
+}
+
+
+
+
 
         // GET: VictuzActivities/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -78,19 +139,6 @@ namespace Aetherworks_Victuz.Controllers
             }
 
             return View(victuzActivity);
-        }
-
-        public string GetDisplayNameForCategory(ActivityCategories category)
-        {
-            return category switch
-            {
-                ActivityCategories.Free => "Free Activity",
-                ActivityCategories.MemFree => "Free for Members",
-                ActivityCategories.PayAll => "Paid for All",
-                ActivityCategories.MemOnlyFree => "Members Only - Free",
-                ActivityCategories.MemOnlyPay => "Members Only - Paid",
-                _ => category.ToString()
-            };
         }
 
         // GET: VictuzActivities/Create
@@ -135,7 +183,6 @@ namespace Aetherworks_Victuz.Controllers
                     victuzActivity.Picture = "\\img\\" + uniqueFileName;
                 }
 
-                // Add the activity to the database and save changes
                 _context.Add(victuzActivity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -216,7 +263,6 @@ namespace Aetherworks_Victuz.Controllers
                     }
 
                     victuzActivity.Picture = "\\img\\" + uniqueFileName;
-
                 }
 
                 _context.Update(victuzActivity);
@@ -285,25 +331,18 @@ namespace Aetherworks_Victuz.Controllers
             return _context.VictuzActivities.Any(e => e.Id == id);
         }
 
-        // Optional: If you want to display activities by date
-        public async Task<IActionResult> ActivitiesByDate(string date)
+        private string GetDisplayNameForCategory(ActivityCategories category)
         {
-            if (string.IsNullOrEmpty(date))
+            return category switch
             {
-                return NotFound();
-            }
-
-            DateTime selectedDate;
-            if (!DateTime.TryParse(date, out selectedDate))
-            {
-                return NotFound();
-            }
-
-            var activities = await _context.VictuzActivities
-                .Where(a => a.ActivityDate.Date == selectedDate.Date)
-                .ToListAsync();
-
-            return View(activities);
+                ActivityCategories.Free => "Free Activity",
+                ActivityCategories.MemFree => "Free for Members",
+                ActivityCategories.PayAll => "Paid for All",
+                ActivityCategories.MemOnlyFree => "Members Only - Free",
+                ActivityCategories.MemOnlyPay => "Members Only - Paid",
+                _ => category.ToString()
+            };
         }
+
     }
 }

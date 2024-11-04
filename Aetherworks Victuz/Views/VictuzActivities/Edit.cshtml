@@ -1,98 +1,116 @@
 ﻿@model Aetherworks_Victuz.Models.VictuzActivity
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Bewerk Activiteit";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow activity-card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Bewerk Activiteit</h2>
+                </div>
+                <div class="card-body activity-card-body">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="Id" />
 
-<h4>VictuzActivity</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" value="ViewBag.CurrentCategory" asp-items="ViewBag.Category" id="categorySelect" class="form-control"></select>
-                <span asp-validation-for="Category" class="text-danger"></span>
+                        <div class="form-group mb-3">
+                            <label asp-for="Category" class="form-label fw-bold"></label>
+                            <select asp-for="Category" value="ViewBag.CurrentCategory" asp-items="ViewBag.Category" id="categorySelect" class="form-select"></select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label fw-bold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Picture" class="form-label fw-bold"></label>
+                            <input type="file" name="PictureFile" class="form-control" />
+                            <span asp-validation-for="Picture" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <img src="@Model.Picture" class="activity-image-preview" alt="Current Picture" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="LocationId" class="form-label fw-bold"></label>
+                            <select asp-for="LocationId" class="form-select" asp-items="ViewBag.LocationId"></select>
+                            <span asp-validation-for="LocationId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ActivityDate" class="form-label fw-bold"></label>
+                            <input asp-for="ActivityDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="ActivityDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="HostId" class="form-label fw-bold"></label>
+                            <select asp-for="HostId" class="form-select" asp-items="ViewBag.HostId"></select>
+                            <span asp-validation-for="HostId" class="text-danger"></span>
+                        </div>
+
+                        <div id="lineMemFree-linePayAll" class="form-group mb-3">
+                            <label asp-for="Price" class="form-label fw-bold"></label>
+                            <input asp-for="Price" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div id="lineMemberPrice" class="form-group mb-3">
+                            <label asp-for="MemberPrice" class="form-label fw-bold"></label>
+                            <input asp-for="MemberPrice" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="MemberPrice" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="ParticipantLimit" class="form-label fw-bold"></label>
+                            <input asp-for="ParticipantLimit" type="number" min="1" class="form-control" />
+                            <span asp-validation-for="ParticipantLimit" class="text-danger"></span>
+                        </div>
+
+                        <div id="hide" class="form-group mb-3">
+                            <input value="@Model.Picture" asp-for="Picture" class="form-control" />
+                            <span asp-validation-for="Picture" class="text-danger" id="hide" />
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <input type="submit" value="Opslaan" class="btn btn-primary btn-lg" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+            <div class="mt-3 text-center">
+                <a asp-action="Index" class="btn btn-outline-secondary">Terug naar lijst</a>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Picture" class="control-label"></label>
-                <input type="file" name="PictureFile" class="form-control" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <img src="@Model.Picture" style="max-width: 200px; max-height: 200px;"/>
-            </div>
-            <div class="form-group">
-                <label asp-for="LocationId" class="control-label"></label>
-                <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
-                <span asp-validation-for="LocationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActivityDate" class="control-label"></label>
-                <input asp-for="ActivityDate" class="form-control" />
-                <span asp-validation-for="ActivityDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HostId" class="control-label"></label>
-                <select asp-for="HostId" class="form-control" asp-items="ViewBag.HostId"></select>
-                <span asp-validation-for="HostId" class="text-danger"></span>
-            </div>
-            <div id="lineMemFree-linePayAll" class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" type="number" min="0" step="0.01" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div id="lineMemberPrice" class="form-group">
-                <label asp-for="MemberPrice" class="control-label"></label>
-                <input asp-for="MemberPrice" type="number" min="0" step="0.01" class="form-control" />
-                <span asp-validation-for="MemberPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ParticipantLimit" class="control-label"></label>
-                <input asp-for="ParticipantLimit" class="form-control" />
-                <span asp-validation-for="ParticipantLimit" class="text-danger"></span>
-            </div>
-            <div id="hide" class="form-group">
-                <input value="@Model.Picture" asp-for="Picture" class="form-control" id="hide"/>
-                <span asp-validation-for="Picture" class="text-danger" class="text-danger" id="hide"/>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#hide').hide();
-    });
-    $(document).ready(function() {
-        $('#categorySelect').on('change', function() {
+
+        $('#categorySelect').on('change', function () {
             var selectedCategory = $(this).val();
 
             // Hide both divs initially
