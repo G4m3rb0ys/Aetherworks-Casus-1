@@ -68,10 +68,16 @@
                     </table>
                 </div>
             </div>
+            <!-- Create Button for Organizers under the calendar -->
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+            {
+                <a href="@Url.Action("Create", "VictuzActivities")" class="btn btn-primary mt-3">Creëer Activiteit</a>
+            }
         </div>
 
         <!-- Main Content Area with Activities Grid -->
         <div class="col-md-9 activities-grid">
+
             <div class="row">
                 @foreach (var activity in Model.Activities)
                 {
