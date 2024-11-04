@@ -18,8 +18,11 @@ namespace Aetherworks_Victuz
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // Add Identity with role management
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>() // Enable role management
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -41,6 +44,7 @@ namespace Aetherworks_Victuz
 
             app.UseRouting();
 
+            app.UseAuthentication(); // Ensure authentication is enabled
             app.UseAuthorization();
 
             app.MapControllerRoute(

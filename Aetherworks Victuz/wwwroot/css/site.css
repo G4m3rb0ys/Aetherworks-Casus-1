@@ -1,32 +1,35 @@
+/* General Styles */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .btnLocation {
     border-radius: 12px;
 }
+
 .NavBarGeneral {
     background-color: #adc2c5;
 }
+
 .location {
     table-layout: fixed;
     width: 100%;
@@ -34,26 +37,27 @@ body {
     border: 3px #adc2c5;
 }
 
-.location td, .location th {
-    border: 1px solid black;
-    padding: 8px;
-}
+    .location td, .location th {
+        border: 1px solid black;
+        padding: 8px;
+    }
 
-.location tr:nth-child(even) {
-    background-color: #adc2c5;
-}
+    .location tr:nth-child(even) {
+        background-color: #adc2c5;
+    }
 
-.location tr:hover {
-    background-color: #adc2c5;
-}
+    .location tr:hover {
+        background-color: #adc2c5;
+    }
 
-.location th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #26939d;
-    color: white;
-}
+    .location th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #26939d;
+        color: white;
+    }
+
 /* General Container Styles */
 .container {
     padding: 20px;
@@ -79,12 +83,17 @@ body {
     transition: transform 0.2s;
     display: flex;
     flex-direction: column; /* Ensure content stacks vertically */
+    padding: 15px; /* Add padding for internal content */
 }
 
     .activity-card img {
         width: 100%;
         height: 150px;
         object-fit: cover;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-5px); /* Hover effect */
     }
 
 .activity-details {
@@ -103,6 +112,14 @@ body {
         margin: 5px 0;
     }
 
+/* Make the entire card link clickable without looking like a link */
+.activity-card-link {
+    text-decoration: none; /* Remove the underline */
+    color: inherit; /* Inherit the text color to match the card's style */
+    display: block; /* Make the link cover the entire card */
+}
+
+/* Button Styles */
 .btn {
     display: block;
     width: 100%;
@@ -111,30 +128,98 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     margin-top: 10px;
+    text-decoration: none;
+    color: white; /* Button text color */
 }
 
 .btn-primary {
     background-color: #007bff;
-    color: #fff;
     border: none;
-    cursor: pointer;
 }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
 
 .btn-danger {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: #dc3545; /* Danger button color */
     border: none;
-    cursor: not-allowed;
 }
 
-/* Make the entire card link clickable without looking like a link */
-.activity-card-link {
-    text-decoration: none; /* Remove the underline */
-    color: inherit; /* Inherit the text color to match the card's style */
-    display: block; /* Make the link cover the entire card */
+.btn-secondary {
+    background-color: #6c757d; /* Secondary button color */
+    border: none;
 }
 
-/* Style the activity card */
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+/* Form Container Styles for Create Activity */
+.activity-card-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-weight: bold;
+}
+
+.activity-card-body {
+    padding: 30px;
+}
+
+/* Form Label Styles */
+.form-label {
+    font-weight: bold;
+}
+
+/* Input Styling */
+.form-control, .form-select {
+    margin-bottom: 10px;
+}
+
+/* Container for Create Activity */
+.text-center {
+    margin-top: 30px;
+}
+
+/* Hover Effect for Buttons */
+.btn-primary:hover,
+.btn-outline-secondary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Responsive Form Styles */
+@media (max-width: 768px) {
+    .activity-card {
+        flex: 1 1 100%; /* Full width on small screens */
+    }
+}
+
+/* Existing Image Preview Styling */
+.activity-image-preview {
+    max-width: 200px; /* Constrain width */
+    max-height: 200px; /* Constrain height */
+    display: block;
+    margin: 10px auto; /* Center the image and add some space around it */
+    border: 1px solid #ddd; /* Optional: Add border to the image for visual separation */
+}
+
+/* Hidden Field Styling (used for Picture URL storage) */
+#hide {
+    display: none; /* Hide the input that stores the image URL */
+}
+
+/* Activity Card Styles for Edit Page - same as Create Page */
 .activity-card {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -145,29 +230,67 @@ body {
     padding: 15px;
 }
 
-    .activity-card:hover {
-        transform: translateY(-5px); /* Hover effect */
+/* Form Label Styles - shared across forms */
+.form-label {
+    font-weight: bold;
+    color: #333; /* Darken the label color for better contrast */
+}
+
+/* Form Container Styles for Create and Edit Activities */
+.activity-card-header {
+    background-color: #007bff; /* Keep the primary blue color */
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.activity-card-body {
+    padding: 30px;
+}
+
+/* Button Styles - shared across forms */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    text-transform: uppercase;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
     }
 
-/* Style the image inside the activity card */
-.activity-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
 }
 
-/* Button styles */
-.btn {
-    text-decoration: none;
-    color: white; /* Button text color */
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+/* Responsive Form Styles for Create and Edit Activities */
+@media (max-width: 768px) {
+    .activity-card {
+        flex: 1 1 100%; /* Full width on small screens */
+    }
 }
 
-.btn-secondary {
-    background-color: #6c757d; /* Secondary button color */
-    border: none;
+/* Align Back to List Button */
+.text-center {
+    margin-top: 30px;
 }
 
-.btn-danger {
-    background-color: #dc3545; /* Danger button color */
-    border: none;
+/* General Container Styles for Edit Form */
+.container {
+    padding: 20px;
 }
+
+/* Form Control Styles */
+.form-control, .form-select {
+    margin-bottom: 15px; /* Increase space for better separation between inputs */
+}
+
