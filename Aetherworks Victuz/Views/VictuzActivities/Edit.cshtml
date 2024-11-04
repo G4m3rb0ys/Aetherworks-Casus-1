@@ -1,13 +1,11 @@
 ﻿@model Aetherworks_Victuz.Models.VictuzActivity
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit " + Model.Name;
 }
 
-<h1>Edit</h1>
+<h1>@Model.Name</h1>
 
-<h4>VictuzActivity</h4>
-<hr />
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Edit" enctype="multipart/form-data">
