@@ -44,17 +44,15 @@ namespace Aetherworks_Victuz.Controllers
             }
             user.Suggestions = _context.Suggestions
                 .Where(s => s.UserId == id)
-                .Include(n => n.Title)
                 .ToList();
 
             user.Participations = _context.Participation
                 .Where(p => p.UserId == id)
-                .Include(a => a.Activity)
+                .Include(p => p.Activity)
                 .ToList();
 
             user.Penalties = _context.Penalties
                 .Where(p => p.UserId == id)
-                .Include(n => n.EndDate)
                 .ToList();
                 
 
