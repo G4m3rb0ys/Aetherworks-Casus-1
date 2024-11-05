@@ -1,0 +1,91 @@
+﻿@model Aetherworks_Victuz.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+<link rel="stylesheet" href="~/css/site.css">
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <table class="users">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Credential.UserName)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Credential.UserName)
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+    <table class="users">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Participations)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Participations)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activity.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>   
+    <table class="users">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Suggestions)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Suggestions)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <table class="users">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Penalties)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Penalties)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -370,3 +370,30 @@ body {
 .g-4 {
     gap: 20px; /* Adjust space between cards */
 }
+.users {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px #adc2c5;
+}
+
+.users td, .users th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.users tr:nth-child(even) {
+    background-color: #adc2c5;
+}
+
+.users tr:hover {
+    background-color: #adc2c5;
+}
+
+.users th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #26939d;
+    color: white;
+}
