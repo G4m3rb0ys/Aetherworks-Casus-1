@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Controllers/VictuzActivitiesController.cs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,8 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
-using System.Diagnostics;
 using static Aetherworks_Victuz.Models.VictuzActivity;
+using System.Diagnostics;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -56,61 +57,69 @@ namespace Aetherworks_Victuz.Controllers
             return View(viewModel);
         }
 
-        // POST: VictuzActivities/Register
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Register(int activityId)
-        {
-            var activity = await _context.VictuzActivities
-                .Include(a => a.ParticipantsList)
-                .FirstOrDefaultAsync(a => a.Id == activityId);
+// POST: VictuzActivities/Register
+[HttpPost]
+[Authorize]
+public async Task<IActionResult> Register(int activityId)
+{
+    var activity = await _context.VictuzActivities
+        .Include(a => a.ParticipantsList)
+        .FirstOrDefaultAsync(a => a.Id == activityId);
 
-            if (activity == null)
-            {
-                return NotFound();
-            }
+    if (activity == null)
+    {
+        return NotFound();
+    }
 
-            if (activity.ParticipantLimit > 0 && activity.ParticipantsList.Count >= activity.ParticipantLimit)
-            {
-                TempData["ErrorMessage"] = "De activiteit zit vol.";
-                return RedirectToAction("Index");
-            }
+    if (activity.ParticipantLimit > 0 && activity.ParticipantsList.Count >= activity.ParticipantLimit)
+    {
+        TempData["ErrorMessage"] = "De activiteit zit vol.";
+        return RedirectToAction("Index");
+    }
 
-            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    // Haal het IdentityUserId op van de ingelogde gebruiker
+    var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (string.IsNullOrEmpty(identityUserId))
-            {
-                TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
-                return RedirectToAction("Index");
-            }
+    if (string.IsNullOrEmpty(identityUserId))
+    {
+        TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
+        return RedirectToAction("Index");
+    }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
+    // Zoek de bijbehorende User in jouw database op basis van de Credential.Id van IdentityUser
+    var user = await _context.User
+        .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
 
-            if (user == null)
-            {
-                TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
-                return RedirectToAction("Index");
-            }
+    if (user == null)
+    {
+        TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
+        return RedirectToAction("Index");
+    }
 
-            if (activity.ParticipantsList.Any(p => p.UserId == user.Id))
-            {
-                TempData["ErrorMessage"] = "Je bent al ingeschreven voor deze activiteit.";
-                return RedirectToAction("Index");
-            }
+    // Controleer of de gebruiker al is ingeschreven voor de activiteit
+    if (activity.ParticipantsList.Any(p => p.UserId == user.Id))
+    {
+        TempData["ErrorMessage"] = "Je bent al ingeschreven voor deze activiteit.";
+        return RedirectToAction("Index");
+    }
 
-            var participation = new Participation
-            {
-                UserId = user.Id
-            };
+    // Voeg de gebruiker toe aan de deelnemerslijst
+    var participation = new Participation
+    {
+        UserId = user.Id
+    };
 
-            activity.ParticipantsList.Add(participation);
-            _context.Update(activity);
-            await _context.SaveChangesAsync();
+    activity.ParticipantsList.Add(participation);
+    _context.Update(activity);
+    await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor de activiteit.";
-            return RedirectToAction("Index");
-        }
+    TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor de activiteit.";
+    return RedirectToAction("Index");
+}
+
+
+
+
 
         // GET: VictuzActivities/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -134,13 +143,14 @@ namespace Aetherworks_Victuz.Controllers
                 .ThenInclude(u => u.Credential)
                 .Where(p => p.ActivityId == id);
 
-            var viewModel = new VictuzActivityViewModel
-            {
-                VictuzActivity = victuzActivity,
-                Attendees = attendees.ToList(),
-                Locations = await _context.Locations.ToListAsync(),
-                Hosts = await _context.User.ToListAsync()
+            var viewModel = new VictuzActivityViewModel() 
+            { 
+                VictuzActivity = victuzActivity, 
+                Attendees = attendees.ToList() 
             };
+            viewModel.SetOldPicture();
+
+
 
             return View(viewModel);
         }
@@ -157,24 +167,16 @@ namespace Aetherworks_Victuz.Controllers
                     category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
-            var viewModel = new VictuzActivityViewModel
-            {
-                Locations = _context.Locations.ToList(),
-                Hosts = _context.User.Include(u => u.Credential).ToList()
-            };
-
-            return View(viewModel);
+            return View();
         }
 
         // POST: VictuzActivities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(VictuzActivityViewModel viewModel, IFormFile? PictureFile)
+        public async Task<IActionResult> Create([Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit")] VictuzActivity victuzActivity, IFormFile? PictureFile)
         {
             if (ModelState.IsValid)
             {
-                var victuzActivity = viewModel.VictuzActivity;
-
                 if (PictureFile != null && PictureFile.Length > 0)
                 {
                     string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
@@ -199,12 +201,8 @@ namespace Aetherworks_Victuz.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            viewModel.Locations = _context.Locations.ToList();
-            viewModel.Hosts = _context.User.ToList();
-
-            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -212,7 +210,7 @@ namespace Aetherworks_Victuz.Controllers
                     category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
-            return View(viewModel);
+            return View(victuzActivity);
         }
 
         // GET: VictuzActivities/Edit/5
@@ -228,31 +226,31 @@ namespace Aetherworks_Victuz.Controllers
             {
                 return NotFound();
             }
-
-            var viewModel = new VictuzActivityViewModel
-            {
-                VictuzActivity = victuzActivity,
-                Locations = await _context.Locations.ToListAsync(),
-                Hosts = await _context.User.ToListAsync()
-            };
-
-            return View(viewModel);
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+            ViewData["CurrentCategory"] = GetDisplayNameForCategory(victuzActivity.Category);
+            return View(victuzActivity);
         }
 
         // POST: VictuzActivities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, VictuzActivityViewModel viewModel, IFormFile? PictureFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category,Name,Description,LocationId,ActivityDate,HostId,Price,MemberPrice,ParticipantLimit,Picture")] VictuzActivity victuzActivity, IFormFile? PictureFile)
         {
-            if (id != viewModel.VictuzActivity.Id)
+            if (id != victuzActivity.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var victuzActivity = viewModel.VictuzActivity;
-
                 if (PictureFile != null && PictureFile.Length > 0)
                 {
                     string imgFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "img");
@@ -261,7 +259,7 @@ namespace Aetherworks_Victuz.Controllers
                     {
                         Directory.CreateDirectory(imgFolderPath);
                     }
-                    else if (!string.IsNullOrEmpty(victuzActivity.Picture))
+                    else
                     {
                         string fullImagePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('\\'));
                         if (System.IO.File.Exists(fullImagePath))
@@ -287,12 +285,60 @@ namespace Aetherworks_Victuz.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            viewModel.Locations = _context.Locations.ToList();
-            viewModel.Hosts = _context.User.ToList();
-            return View(viewModel);
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id", victuzActivity.HostId);
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Id", victuzActivity.LocationId);
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+
+            return View(victuzActivity);
         }
 
-        // Additional methods (Delete, Reservations, etc.) remain unchanged
+        // GET: VictuzActivities/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var victuzActivity = await _context.VictuzActivities
+                .Include(v => v.Host)
+                .Include(v => v.Location)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (victuzActivity == null)
+            {
+                return NotFound();
+            }
+
+            return View(victuzActivity);
+        }
+
+        // POST: VictuzActivities/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var victuzActivity = await _context.VictuzActivities.FindAsync(id);
+            if (victuzActivity != null)
+            {
+                _context.VictuzActivities.Remove(victuzActivity);
+            }
+            await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(victuzActivity.Picture))
+            {
+                var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, victuzActivity.Picture.TrimStart('\\'));
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
         private bool VictuzActivityExists(int id)
         {
@@ -312,44 +358,5 @@ namespace Aetherworks_Victuz.Controllers
             };
         }
 
-        [HttpPost]
-        public IActionResult ToggleAttendance(int participationId)
-        {
-            var participation = _context.Participation.FirstOrDefault(p => p.Id == participationId);
-            if (participation == null)
-            {
-                return NotFound();
-            }
-
-            participation.Attended = !participation.Attended;
-            _context.SaveChanges();
-
-            return RedirectToAction(nameof(Details), new { id = participation.ActivityId });
-        }
-
-        public async Task<IActionResult> Reservations()
-        {
-            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(identityUserId))
-            {
-                TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
-                return RedirectToAction("Index");
-            }
-            var user = await _context.User
-                .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
-            if (user == null)
-            {
-                TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
-                return RedirectToAction("Index");
-            }
-            var reservations = _context.Participation
-                .Include(p => p.Activity)
-                .ThenInclude(a => a.Host)
-                .Include(p => p.Activity)
-                .ThenInclude(a => a.Location)
-                .Where(p => p.UserId == user.Id);
-            return View(reservations);
-        }
     }
-
 }

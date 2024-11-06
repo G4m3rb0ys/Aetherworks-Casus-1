@@ -21,7 +21,7 @@
                         {
                             <form asp-action="Register" asp-controller="VictuzActivities" method="post" class="d-inline">
                                 <input type="hidden" name="activityId" value="@nextActivity.Id" />
-                                <button type="submit" class="btn btn-secondary me-2">Meld je aan</button>
+                                <button type="submit" class="btn btn-secondary me-2">Inschrijven</button>
                             </form>
                         }
                         <a href="@Url.Action("Details", "VictuzActivities", new { id = nextActivity.Id })" class="btn btn-primary">Meer info</a>
