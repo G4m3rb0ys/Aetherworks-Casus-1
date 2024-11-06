@@ -24,13 +24,13 @@
                 <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Description)</dd>
 
                 <dt class="col-sm-5">Location</dt>
-                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Location.Id)</dd>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Location.Name)</dd>
 
                 <dt class="col-sm-5">Date</dt>
                 <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.ActivityDate)</dd>
 
                 <dt class="col-sm-5">Host</dt>
-                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Host.Id)</dd>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VictuzActivity.Host.Credential.UserName)</dd>
 
                 <dt class="col-sm-5">Price</dt>
                 <dd class="col-sm-7">@Model.VictuzActivity.Price?.ToString("C")</dd>
@@ -44,37 +44,40 @@
         </div>
 
         <!-- Attendees Section -->
-        <div class="col-md-6">
-            <h4 class="text-primary">Attendees</h4>
-            <hr />
-            <table class="table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Attended</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var attendee in Model.Attendees)
-                    {
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+        {
+            <div class="col-md-6">
+                <h4 class="text-primary">Attendees</h4>
+                <hr />
+                <table class="table table-striped">
+                    <thead class="table-dark">
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
-                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
-                            <td>
-                                <!-- Form to toggle attendance status -->
-                                <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
-                                    <input type="hidden" name="participationId" value="@attendee.Id" />
-                                    <button type="submit" class="btn btn-link p-0">
-                                        <i class="fas @(attendee.Attended ? "fa-check-circle" : "fa-times-circle")"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Attended</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var attendee in Model.Attendees)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
+                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
+                                <td>
+                                    <!-- Form to toggle attendance status -->
+                                    <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
+                                        <input type="hidden" name="participationId" value="@attendee.Id" />
+                                        <button type="submit" class="btn btn-link p-0">
+                                            <i class="fas @(attendee.Attended ? "fa-check-circle" : "fa-times-circle")"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
     <!-- Navigation Links -->
