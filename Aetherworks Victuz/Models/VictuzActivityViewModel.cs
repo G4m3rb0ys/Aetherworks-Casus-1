@@ -17,5 +17,8 @@ namespace Aetherworks_Victuz.Models
         {
             OldPicture = VictuzActivity.Picture;
         }
+        public IEnumerable<Location>? Locations { get; set; } 
+        public IEnumerable<User>? Hosts { get; set; }
+
     }
 }
