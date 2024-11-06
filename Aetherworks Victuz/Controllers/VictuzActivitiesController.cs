@@ -139,7 +139,7 @@ namespace Aetherworks_Victuz.Controllers
                 VictuzActivity = victuzActivity,
                 Attendees = attendees.ToList(),
                 Locations = await _context.Locations.ToListAsync(),
-                Hosts = await _context.User.ToListAsync()
+                Hosts = await _context.User.Include(u => u.Credential).ToListAsync()
             };
 
             return View(viewModel);

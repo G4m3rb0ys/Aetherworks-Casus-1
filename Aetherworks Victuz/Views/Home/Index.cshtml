@@ -140,9 +140,8 @@
                 Excepteur efficient emerging, multiple veniam anim aute carefully curated Ghana consectetur apologetic perfect nostrud sit amet content.
             </p>
 
-            @* Codeblok voor upcomingActivities *@
             @{
-                var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Take(3).ToList();
+                var upcomingActivities = Model.Activities.OrderBy(a => a.ActivityDate).Skip(1).Take(3).ToList();
             }
 
             <div class="row">
