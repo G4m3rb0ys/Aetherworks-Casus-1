@@ -340,6 +340,38 @@ public async Task<IActionResult> Register(int activityId)
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: VictuzActivities/reservaties
+        [Authorize]
+        public async Task<IActionResult> Reservations()
+        {
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(identityUserId))
+            {
+                TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
+                return RedirectToAction("Index");
+            }
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
+
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
+                return RedirectToAction("Index");
+            }
+
+            var reservations = _context.Participation
+                .Include(p => p.Activity)
+                .ThenInclude(a => a.Host)
+                .Include(p => p.Activity)
+                .ThenInclude(a => a.Location)
+                .Where(p => p.UserId == user.Id);
+
+            return View(reservations);
+        }
+
+
         private bool VictuzActivityExists(int id)
         {
             return _context.VictuzActivities.Any(e => e.Id == id);
@@ -357,6 +389,27 @@ public async Task<IActionResult> Register(int activityId)
                 _ => category.ToString()
             };
         }
+
+        [HttpPost]
+        public IActionResult ToggleAttendance(int participationId)
+        {
+            // Assuming you have a DbContext instance called _context
+            var participation = _context.Participation.FirstOrDefault(p => p.Id == participationId);
+            if (participation == null)
+            {
+                return NotFound(); // Handle case where participation is not found
+            }
+
+            // Toggle the attendance status
+            participation.Attended = !participation.Attended;
+
+            // Save changes to the database
+            _context.SaveChanges();
+
+            // Redirect back to the activity details page (or use RedirectToAction if needed)
+            return RedirectToAction(nameof(Details), new { id = participation.ActivityId });
+        }
+
 
     }
 }
