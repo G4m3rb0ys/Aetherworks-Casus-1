@@ -65,9 +65,10 @@
                             <select asp-for="VictuzActivity.HostId" class="form-select">
                                 @foreach (var host in Model.Hosts)
                                 {
-                                    <option value="@host.Credential.UserName" >@host.Credential.UserName</option> <!-- Adjust property as needed -->
+                                    <option value="@host.Id">@host.Credential.UserName</option> <!-- Displaying the name but binding the integer Id -->
                                 }
                             </select>
+
 
                             <span asp-validation-for="VictuzActivity.HostId" class="text-danger"></span>
                         </div>

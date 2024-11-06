@@ -160,7 +160,8 @@ namespace Aetherworks_Victuz.Controllers
             var viewModel = new VictuzActivityViewModel
             {
                 Locations = _context.Locations.ToList(),
-                Hosts = _context.User.Include(u => u.Credential).ToList()
+                Hosts = _context.User.Include(u => u.Credential).Where(u => u.Credential != null).ToList()
+
             };
 
             return View(viewModel);
@@ -171,6 +172,16 @@ namespace Aetherworks_Victuz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VictuzActivityViewModel viewModel, IFormFile? PictureFile)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState)
+                {
+                    Debug.WriteLine($"{error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+                // Return to the view with errors to display to the user
+                return View(viewModel);
+            }
+
             if (ModelState.IsValid)
             {
                 var victuzActivity = viewModel.VictuzActivity;
@@ -236,6 +247,16 @@ namespace Aetherworks_Victuz.Controllers
                 Hosts = await _context.User.ToListAsync()
             };
 
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
+
             return View(viewModel);
         }
 
@@ -286,6 +307,16 @@ namespace Aetherworks_Victuz.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
 
             viewModel.Locations = _context.Locations.ToList();
             viewModel.Hosts = _context.User.ToList();
@@ -349,6 +380,52 @@ namespace Aetherworks_Victuz.Controllers
                 .ThenInclude(a => a.Location)
                 .Where(p => p.UserId == user.Id);
             return View(reservations);
+        }
+
+        // POST: VictuzActivities/Unregister
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Unregister(int activityId)
+        {
+            var activity = await _context.VictuzActivities
+                .Include(a => a.ParticipantsList)
+                .FirstOrDefaultAsync(a => a.Id == activityId);
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(identityUserId))
+            {
+                TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
+                return RedirectToAction("Index");
+            }
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
+
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
+                return RedirectToAction("Index");
+            }
+
+            var participation = activity.ParticipantsList.FirstOrDefault(p => p.UserId == user.Id);
+            if (participation == null)
+            {
+                TempData["ErrorMessage"] = "Je bent niet ingeschreven voor deze activiteit.";
+                return RedirectToAction("Index");
+            }
+
+            activity.ParticipantsList.Remove(participation);
+            _context.Update(activity);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Je bent succesvol uitgeschreven voor de activiteit.";
+            return RedirectToAction("Index");
         }
     }
 

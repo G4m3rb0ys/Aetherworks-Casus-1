@@ -83,6 +83,14 @@
     <div class="mt-4">
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
+        @if (User.IsInRole("Organizer"))
+        {
+            <div class="mb-3">
+                <a asp-action="Edit" asp-route-id="@Model.VictuzActivity.Id" asp-controller="VictuzActivities" class="btn btn-primary">
+                    Edit Activity
+                </a>
+            </div>
+        }
 </div>
 
 @section Scripts {

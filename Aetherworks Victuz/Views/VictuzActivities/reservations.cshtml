@@ -39,10 +39,11 @@
                 <td>
                     @if (!isActivityPast && canUnregister)
                     {
-                        <form asp-action="Unregister" method="post" class="unregister-form">
-                            <input type="hidden" name="participationId" value="@item.Id" />
-                            <button type="submit" class="btn btn-warning">Unregister</button>
+                        <form asp-action="Unregister" asp-controller="VictuzActivities" method="post">
+                            <input type="hidden" name="activityId" value="@item.ActivityId" />
+                            <button type="submit" class="btn btn-danger">Uitschrijven</button>
                         </form>
+
                     }
                 </td>
             </tr>
