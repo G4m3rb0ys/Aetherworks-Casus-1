@@ -44,43 +44,42 @@
         </div>
 
         <!-- Attendees Section -->
-        @if (User.IsInRole("Organizer"))
-        {
-            <div class="col-md-6">
-                <h4 class="text-primary">Attendees</h4>
-                <hr />
-                <table class="table table-striped">
-                    <thead class="table-dark">
+        <div class="col-md-6">
+            <h4 class="text-primary">Attendees</h4>
+            <hr />
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Attended</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var attendee in Model.Attendees)
+                    {
                         <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Attended</th>
+                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
+                            <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
+                            <td>
+                                <!-- Form to toggle attendance status -->
+                                <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
+                                    <input type="hidden" name="participationId" value="@attendee.Id" />
+                                    <button type="submit" class="btn btn-link p-0">
+                                        <i class="fas @(attendee.Attended ? "fa-check-circle" : "fa-times-circle")"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var attendee in Model.Attendees)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
-                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
-                                <td>
-                                    <!-- Form to toggle attendance status -->
-                                    <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
-                                        <input type="hidden" name="participationId" value="@attendee.Id" />
-                                        <button type="submit" class="btn btn-link p-0">
-                                            <i class="fas @(attendee.Attended ? "fa-check-circle" : "fa-times-circle")"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- Navigation Links -->
     <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.VictuzActivity.Id" class="btn btn-primary">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>

@@ -65,8 +65,6 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
-                                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="VictuzActivities" asp-action="reservations">reservations</a></li>
                             }
                             else
                             {
