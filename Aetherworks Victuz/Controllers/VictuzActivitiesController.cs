@@ -326,5 +326,30 @@ namespace Aetherworks_Victuz.Controllers
 
             return RedirectToAction(nameof(Details), new { id = participation.ActivityId });
         }
+
+        public async Task<IActionResult> Reservations()
+        {
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(identityUserId))
+            {
+                TempData["ErrorMessage"] = "Kan gebruikers-ID niet ophalen. Controleer je loginstatus.";
+                return RedirectToAction("Index");
+            }
+            var user = await _context.User
+                .FirstOrDefaultAsync(u => u.Credential != null && u.Credential.Id == identityUserId);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Gebruiker niet gevonden.";
+                return RedirectToAction("Index");
+            }
+            var reservations = _context.Participation
+                .Include(p => p.Activity)
+                .ThenInclude(a => a.Host)
+                .Include(p => p.Activity)
+                .ThenInclude(a => a.Location)
+                .Where(p => p.UserId == user.Id);
+            return View(reservations);
+        }
     }
+
 }
