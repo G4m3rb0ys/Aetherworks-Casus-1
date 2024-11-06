@@ -1,8 +1,10 @@
 ﻿@model Aetherworks_Victuz.Models.User
 
 @{
+    // Set the title for the page.
     ViewData["Title"] = "Details";
 }
+// Link to the CSS file for styling.
 <link rel="stylesheet" href="~/css/site.css">
 
 <h1>Details</h1>
@@ -10,31 +12,39 @@
 <div>
     <h4>User</h4>
     <hr />
+
+    <!-- Table for displaying the user's username -->
     <table class="users">
         <thead>
             <tr>
+                <!-- Display the header for the username column -->
                 <th>
                     @Html.DisplayNameFor(model => model.Credential.UserName)
                 </th>
             </tr>
         </thead>
         <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(model => model.Credential.UserName)
-                    </td>
-                </tr>
+            <tr>
+                <!-- Display the actual username -->
+                <td>
+                    @Html.DisplayFor(model => model.Credential.UserName)
+                </td>
+            </tr>
         </tbody>
     </table>
+
+    <!-- Table for displaying user's participation activities -->
     <table class="users">
         <thead>
             <tr>
+                <!-- Display the header for the participation column -->
                 <th>
                     @Html.DisplayNameFor(model => model.Participations)
                 </th>
             </tr>
         </thead>
         <tbody>
+            <!-- Loop through each participation item and display its activity name -->
             @foreach (var item in Model.Participations)
             {
                 <tr>
@@ -44,16 +54,20 @@
                 </tr>
             }
         </tbody>
-    </table>   
+    </table>
+
+    <!-- Table for displaying user's suggestions -->
     <table class="users">
         <thead>
             <tr>
+                <!-- Display the header for the suggestions column -->
                 <th>
                     @Html.DisplayNameFor(model => model.Suggestions)
                 </th>
             </tr>
         </thead>
         <tbody>
+            <!-- Loop through each suggestion item and display its title -->
             @foreach (var item in Model.Suggestions)
             {
                 <tr>
@@ -64,15 +78,19 @@
             }
         </tbody>
     </table>
+
+    <!-- Table for displaying user's penalties -->
     <table class="users">
         <thead>
             <tr>
+                <!-- Display the header for the penalties column -->
                 <th>
                     @Html.DisplayNameFor(model => model.Penalties)
                 </th>
             </tr>
         </thead>
         <tbody>
+            <!-- Loop through each penalty item and display its end date -->
             @foreach (var item in Model.Penalties)
             {
                 <tr>
@@ -85,7 +103,10 @@
     </table>
 
 </div>
+
 <div>
+    <!-- Link to edit the user details, with the user's ID as a route parameter -->
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <!-- Link to return to the main list of users -->
     <a asp-action="Index">Back to List</a>
 </div>

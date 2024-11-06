@@ -1,36 +1,40 @@
-﻿@model IEnumerable<Aetherworks_Victuz.Models.User>
+﻿@model IEnumerable<Aetherworks_Victuz.Models.User>  // Define the model as a collection of User objects from the specified namespace
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";  // Set the page title in the ViewData dictionary
 }
-<link rel="stylesheet" href="~/css/site.css">
+<link rel="stylesheet" href="~/css/site.css">  // Link to the CSS stylesheet for page styling
 
-<h1>User Managment</h1>
+<h1>User Management</h1>  // Main header for the page
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>  // Link to navigate to the Create action for adding a new user
 </p>
+
 <table class="users">
+    // Table to display the list of users
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Credential)
+                @Html.DisplayNameFor(model => model.Credential)  // Display the header for the Credential column
             </th>
-            <th></th>
+            <th></th>  // Empty header for the action column
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credential.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {  // Loop through each user in the Model
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credential.UserName)  // Display the UserName property of the Credential object
+                </td>
+                <td>
+                    // Action links to Edit, View Details, and Delete for each user item
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
