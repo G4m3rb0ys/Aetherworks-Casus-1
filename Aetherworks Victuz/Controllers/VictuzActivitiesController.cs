@@ -148,8 +148,8 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
-            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User.Include(u => u.Credential), "Id", "Credential.Name");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Name");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -214,8 +214,8 @@ namespace Aetherworks_Victuz.Controllers
             viewModel.Locations = _context.Locations.ToList();
             viewModel.Hosts = _context.User.ToList();
 
-            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User.Include(u => u.Credential), "Id", "Credential.Name");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Name");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -247,8 +247,8 @@ namespace Aetherworks_Victuz.Controllers
                 Hosts = await _context.User.ToListAsync()
             };
 
-            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User.Include(u => u.Credential), "Id", "Credential.Name");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Name");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -308,8 +308,8 @@ namespace Aetherworks_Victuz.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            ViewData["HostId"] = new SelectList(_context.User.Include(u => u.Credential), "Id", "Credential.Name");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Name");
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
