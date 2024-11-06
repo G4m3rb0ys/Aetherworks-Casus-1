@@ -3,22 +3,23 @@
 @{
     ViewData["Title"] = "Index";  // Set the page title in the ViewData dictionary
 }
-<link rel="stylesheet" href="~/css/site.css">  // Link to the CSS stylesheet for page styling
+<link rel="stylesheet" href="~/css/site.css">  <!-- Link to the CSS stylesheet for page styling -->
 
-<h1>User Management</h1>  // Main header for the page
+
+<h1>User Management</h1>   <!-- Main header for the page -->
 
 <p>
-    <a asp-action="Create">Create New</a>  // Link to navigate to the Create action for adding a new user
+    <a asp-action="Create">Create New</a>  <!-- Link to navigate to the Create action for adding a new user -->
 </p>
 
 <table class="users">
-    // Table to display the list of users
+    <!-- Table to display the list of users -->
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Credential)  // Display the header for the Credential column
+                @Html.DisplayNameFor(model => model.Credential)   <!-- Display the header for the Credential column -->
             </th>
-            <th></th>  // Empty header for the action column
+            <th></th>  <!-- Empty header for the action column -->
         </tr>
     </thead>
     <tbody>
@@ -26,10 +27,10 @@
         {  // Loop through each user in the Model
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Credential.UserName)  // Display the UserName property of the Credential object
+                    @Html.DisplayFor(modelItem => item.Credential.UserName)  <!-- Display the UserName property of the Credential object -->
                 </td>
                 <td>
-                    // Action links to Edit, View Details, and Delete for each user item
+                    <!-- Action links to Edit, View Details, and Delete for each user item -->
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
