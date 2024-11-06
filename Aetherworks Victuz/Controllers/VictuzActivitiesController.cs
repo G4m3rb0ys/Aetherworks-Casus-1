@@ -148,6 +148,15 @@ namespace Aetherworks_Victuz.Controllers
         // GET: VictuzActivities/Create
         public IActionResult Create()
         {
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             var viewModel = new VictuzActivityViewModel
             {
                 Locations = _context.Locations.ToList(),
@@ -193,6 +202,16 @@ namespace Aetherworks_Victuz.Controllers
 
             viewModel.Locations = _context.Locations.ToList();
             viewModel.Hosts = _context.User.ToList();
+
+            ViewData["HostId"] = new SelectList(_context.User, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Id");
+            var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
+                .Cast<VictuzActivity.ActivityCategories>()
+                .ToDictionary(
+                    category => category,
+                    category => GetDisplayNameForCategory(category)
+                );
+            ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
             return View(viewModel);
         }
 
