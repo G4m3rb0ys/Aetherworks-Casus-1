@@ -1,4 +1,4 @@
-﻿@model Aetherworks_Victuz.Models.VictuzActivity
+﻿@model Aetherworks_Victuz.Models.VictuzActivityViewModel
 
 @{
     ViewData["Title"] = "Creëer Activiteit";
@@ -17,61 +17,77 @@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Category" class="form-label"></label>
-                            <select asp-for="Category" asp-items="ViewBag.Category" id="categorySelect" class="form-select"></select>
-                            <span asp-validation-for="Category" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.Category" class="form-label"></label>
+                            <select asp-for="VictuzActivity.Category" asp-items="ViewBag.Category" id="categorySelect" class="form-select"></select>
+                            <span asp-validation-for="VictuzActivity.Category" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Name" class="form-label"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.Name" class="form-label"></label>
+                            <input asp-for="VictuzActivity.Name" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.Name" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.Description" class="form-label"></label>
+                            <textarea asp-for="VictuzActivity.Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="VictuzActivity.Description" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="Picture" class="form-label"></label>
+                            <label asp-for="VictuzActivity.Picture" class="form-label"></label>
                             <input type="file" name="PictureFile" class="form-control" />
-                            <span asp-validation-for="Picture" class="text-danger"></span>
+                            <span asp-validation-for="VictuzActivity.Picture" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="LocationId" class="form-label"></label>
-                            <select asp-for="LocationId" class="form-select" asp-items="ViewBag.LocationId"></select>
+                            <label asp-for="VictuzActivity.LocationId" class="form-label"></label>
+                            <select asp-for="VictuzActivity.LocationId" class="form-select">
+                                @foreach (var location in Model.Locations)
+                                {
+                                    <option value="@location.Id">@location.Name</option> <!-- Ensure this is correct -->
+                                }
+                            </select>
+
+
+
+                            <span asp-validation-for="VictuzActivity.LocationId" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="ActivityDate" class="form-label"></label>
-                            <input asp-for="ActivityDate" class="form-control" type="datetime-local" />
-                            <span asp-validation-for="ActivityDate" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.ActivityDate" class="form-label"></label>
+                            <input asp-for="VictuzActivity.ActivityDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="VictuzActivity.ActivityDate" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="HostId" class="form-label"></label>
-                            <select asp-for="HostId" class="form-select" asp-items="ViewBag.HostId"></select>
+                            <label asp-for="VictuzActivity.HostId" class="form-label"></label>
+                            <select asp-for="VictuzActivity.HostId" class="form-select">
+                                @foreach (var host in Model.Hosts)
+                                {
+                                    <option value="@host.Credential.UserName" >@host.Credential.UserName</option> <!-- Adjust property as needed -->
+                                }
+                            </select>
+
+                            <span asp-validation-for="VictuzActivity.HostId" class="text-danger"></span>
                         </div>
 
                         <div id="lineMemFree-linePayAll" class="form-group mb-3">
-                            <label asp-for="Price" class="form-label"></label>
-                            <input asp-for="Price" type="number" min="0" step="0.01" class="form-control" />
-                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.Price" class="form-label"></label>
+                            <input asp-for="VictuzActivity.Price" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.Price" class="text-danger"></span>
                         </div>
 
                         <div id="lineMemberPrice" class="form-group mb-3">
-                            <label asp-for="MemberPrice" class="form-label"></label>
-                            <input asp-for="MemberPrice" type="number" min="0" step="0.01" class="form-control" />
-                            <span asp-validation-for="MemberPrice" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.MemberPrice" class="form-label"></label>
+                            <input asp-for="VictuzActivity.MemberPrice" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.MemberPrice" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label asp-for="ParticipantLimit" class="form-label"></label>
-                            <input asp-for="ParticipantLimit" type="number" min="1" class="form-control" />
-                            <span asp-validation-for="ParticipantLimit" class="text-danger"></span>
+                            <label asp-for="VictuzActivity.ParticipantLimit" class="form-label"></label>
+                            <input asp-for="VictuzActivity.ParticipantLimit" type="number" min="1" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.ParticipantLimit" class="text-danger"></span>
                         </div>
 
                         <div class="text-center mt-4">
