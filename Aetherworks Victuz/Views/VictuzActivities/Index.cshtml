@@ -125,7 +125,7 @@
                                 }
                                 else
                                 {
-                                    @if (User.Identity.IsAuthenticated)
+                                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Organizer") || User.IsInRole("Member")))
                                     {
                                         <form asp-action="Register" asp-controller="VictuzActivities" method="post">
                                             <input type="hidden" name="ActivityId" value="@activity.Id" />
