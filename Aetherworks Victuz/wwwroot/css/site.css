@@ -397,3 +397,99 @@ body {
     background-color: #26939d;
     color: white;
 }
+
+/* Membership Comparison Container */
+.membership-comparison {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Individual Membership Boxes */
+.membership-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #ffffff;
+}
+
+    .membership-box h4 {
+        font-family: Arial, sans-serif;
+        margin-bottom: 10px;
+    }
+
+    .membership-box p {
+        font-family: Arial, sans-serif;
+        color: #444;
+        margin: 10px 0;
+    }
+
+    .membership-box ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+        font-family: Arial, sans-serif;
+        color: #555;
+    }
+
+    .membership-box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Button Styles for Membership */
+    .membership-box button, .membership-box .info-text {
+        display: inline-block;
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        margin-top: 15px;
+        border-radius: 5px;
+        text-align: center;
+        transition: background-color 0.3s, color 0.3s;
+        text-decoration: none;
+    }
+
+    .membership-box .info-text {
+        color: #555;
+        font-size: 0.9em;
+        background-color: transparent;
+        border: none;
+        cursor: default;
+    }
+
+    .membership-box button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+        .membership-box button:hover {
+            background-color: #218838;
+        }
+
+        /* Adjusted Hover State */
+        .membership-box button:hover, .membership-box button:focus {
+            background-color: #1e7e34;
+        }
+
+/* Small Print Disclaimer */
+.membership-disclaimer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #777;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.max-width-button {
+    max-width: 125px; /* Set your desired max width */
+    display: inline-block; /* Ensure the max-width constraint is respected */
+    font-family: Arial, sans-serif;
+}
