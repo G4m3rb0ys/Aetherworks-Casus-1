@@ -27,41 +27,31 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // Index Actie
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var identityUserId = _userManager.GetUserId(User);
-            var user = await _context.User.FirstOrDefaultAsync(u => u.CredentialId == identityUserId);
-
             var startDate = DateTime.Today;
             var endDate = startDate.AddDays(30); // Volgende 31 dagen inclusief vandaag
 
-            // Fetch recent activities and suggestions
-            var activities = await _context.VictuzActivities
-                .Where(a => a.ActivityDate >= startDate && a.ActivityDate <= endDate)
-                .OrderBy(a => a.ActivityDate)
+            var activities = _context.VictuzActivities
+                .Where(a => a.ActivityDate.Date >= startDate && a.ActivityDate.Date <= endDate)
+                .OrderBy(a => a.ActivityDate) // Sorteer activiteiten op datum
                 .Include(a => a.ParticipantsList)
-                .ToListAsync();
+                .ToList();
 
-            var suggestions = await _context.Suggestions
-                .Include(s => s.SuggestionLikeds)
-                .OrderByDescending(s => s.Id)
+            // Haal de drie meest recente suggesties op
+            var suggestions = _context.Suggestions
+                .OrderByDescending(s => s.Id) // Sorteer op Id om de meest recente suggesties te krijgen
                 .Take(3)
-                .Take(3)
-                .Select(s => new SuggestionViewModel
-                {
-                    Suggestion = s,
-                    LikeCount = s.SuggestionLikeds.Count,
-                    IsLiked = s.SuggestionLikeds.Any(sl => sl.UserId == user.Id)
-                })
-                .ToListAsync();
+                .ToList();
 
             var model = new HomeViewModel
             {
                 StartDate = startDate,
                 EndDate = endDate,
                 Activities = activities,
-                Suggestions = suggestions
+                Suggestions = suggestions // Voeg de suggesties toe aan het model
             };
+
 
             return View(model);
         }
@@ -116,47 +106,6 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ToggleLike(int suggestionId)
-        {
-            // Get the current logged-in user's ID
-            var identityUserId = _userManager.GetUserId(User);
-            var user = await _context.User.FirstOrDefaultAsync(u => u.CredentialId == identityUserId);
-
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
-
-            // Check if the user has already liked the suggestion
-            var existingLike = await _context.SuggestionLiked
-                .FirstOrDefaultAsync(sl => sl.SuggestionId == suggestionId && sl.UserId == user.Id);
-
-            if (existingLike != null)
-            {
-                // If a like exists, remove it (unlike)
-                _context.SuggestionLiked.Remove(existingLike);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                // If no like exists, add it (like)
-                var newLike = new SuggestionLiked
-                {
-                    SuggestionId = suggestionId,
-                    UserId = user.Id
-                };
-
-                _context.SuggestionLiked.Add(newLike);
-                await _context.SaveChangesAsync();
-            }
-
-            // Calculate the updated like count after toggling
-            var likeCount = await _context.SuggestionLiked.CountAsync(sl => sl.SuggestionId == suggestionId);
-
-            // Return JSON with the updated like count
-            return Json(new { success = true, liked = existingLike == null, likeCount });
-        }
-
         [HttpPost]
         public async Task<IActionResult> RegisterGuest([FromBody] RegisterGuestModel model)
         {
@@ -279,5 +228,9 @@ namespace Aetherworks_Victuz.Controllers
 
             return RedirectToAction("ManageAccounts");
         }
+
+
+
+
     }
 }

@@ -9,6 +9,6 @@ namespace Aetherworks_Victuz.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<VictuzActivity> Activities { get; set; }
-        public List<SuggestionViewModel>? Suggestions { get; set; }
+        public List<Suggestion> Suggestions { get; set; }
     }
 }
