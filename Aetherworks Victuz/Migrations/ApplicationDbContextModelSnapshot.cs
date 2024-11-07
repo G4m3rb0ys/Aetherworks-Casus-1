@@ -81,7 +81,13 @@ namespace Aetherworks_Victuz.Migrations
                     b.Property<bool>("Attended")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -169,7 +175,7 @@ namespace Aetherworks_Victuz.Migrations
                         {
                             Id = 1,
                             EndDate = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RoleId = "644ce47f-e92e-4f12-b836-d277fd370c87",
+                            RoleId = "7dbac080-36e1-410c-8899-597b68965e42",
                             UserId = 2
                         });
                 });
@@ -307,22 +313,22 @@ namespace Aetherworks_Victuz.Migrations
                         new
                         {
                             Id = 1,
-                            CredentialId = "a3b14bfb-aa9d-4c0e-bed0-4d1dc03df342"
+                            CredentialId = "b499561d-b312-4308-986d-89007aa25ce5"
                         },
                         new
                         {
                             Id = 2,
-                            CredentialId = "ce99840f-75a9-454b-818a-fe19e1d74724"
+                            CredentialId = "1af479f6-748b-4dcd-a024-52552db66c29"
                         },
                         new
                         {
                             Id = 3,
-                            CredentialId = "074aa6fb-9351-4efc-9a0b-7e7be1a844c3"
+                            CredentialId = "dc4b4ecd-cafc-42aa-87f9-bc5eb2543017"
                         },
                         new
                         {
                             Id = 4,
-                            CredentialId = "29b452f8-7be2-43da-9b7b-66314b048544"
+                            CredentialId = "14f343ed-260d-4ece-bf21-1aacf53c8c47"
                         });
                 });
 
@@ -449,19 +455,19 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "42537b5b-cea4-4fc4-b29c-dd7629a5c752",
+                            Id = "fac03021-92e4-4b64-a797-9a0fd588271e",
                             Name = "Organizer",
                             NormalizedName = "ORGANIZER"
                         },
                         new
                         {
-                            Id = "2d1875c1-6bb3-4214-8689-667f075009e4",
+                            Id = "3244f2f7-a751-4159-85f2-9b05d5f29b4a",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
-                            Id = "644ce47f-e92e-4f12-b836-d277fd370c87",
+                            Id = "7dbac080-36e1-410c-8899-597b68965e42",
                             Name = "Guest",
                             NormalizedName = "GUEST"
                         });
@@ -559,7 +565,7 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a3b14bfb-aa9d-4c0e-bed0-4d1dc03df342",
+                            Id = "b499561d-b312-4308-986d-89007aa25ce5",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
                             Email = "organizer@gmail.com",
@@ -575,7 +581,7 @@ namespace Aetherworks_Victuz.Migrations
                         },
                         new
                         {
-                            Id = "ce99840f-75a9-454b-818a-fe19e1d74724",
+                            Id = "1af479f6-748b-4dcd-a024-52552db66c29",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
                             Email = "member@gmail.com",
@@ -591,7 +597,7 @@ namespace Aetherworks_Victuz.Migrations
                         },
                         new
                         {
-                            Id = "074aa6fb-9351-4efc-9a0b-7e7be1a844c3",
+                            Id = "dc4b4ecd-cafc-42aa-87f9-bc5eb2543017",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
                             Email = "guest@gmail.com",
@@ -607,7 +613,7 @@ namespace Aetherworks_Victuz.Migrations
                         },
                         new
                         {
-                            Id = "29b452f8-7be2-43da-9b7b-66314b048544",
+                            Id = "14f343ed-260d-4ece-bf21-1aacf53c8c47",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "cf94f079-f33c-42fb-be66-f15601fdb549",
                             Email = "lock@gmail.com",
@@ -690,23 +696,23 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a3b14bfb-aa9d-4c0e-bed0-4d1dc03df342",
-                            RoleId = "42537b5b-cea4-4fc4-b29c-dd7629a5c752"
+                            UserId = "b499561d-b312-4308-986d-89007aa25ce5",
+                            RoleId = "fac03021-92e4-4b64-a797-9a0fd588271e"
                         },
                         new
                         {
-                            UserId = "ce99840f-75a9-454b-818a-fe19e1d74724",
-                            RoleId = "2d1875c1-6bb3-4214-8689-667f075009e4"
+                            UserId = "1af479f6-748b-4dcd-a024-52552db66c29",
+                            RoleId = "3244f2f7-a751-4159-85f2-9b05d5f29b4a"
                         },
                         new
                         {
-                            UserId = "074aa6fb-9351-4efc-9a0b-7e7be1a844c3",
-                            RoleId = "644ce47f-e92e-4f12-b836-d277fd370c87"
+                            UserId = "dc4b4ecd-cafc-42aa-87f9-bc5eb2543017",
+                            RoleId = "7dbac080-36e1-410c-8899-597b68965e42"
                         },
                         new
                         {
-                            UserId = "29b452f8-7be2-43da-9b7b-66314b048544",
-                            RoleId = "644ce47f-e92e-4f12-b836-d277fd370c87"
+                            UserId = "14f343ed-260d-4ece-bf21-1aacf53c8c47",
+                            RoleId = "7dbac080-36e1-410c-8899-597b68965e42"
                         });
                 });
 
@@ -742,8 +748,7 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasOne("Aetherworks_Victuz.Models.User", "User")
                         .WithMany("Participations")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Activity");
 
