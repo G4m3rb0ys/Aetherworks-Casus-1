@@ -1,0 +1,137 @@
+﻿<div class="membership-intro">
+    <p>
+        Word lid en ontdek de vele voordelen die het lidmaatschap te bieden heeft! Als lid geniet je van exclusieve toegang tot speciale evenementen, heb je voorrang bij inschrijvingen, en profiteer je van aantrekkelijke kortingen. Je krijgt de kans om meer te halen uit onze activiteiten en deel uit te maken van een geweldige community!
+    </p>
+</div>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+{
+    <div style="text-align: right; margin: 10px;">
+        <a asp-action="ManageAccounts" asp-controller="Home" class="btn btn-primary">
+            Beheer Accounts
+        </a>
+    </div>
+}
+
+<div class="membership-comparison">
+    <!-- Guest Subscription Box -->
+    <div class="membership-box">
+        <h4 class="text-primary">Gast</h4>
+        <p>Gratis</p>
+        <ul>
+            <li>Gemakkelijker aanmelden</li>
+        </ul>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Guest"))
+        {
+            <button disabled class="info-text">Geselecteerd</button>
+        }
+        else if (User.Identity.IsAuthenticated && (User.IsInRole("Member") || User.IsInRole("Organizer")))
+        {
+            <p class="info-text">Gratis toegang tot evenementen zonder registratie</p>
+        }
+        else
+        {
+            <p class="info-text">Gratis toegang tot evenementen zonder registratie</p>
+            <button type="button" class="info-text" data-bs-toggle="modal" data-bs-target="#registerModal" onclick="setRole('Guest')">Registeren als Gast</button>
+        }
+    </div>
+
+    <!-- Member Subscription Box -->
+    <div class="membership-box">
+        <h4 class="text-success">Lid</h4>
+        <p>€25,- / 3 maanden</p>
+        <ul>
+            <li>Exclusieve evenementen</li>
+            <li>Prioriteit bij inschrijvingen</li>
+            <li>Korting op evenementen</li>
+        </ul>
+        @if ((User.Identity.IsAuthenticated && User.IsInRole("Guest")) || !User.Identity.IsAuthenticated)
+        {
+            <button type="button" class="info-text" data-bs-toggle="modal" data-bs-target="#registerModal" onclick="setRole('Member')">Kies Lidmaatschap</button>
+        }
+        else
+        {
+            <p class="info-text">Dankjewel dat je ons steunt met je lidmaatschap</p>
+        }
+    </div>
+</div>
+
+<p class="membership-disclaimer">
+    * Geen lidmaatschap is vereist om deel te nemen aan evenementen.
+</p>
+
+<!-- Modal for Registration -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Account Registratie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registrationForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Gebruikersnaam</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Wachtwoord</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <!-- Verborgen veld voor de rol -->
+                    <input type="hidden" id="role" name="role" value="Guest" />
+                    <button type="submit" class="btn btn-primary">Verstuur Verzoek</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setRole(role) {
+        document.getElementById('role').value = role;
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value; // Lees de rolwaarde
+
+        // Send a request to the server (this example uses fetch; adjust as needed for your backend setup)
+        fetch('/Home/RegisterGuest', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Username: username,
+                Email: email,
+                Password: password,
+                Role: role // Stuur de rol mee
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Account verzoek verstuurd. Verwerking neemt 24-48 uur in beslag.');
+                    // Optionally close the modal
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                    modal.hide();
+                } else {
+                    alert('Er is een fout opgetreden bij het verzenden van het verzoek.');
+                    console.log('Fouten:', data.errors);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Er is een fout opgetreden. Probeer het later opnieuw.');
+            });
+    });
+</script>

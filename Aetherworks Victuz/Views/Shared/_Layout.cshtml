@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Aetherworks_Victuz.styles.css" asp-append-version="true" />
     <link href="~/css/styles.css" rel="stylesheet" />
-
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 NavBarGeneral">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="/img/49e20123-0324-4778-8244-be706e895487.jpg" alt="Logo" style="height: 40px; margin-right: 10px;" />
-                    Aetherworks_Victuz
+                    <img src="/img/Logo.png" alt="Logo" style="height: 40px; margin-right: 10px;" />
+                    Victuz
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -30,16 +29,26 @@
                         <li class="nav-item">
                             <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestion</a>
-                        </li>
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestions</a>
+                            </li>
+                        }
+
+
                     </ul>
+                    <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Home" asp-action="Voordelen">Word Lid?</a>
                     <div class="dropdown">
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -57,6 +66,8 @@
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
+                                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="VictuzActivities" asp-action="reservations">reservations</a></li>
                             }
                             else
                             {
@@ -65,7 +76,6 @@
                             }
                         </ul>
                     </div>
-
                 </div>
             </div>
         </nav>

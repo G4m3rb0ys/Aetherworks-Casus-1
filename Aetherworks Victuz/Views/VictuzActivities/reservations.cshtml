@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Aetherworks_Victuz.Models.Participation>
+
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<h1 class="reservations-title">My Reservations</h1>
+
+<table class="table table-striped location">
+    <thead>
+        <tr>
+            <th>Activity Name</th>
+            <th>Date & Time</th>
+            <th>Attendance Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var activityDate = item.Activity.ActivityDate; // Corrected property name
+            var canUnregister = (activityDate - DateTime.Now).TotalDays >= 1; // Shows unregister if more than 1 day remains
+            var isActivityPast = activityDate < DateTime.Now;
+
+            <tr>
+                <td>@item.Activity.Name</td> <!-- Corrected property name -->
+                <td>@item.Activity.ActivityDate.ToString("dd MMM yyyy HH:mm")</td> <!-- Corrected property name -->
+                <td>
+                    @if (isActivityPast)
+                    {
+                        <span>@(item.Attended ? "Attended" : "Did not attend")</span> <!-- Assuming item.Attended is a bool -->
+                    }
+                    
+                    else
+                    {
+                        <span>Upcoming</span>
+                    }
+                </td>
+                <td>
+                    @if (!isActivityPast && canUnregister)
+                    {
+                        <form asp-action="Unregister" asp-controller="VictuzActivities" method="post">
+                            <input type="hidden" name="activityId" value="@item.ActivityId" />
+                            <button type="submit" class="btn btn-danger">Uitschrijven</button>
+                        </form>
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

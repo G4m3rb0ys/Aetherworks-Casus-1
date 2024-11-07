@@ -72,12 +72,6 @@ namespace Aetherworks_Victuz.Controllers
             return View();
         }
 
-        // Contact Actie (als je deze hebt)
-        public IActionResult Contact()
-        {
-            return View();
-        }
-
         // Overzicht van alle activiteiten (optioneel)
         public IActionResult Activities()
         {
@@ -107,6 +101,11 @@ namespace Aetherworks_Victuz.Controllers
             }
 
             return View(activity);
+        }
+
+        public IActionResult Voordelen()
+        {
+            return View();
         }
 
         // Foutafhandeling
@@ -156,6 +155,129 @@ namespace Aetherworks_Victuz.Controllers
 
             // Return JSON with the updated like count
             return Json(new { success = true, liked = existingLike == null, likeCount });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterGuest([FromBody] RegisterGuestModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Maak een nieuwe IdentityUser aan
+                var user = new IdentityUser
+                {
+                    UserName = model.Username,
+                    Email = model.Email,
+                    LockoutEnabled = true // Optioneel: standaard vergrendeling
+                };
+
+                // Maak de gebruiker aan met een wachtwoord
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // Voeg de gebruiker toe aan de rol die uit het formulier komt
+                    var role = string.IsNullOrEmpty(model.Role) ? "Guest" : model.Role; // Als geen rol is opgegeven, standaard naar Guest
+                    await _userManager.AddToRoleAsync(user, role);
+
+                    return Json(new { success = true });
+                }
+
+                // Verwerk eventuele fouten
+                return Json(new { success = false, errors = result.Errors.Select(e => e.Description).ToList() });
+            }
+
+            // Terugkeren als ModelState niet geldig is
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
+        }
+
+
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> ManageAccounts()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userRolesViewModel = new List<UserRoleViewModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRolesViewModel.Add(new UserRoleViewModel
+                {
+                    User = user,
+                    Roles = roles.ToList() // Assuming a single role per user, use roles.FirstOrDefault() if needed
+                });
+            }
+
+            var model = new ManageAccountsViewModel
+            {
+                AllUsers = userRolesViewModel,
+                PendingAccounts = userRolesViewModel.Where(u => u.User.LockoutEnabled && u.User.LockoutEnd != null).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> UnblockAccount(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.LockoutEnd = null;
+                user.LockoutEnabled = false;
+                await _userManager.UpdateAsync(user);
+            }
+            return RedirectToAction("ManageAccounts");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> ChangeRole(string userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles); // Optionally remove all existing roles
+                await _userManager.AddToRoleAsync(user, newRole);
+            }
+            return RedirectToAction("ManageAccounts");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> LockAccount(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                user.LockoutEnabled = true;
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100); // Arbitrary long lockout period
+                await _userManager.UpdateAsync(user);
+            }
+            return RedirectToAction("ManageAccounts");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> DeleteAccount(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    // Optional: Add a success message here (e.g., ViewData["Message"] = "User deleted successfully.")
+                    return RedirectToAction("ManageAccounts");
+                }
+                else
+                {
+                    // Optional: Handle errors
+                    ModelState.AddModelError(string.Empty, "Er is een fout opgetreden bij het verwijderen van het account.");
+                }
+            }
+
+            return RedirectToAction("ManageAccounts");
         }
     }
 }
