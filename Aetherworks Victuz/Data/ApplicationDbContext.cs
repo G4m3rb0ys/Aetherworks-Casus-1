@@ -128,9 +128,9 @@ namespace Aetherworks_Victuz.Data
 
             // AspNetRoles
             modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole { Id = RoleOrganizerId, Name = "Organizer" },
-                new IdentityRole { Id = RoleMemberId, Name = "Member" },
-                new IdentityRole { Id = RoleGuestId, Name = "Guest" }
+                new IdentityRole { Id = RoleOrganizerId, Name = "Organizer", NormalizedName = "ORGANIZER" },
+                new IdentityRole { Id = RoleMemberId, Name = "Member", NormalizedName = "MEMBER" },
+                new IdentityRole { Id = RoleGuestId, Name = "Guest", NormalizedName = "GUEST" }
                 );
 
             // AspNetUsers
