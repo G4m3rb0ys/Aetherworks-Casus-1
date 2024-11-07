@@ -42,10 +42,13 @@ namespace Aetherworks_Victuz.Controllers
                 .Include(a => a.ParticipantsList)
                 .ToListAsync();
 
-            var suggestions = await _context.Suggestions
+            HomeViewModel model;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var suggestions = await _context.Suggestions
                 .Include(s => s.SuggestionLikeds)
                 .OrderByDescending(s => s.Id)
-                .Take(3)
                 .Take(3)
                 .Select(s => new SuggestionViewModel
                 {
@@ -55,13 +58,23 @@ namespace Aetherworks_Victuz.Controllers
                 })
                 .ToListAsync();
 
-            var model = new HomeViewModel
+                model = new HomeViewModel
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Activities = activities,
+                    Suggestions = suggestions
+                };
+            }
+            else
             {
-                StartDate = startDate,
-                EndDate = endDate,
-                Activities = activities,
-                Suggestions = suggestions
-            };
+                model = new HomeViewModel
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Activities = activities
+                };
+            }
 
             return View(model);
         }
