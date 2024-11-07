@@ -42,11 +42,9 @@ body {
         padding: 8px;
     }
 
-
-.location tr:hover {
-    background-color: #adc2c5;
-}
-
+    .location tr:nth-child(even) {
+        background-color: #adc2c5;
+    }
 
     .location tr:hover {
         background-color: #adc2c5;
@@ -59,7 +57,6 @@ body {
         background-color: #26939d;
         color: white;
     }
-
 
 /* General Container Styles */
 .container {
@@ -385,6 +382,9 @@ body {
     padding: 8px;
 }
 
+.users tr:nth-child(even) {
+    background-color: #adc2c5;
+}
 
 .users tr:hover {
     background-color: #adc2c5;
