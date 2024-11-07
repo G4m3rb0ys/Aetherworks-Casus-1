@@ -12,6 +12,7 @@ using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
 using System.Diagnostics;
 using static Aetherworks_Victuz.Models.VictuzActivity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -323,6 +324,8 @@ namespace Aetherworks_Victuz.Controllers
             return View(viewModel);
         }
 
+        
+
         // Additional methods (Delete, Reservations, etc.) remain unchanged
 
         private bool VictuzActivityExists(int id)
@@ -425,6 +428,21 @@ namespace Aetherworks_Victuz.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Je bent succesvol uitgeschreven voor de activiteit.";
+            return RedirectToAction("Index");
+        }
+
+        // POST: Delete Button
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> Delete(int activityId)
+        {
+            var activity = await _context.VictuzActivities.FindAsync(activityId);
+            if (activity != null)
+            {
+                _context.VictuzActivities.Remove(activity);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction("Index");
         }
     }
