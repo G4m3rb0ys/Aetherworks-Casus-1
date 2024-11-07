@@ -1,0 +1,88 @@
+﻿@model ManageAccountsViewModel
+
+<h1>Account Management</h1>
+
+<h2>Pending Account Requests</h2>
+@if (Model.PendingAccounts.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Model.PendingAccounts)
+            {
+                <tr>
+                    <td>@account.User.UserName</td>
+                    <td>@account.User.Email</td>
+                    <td>
+                        <form asp-action="UnblockAccount" method="post">
+                            <input type="hidden" name="userId" value="@account.User.Id" />
+                            <button type="submit" class="btn btn-success">Unblock</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No pending account requests.</p>
+}
+
+<h2>All Accounts</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Current Role</th>
+            <th>Change Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.AllUsers)
+        {
+            var currentRole = user.Roles.FirstOrDefault(); // Assuming each user has only one role
+
+            <tr>
+                <td>@user.User.UserName</td>
+                <td>@user.User.Email</td>
+                <td>@currentRole</td> <!-- Display the current role -->
+                <td>
+                    <!-- Form to change roles -->
+                    <form asp-action="ChangeRole" method="post">
+                        <input type="hidden" name="userId" value="@user.User.Id" />
+                        <select name="newRole" class="form-select">
+                            <option value="Guest">Guest</option>
+                            <option value="Member">Member</option>
+                            <option value="Organizer">Organizer</option>
+                        </select>
+
+
+
+
+                        <button type="submit" class="btn btn-primary">Change Role</button>
+                    </form>
+                </td>
+                <td>
+                    <!-- Lock and Delete buttons -->
+                    <form asp-action="LockAccount" method="post">
+                        <input type="hidden" name="userId" value="@user.User.Id" />
+                        <button type="submit" class="btn btn-danger">Lock</button>
+                    </form>
+                    <form asp-action="DeleteAccount" method="post" onsubmit="return confirm('Weet je zeker dat je dit account wilt verwijderen?');">
+                        <input type="hidden" name="userId" value="@user.User.Id" />
+                        <button type="submit" class="btn btn-danger">Verwijderen</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Aetherworks_Victuz.Models.SuggestionViewModel>
+
+@{
+    ViewData["Title"] = "Suggestions";
+}
+
+<div class="container my-5">
+    <!-- Page Header -->
+    <div class="text-center mb-4">
+        <h1 class="text-primary">Suggestions</h1>
+    </div>
+
+    <div class="mb-4 text-end">
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </div>
+
+    <!-- Suggestions Grid -->
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Title)</h5>
+                        <p class="card-text text-muted text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Description)</p>
+                        <p class="card-text">
+                            <small class="text-muted">Posted by: @Html.DisplayFor(modelItem => item.Suggestion.User.Credential.UserName)</small>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="d-flex align-items-center">
+                                <img id="like-icon-@item.Suggestion.Id"
+                                     src="@(item.IsLiked ? "/img/Liked.png" : "/img/UnLiked.png")"
+                                     alt="Like"
+                                     class="like-icon"
+                                     onclick="toggleLike(@item.Suggestion.Id)" />
+                                <span id="like-count-@item.Suggestion.Id" class="ms-2 like-count">@item.LikeCount</span>
+                            </div>
+                            <div class="suggestion-buttons">
+                                <!-- Details button is always visible -->
+                                <a asp-action="Details" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-info btn-sm">Details</a>
+
+                                <!-- Edit and Delete buttons are restricted to authenticated users -->
+                                @if (User.Identity.IsAuthenticated &&
+                               (User.IsInRole("Organizer") || User.Identity.Name == item.Suggestion.User.Credential.UserName))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-secondary btn-sm">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-danger btn-sm">Delete</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function toggleLike(suggestionId) {
+            $.post('/Suggestions/ToggleLike', { suggestionId: suggestionId }, function (response) {
+                if (response.success) {
+                    const likeCountElement = document.getElementById(`like-count-${suggestionId}`);
+                    const likeIcon = document.getElementById(`like-icon-${suggestionId}`);
+
+                    if (response.liked) {
+                        likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+                        likeIcon.src = "/img/Liked.png";
+                    } else {
+                        likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1;
+                        likeIcon.src = "/img/UnLiked.png";
+                    }
+                }
+            }).fail(function () {
+                alert('An unexpected error occurred. Please try again.');
+            });
+        }
+    </script>
+}

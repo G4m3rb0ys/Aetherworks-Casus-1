@@ -1,85 +1,121 @@
-﻿@model Aetherworks_Victuz.Models.VictuzActivity
+﻿@model Aetherworks_Victuz.Models.VictuzActivityViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Creëer Activiteit";
 }
+<link href="~/css/styles.css" rel="stylesheet" />
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="activity-card">
+                <div class="activity-card-header">
+                    <h2 class="mb-0">Creëer Activiteit</h2>
+                </div>
+                <div class="activity-card-body">
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<h4>VictuzActivity</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" asp-items="ViewBag.Category" id="categorySelect" class="form-control"></select>
-                <span asp-validation-for="Category" class="text-danger"></span>
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.Category" class="form-label"></label>
+                            <select asp-for="VictuzActivity.Category" asp-items="ViewBag.Category" id="categorySelect" class="form-select"></select>
+                            <span asp-validation-for="VictuzActivity.Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.Name" class="form-label"></label>
+                            <input asp-for="VictuzActivity.Name" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.Description" class="form-label"></label>
+                            <textarea asp-for="VictuzActivity.Description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="VictuzActivity.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.Picture" class="form-label"></label>
+                            <input type="file" name="PictureFile" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.Picture" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.LocationId" class="form-label"></label>
+                            <select asp-for="VictuzActivity.LocationId" class="form-select">
+                                @foreach (var location in Model.Locations)
+                                {
+                                    <option value="@location.Id">@location.Name</option> <!-- Ensure this is correct -->
+                                }
+                            </select>
+
+
+
+                            <span asp-validation-for="VictuzActivity.LocationId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.ActivityDate" class="form-label"></label>
+                            <input asp-for="VictuzActivity.ActivityDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="VictuzActivity.ActivityDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.HostId" class="form-label"></label>
+                            <select asp-for="VictuzActivity.HostId" class="form-select">
+                                @foreach (var host in Model.Hosts)
+                                {
+                                    <option value="@host.Id">@host.Credential.UserName</option> <!-- Displaying the name but binding the integer Id -->
+                                }
+                            </select>
+
+
+                            <span asp-validation-for="VictuzActivity.HostId" class="text-danger"></span>
+                        </div>
+
+                        <div id="lineMemFree-linePayAll" class="form-group mb-3">
+                            <label asp-for="VictuzActivity.Price" class="form-label"></label>
+                            <input asp-for="VictuzActivity.Price" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.Price" class="text-danger"></span>
+                        </div>
+
+                        <div id="lineMemberPrice" class="form-group mb-3">
+                            <label asp-for="VictuzActivity.MemberPrice" class="form-label"></label>
+                            <input asp-for="VictuzActivity.MemberPrice" type="number" min="0" step="0.01" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.MemberPrice" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="VictuzActivity.ParticipantLimit" class="form-label"></label>
+                            <input asp-for="VictuzActivity.ParticipantLimit" type="number" min="1" class="form-control" />
+                            <span asp-validation-for="VictuzActivity.ParticipantLimit" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <input type="submit" value="Creëer Activiteit" class="btn btn-primary btn-lg" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+            <div class="mt-3 text-center">
+                <a asp-action="Index" class="btn btn-outline-secondary">Terug naar lijst</a>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Picture" class="control-label"></label>
-                <input type="file" name="PictureFile" class="form-control" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LocationId" class="control-label"></label>
-                <select asp-for="LocationId" class ="form-control" asp-items="ViewBag.LocationId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActivityDate" class="control-label"></label>
-                <input asp-for="ActivityDate" class="form-control" />
-                <span asp-validation-for="ActivityDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HostId" class="control-label"></label>
-                <select asp-for="HostId" class ="form-control" asp-items="ViewBag.HostId"></select>
-            </div>
-            <div id="lineMemFree-linePayAll" class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" type="number" min="0" step="0.01" value="0.00" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div id="lineMemberPrice" class="form-group">
-                <label asp-for="MemberPrice" class="control-label"></label>
-                <input asp-for="MemberPrice" type="number" min="0" step="0.01" value="0.00" class="form-control" />
-                <span asp-validation-for="MemberPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ParticipantLimit" class="control-label"></label>
-                <input asp-for="ParticipantLimit" class="form-control" />
-                <span asp-validation-for="ParticipantLimit" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#lineMemFree-linePayAll, #lineMemberPrice').hide();
-        $('#categorySelect').on('change', function() {
+        $('#categorySelect').on('change', function () {
             var selectedCategory = $(this).val();
 
             // Hide both divs initially
