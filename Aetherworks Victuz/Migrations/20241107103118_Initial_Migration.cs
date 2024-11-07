@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Aetherworks_Victuz.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -339,9 +339,9 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "062ad658-cbcb-4a6f-a160-7be9e7a6a70f", null, "Organizer", null },
-                    { "7cb11cd7-828d-4fef-82be-772a401c35f8", null, "Member", null },
-                    { "d44d1274-9040-4259-8252-7c4a702637a6", null, "Guest", null }
+                    { "1b5b8cdf-e551-4cd5-9812-f89ccb4f58fd", null, "Organizer", null },
+                    { "4df2b64b-1533-447f-b8de-3ee692790db1", null, "Guest", null },
+                    { "6e39927d-1081-468b-b60a-fedfe1549d0f", null, "Member", null }
                 });
 
             migrationBuilder.InsertData(
@@ -349,9 +349,10 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST@GMAIL.COM", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "guest@gmail.com" },
-                    { "7a39359e-6e58-4f2e-8798-581b80492a19", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER@GMAIL.COM", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "organizer@gmail.com" },
-                    { "fe24162d-0433-4991-ab3b-ee00df2af8f4", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER@GMAIL.COM", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "member@gmail.com" }
+                    { "15e27e09-4b3e-4934-b227-09e44fef3219", 0, "6f44b994-4920-49ff-84a3-37edfc164be6", "member@gmail.com", true, true, null, "MEMBER@GMAIL.COM", "MEMBER", "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==", null, false, "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7", false, "Member" },
+                    { "25335a7f-df48-4b77-8629-468a2015c0b5", 0, "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10", "guest@gmail.com", true, true, null, "GUEST@GMAIL.COM", "GUEST", "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==", null, false, "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP", false, "Guest" },
+                    { "35cbcaf4-d21b-49e3-a496-2c3562738521", 0, "cf94f079-f33c-42fb-be66-f15601fdb549", "lock@gmail.com", true, true, new DateTimeOffset(new DateTime(2124, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "LOCK@GMAIL.COM", "LOCK", "AQAAAAIAAYagAAAAEBfVTJQI47BIH3mpec90MDkrbH8RxtAFRnFQ6UFD2pY5hY3ABSze9cDHDd88b5E2Pg==", null, false, "6IS3TH2BMU4QPOKYPZNBUE3WJFM6R5MO", false, "Lock" },
+                    { "6f051aeb-b4ad-4cff-87db-0566f9c7474e", 0, "3d08f465-c409-412d-85c1-f4a212fc2e25", "organizer@gmail.com", true, true, null, "ORGANIZER@GMAIL.COM", "ORGANIZER", "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==", null, false, "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76", false, "Organizer" }
                 });
 
             migrationBuilder.InsertData(
@@ -380,9 +381,10 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "d44d1274-9040-4259-8252-7c4a702637a6", "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9" },
-                    { "062ad658-cbcb-4a6f-a160-7be9e7a6a70f", "7a39359e-6e58-4f2e-8798-581b80492a19" },
-                    { "7cb11cd7-828d-4fef-82be-772a401c35f8", "fe24162d-0433-4991-ab3b-ee00df2af8f4" }
+                    { "6e39927d-1081-468b-b60a-fedfe1549d0f", "15e27e09-4b3e-4934-b227-09e44fef3219" },
+                    { "4df2b64b-1533-447f-b8de-3ee692790db1", "25335a7f-df48-4b77-8629-468a2015c0b5" },
+                    { "4df2b64b-1533-447f-b8de-3ee692790db1", "35cbcaf4-d21b-49e3-a496-2c3562738521" },
+                    { "1b5b8cdf-e551-4cd5-9812-f89ccb4f58fd", "6f051aeb-b4ad-4cff-87db-0566f9c7474e" }
                 });
 
             migrationBuilder.InsertData(
@@ -390,15 +392,16 @@ namespace Aetherworks_Victuz.Migrations
                 columns: new[] { "Id", "CredentialId" },
                 values: new object[,]
                 {
-                    { 1, "7a39359e-6e58-4f2e-8798-581b80492a19" },
-                    { 2, "fe24162d-0433-4991-ab3b-ee00df2af8f4" },
-                    { 3, "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9" }
+                    { 1, "6f051aeb-b4ad-4cff-87db-0566f9c7474e" },
+                    { 2, "15e27e09-4b3e-4934-b227-09e44fef3219" },
+                    { 3, "25335a7f-df48-4b77-8629-468a2015c0b5" },
+                    { 4, "35cbcaf4-d21b-49e3-a496-2c3562738521" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Penalties",
                 columns: new[] { "Id", "EndDate", "RoleId", "UserId" },
-                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "d44d1274-9040-4259-8252-7c4a702637a6", 2 });
+                values: new object[] { 1, new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "4df2b64b-1533-447f-b8de-3ee692790db1", 2 });
 
             migrationBuilder.InsertData(
                 table: "Suggestions",
