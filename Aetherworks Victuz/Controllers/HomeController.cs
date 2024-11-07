@@ -237,6 +237,7 @@ namespace Aetherworks_Victuz.Controllers
         public async Task<IActionResult> ChangeRole(string userId, string newRole)
         {
             var user = await _userManager.FindByIdAsync(userId);
+
             if (user != null)
             {
                 var currentRoles = await _userManager.GetRolesAsync(user);

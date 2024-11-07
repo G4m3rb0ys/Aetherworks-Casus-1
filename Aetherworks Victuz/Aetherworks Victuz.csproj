@@ -23,13 +23,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="wwwroot\img\BattleBot.png" />
-	  <None Include="wwwroot\img\BookClub.png" />
-	  <None Include="wwwroot\img\Photography.png" />
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Migrations\" />
+	  <None Include="wwwroot\img\BattleBot.png" />
+	  <None Include="wwwroot\img\BookClub.png" />
+	  <None Include="wwwroot\img\Photography.png" />
 	</ItemGroup>
 
 </Project>

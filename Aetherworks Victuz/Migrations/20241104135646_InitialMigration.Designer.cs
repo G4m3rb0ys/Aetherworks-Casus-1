@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aetherworks_Victuz.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241107103118_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20241104135646_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace Aetherworks_Victuz.Migrations
                         {
                             Id = 1,
                             EndDate = new DateTime(2024, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            RoleId = "4df2b64b-1533-447f-b8de-3ee692790db1",
+                            RoleId = "d44d1274-9040-4259-8252-7c4a702637a6",
                             UserId = 2
                         });
                 });
@@ -310,22 +310,17 @@ namespace Aetherworks_Victuz.Migrations
                         new
                         {
                             Id = 1,
-                            CredentialId = "6f051aeb-b4ad-4cff-87db-0566f9c7474e"
+                            CredentialId = "7a39359e-6e58-4f2e-8798-581b80492a19"
                         },
                         new
                         {
                             Id = 2,
-                            CredentialId = "15e27e09-4b3e-4934-b227-09e44fef3219"
+                            CredentialId = "fe24162d-0433-4991-ab3b-ee00df2af8f4"
                         },
                         new
                         {
                             Id = 3,
-                            CredentialId = "25335a7f-df48-4b77-8629-468a2015c0b5"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CredentialId = "35cbcaf4-d21b-49e3-a496-2c3562738521"
+                            CredentialId = "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9"
                         });
                 });
 
@@ -390,7 +385,7 @@ namespace Aetherworks_Victuz.Migrations
                             MemberPrice = 0.00m,
                             Name = "Book Club Meetup",
                             ParticipantLimit = 25,
-                            Picture = "\\img\\BookClub.png",
+                            Picture = "img\\BookClub.png",
                             Price = 0.00m
                         },
                         new
@@ -404,7 +399,7 @@ namespace Aetherworks_Victuz.Migrations
                             MemberPrice = 15.00m,
                             Name = "Photography Workshop",
                             ParticipantLimit = 20,
-                            Picture = "\\img\\Photography.png",
+                            Picture = "img\\Photography.png",
                             Price = 25.00m
                         },
                         new
@@ -418,7 +413,7 @@ namespace Aetherworks_Victuz.Migrations
                             MemberPrice = 12.00m,
                             Name = "Battlebot Wars",
                             ParticipantLimit = 10,
-                            Picture = "\\img\\BattleBot.png",
+                            Picture = "img\\BattleBot.png",
                             Price = 0.00m
                         });
                 });
@@ -452,17 +447,17 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1b5b8cdf-e551-4cd5-9812-f89ccb4f58fd",
+                            Id = "062ad658-cbcb-4a6f-a160-7be9e7a6a70f",
                             Name = "Organizer"
                         },
                         new
                         {
-                            Id = "6e39927d-1081-468b-b60a-fedfe1549d0f",
+                            Id = "7cb11cd7-828d-4fef-82be-772a401c35f8",
                             Name = "Member"
                         },
                         new
                         {
-                            Id = "4df2b64b-1533-447f-b8de-3ee692790db1",
+                            Id = "d44d1274-9040-4259-8252-7c4a702637a6",
                             Name = "Guest"
                         });
                 });
@@ -559,68 +554,51 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6f051aeb-b4ad-4cff-87db-0566f9c7474e",
+                            Id = "7a39359e-6e58-4f2e-8798-581b80492a19",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "3d08f465-c409-412d-85c1-f4a212fc2e25",
                             Email = "organizer@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "ORGANIZER@GMAIL.COM",
-                            NormalizedUserName = "ORGANIZER",
+                            NormalizedUserName = "ORGANIZER@GMAIL.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEBCO7kfhleA+rJgzblvMlQh/8EzLDeKO1hRDHFxuAX4hRaLAOZEICsYhYKoI97QYew==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "MRKIS7ZM3PEX7XJX7FGMPZY4NKTH6Z76",
                             TwoFactorEnabled = false,
-                            UserName = "Organizer"
+                            UserName = "organizer@gmail.com"
                         },
                         new
                         {
-                            Id = "15e27e09-4b3e-4934-b227-09e44fef3219",
+                            Id = "fe24162d-0433-4991-ab3b-ee00df2af8f4",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "6f44b994-4920-49ff-84a3-37edfc164be6",
                             Email = "member@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "MEMBER@GMAIL.COM",
-                            NormalizedUserName = "MEMBER",
+                            NormalizedUserName = "MEMBER@GMAIL.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEO/MrnGzjJfNjh+vU2Zv9Dv1TR4ZFhiYqBkKFPYFFSVIT+S4DNyYqlNlFb/+ba/vjw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "LFSRBIXYR4P6ZTHPXRWDIQ7M5GTLJXK7",
                             TwoFactorEnabled = false,
-                            UserName = "Member"
+                            UserName = "member@gmail.com"
                         },
                         new
                         {
-                            Id = "25335a7f-df48-4b77-8629-468a2015c0b5",
+                            Id = "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
                             Email = "guest@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
                             NormalizedEmail = "GUEST@GMAIL.COM",
-                            NormalizedUserName = "GUEST",
+                            NormalizedUserName = "GUEST@GMAIL.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEC9Tmh0HNHm5EQL0YPRmTJTZRmjRX4OnzusW767S7O2uW5XKJov6oSZPrQx/RGEcRA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "RQLSCP23C4O43IDZW3SETEUO2GI7VZOP",
                             TwoFactorEnabled = false,
-                            UserName = "Guest"
-                        },
-                        new
-                        {
-                            Id = "35cbcaf4-d21b-49e3-a496-2c3562738521",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "cf94f079-f33c-42fb-be66-f15601fdb549",
-                            Email = "lock@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2124, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)),
-                            NormalizedEmail = "LOCK@GMAIL.COM",
-                            NormalizedUserName = "LOCK",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBfVTJQI47BIH3mpec90MDkrbH8RxtAFRnFQ6UFD2pY5hY3ABSze9cDHDd88b5E2Pg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "6IS3TH2BMU4QPOKYPZNBUE3WJFM6R5MO",
-                            TwoFactorEnabled = false,
-                            UserName = "Lock"
+                            UserName = "guest@gmail.com"
                         });
                 });
 
@@ -690,23 +668,18 @@ namespace Aetherworks_Victuz.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "6f051aeb-b4ad-4cff-87db-0566f9c7474e",
-                            RoleId = "1b5b8cdf-e551-4cd5-9812-f89ccb4f58fd"
+                            UserId = "7a39359e-6e58-4f2e-8798-581b80492a19",
+                            RoleId = "062ad658-cbcb-4a6f-a160-7be9e7a6a70f"
                         },
                         new
                         {
-                            UserId = "15e27e09-4b3e-4934-b227-09e44fef3219",
-                            RoleId = "6e39927d-1081-468b-b60a-fedfe1549d0f"
+                            UserId = "fe24162d-0433-4991-ab3b-ee00df2af8f4",
+                            RoleId = "7cb11cd7-828d-4fef-82be-772a401c35f8"
                         },
                         new
                         {
-                            UserId = "25335a7f-df48-4b77-8629-468a2015c0b5",
-                            RoleId = "4df2b64b-1533-447f-b8de-3ee692790db1"
-                        },
-                        new
-                        {
-                            UserId = "35cbcaf4-d21b-49e3-a496-2c3562738521",
-                            RoleId = "4df2b64b-1533-447f-b8de-3ee692790db1"
+                            UserId = "18e3da1d-c424-44d5-a252-f9bd6b3bf9e9",
+                            RoleId = "d44d1274-9040-4259-8252-7c4a702637a6"
                         });
                 });
 
