@@ -39,10 +39,6 @@ body {
     padding: 8px;
 }
 
-.location tr:nth-child(even) {
-    background-color: #adc2c5;
-}
-
 .location tr:hover {
     background-color: #adc2c5;
 }
@@ -183,9 +179,6 @@ body {
     padding: 8px;
 }
 
-.users tr:nth-child(even) {
-    background-color: #adc2c5;
-}
 
 .users tr:hover {
     background-color: #adc2c5;
