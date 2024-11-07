@@ -30,6 +30,7 @@ namespace Aetherworks_Victuz.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -174,5 +175,24 @@ namespace Aetherworks_Victuz.Controllers
         {
             return _context.User.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> FindByCredentialId(string credentialId)
+        {
+            if (string.IsNullOrEmpty(credentialId))
+            {
+                return NotFound();
+            }
+
+            // Find the User entity using the CredentialId
+            var user = await _context.User.FirstOrDefaultAsync(u => u.CredentialId == credentialId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Redirect to the Details page with the found User's Id
+            return RedirectToAction(nameof(Details), new { id = user.Id });
+        }
+
     }
 }
