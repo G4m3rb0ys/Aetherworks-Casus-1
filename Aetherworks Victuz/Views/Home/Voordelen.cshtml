@@ -4,6 +4,15 @@
     </p>
 </div>
 
+@if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
+{
+    <div style="text-align: right; margin: 10px;">
+        <a asp-action="ManageAccounts" asp-controller="Home" class="btn btn-primary">
+            Beheer Accounts
+        </a>
+    </div>
+}
+
 <div class="membership-comparison">
     <!-- Guest Subscription Box -->
     <div class="membership-box">

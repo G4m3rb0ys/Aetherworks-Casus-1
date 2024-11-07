@@ -33,7 +33,7 @@
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="ManageAccounts">Users</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
