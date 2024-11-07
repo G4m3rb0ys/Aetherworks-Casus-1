@@ -72,7 +72,13 @@ else
                     </form>
                 </td>
                 <td>
+
                     <!-- Lock and Delete buttons -->
+                    <form asp-controller="Users" asp-action="FindByCredentialId" method="get">
+                        <input type="hidden" name="credentialId" value="@user.User.Id" />
+                        <button type="submit" class="btn btn-info">Details</button>
+                    </form>
+
                     <form asp-action="LockAccount" method="post">
                         <input type="hidden" name="userId" value="@user.User.Id" />
                         <button type="submit" class="btn btn-danger">Lock</button>
