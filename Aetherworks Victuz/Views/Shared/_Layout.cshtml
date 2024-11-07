@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 NavBarGeneral">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 NavBarGeneral flex-grow-2">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="/img/Logo.png" alt="Logo" style="height: 40px; margin-right: 10px;" />
@@ -24,25 +24,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="ManageAccounts">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
                             </li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestions</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestions</a>
                             </li>
                         }
 
@@ -86,11 +86,51 @@
             @RenderBody()
         </main>
     </div>
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Aetherworks_Victuz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+
+    <footer>
+        <table class="Victuz-Info">
+            <thead>
+                <tr>
+                    <th>
+                        <h4>Victuz</h4>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+        <table class="Social-Links">
+            <thead>
+                <tr>
+                    <th>
+                        <h4>Social Media Links</h4>
+                        <br />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="rounded-social-buttons">
+                        <a class="social-button linkedin" href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a class="social-button tiktok" href="https://www.tiktok.com/" target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a class="social-button youtube" href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a class="social-button instagram" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </td>
+                </tr>
+             </tbody>
+        </table>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

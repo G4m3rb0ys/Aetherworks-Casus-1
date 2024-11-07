@@ -42,7 +42,11 @@ namespace Aetherworks_Victuz.Controllers
                 .Include(a => a.ParticipantsList)
                 .ToListAsync();
 
-            var suggestions = await _context.Suggestions
+            HomeViewModel model;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var suggestions = await _context.Suggestions
                 .Include(s => s.SuggestionLikeds)
                 .OrderByDescending(s => s.Id)
                 .Take(3)
@@ -54,13 +58,23 @@ namespace Aetherworks_Victuz.Controllers
                 })
                 .ToListAsync();
 
-            var model = new HomeViewModel
+                model = new HomeViewModel
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Activities = activities,
+                    Suggestions = suggestions
+                };
+            }
+            else
             {
-                StartDate = startDate,
-                EndDate = endDate,
-                Activities = activities,
-                Suggestions = suggestions
-            };
+                model = new HomeViewModel
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Activities = activities
+                };
+            }
 
             return View(model);
         }
@@ -166,6 +180,8 @@ namespace Aetherworks_Victuz.Controllers
                 {
                     UserName = model.Username,
                     Email = model.Email,
+                    EmailConfirmed = true,
+                    LockoutEnd = new DateTimeOffset(new DateTime(2124, 12, 12)),
                     LockoutEnabled = true // Optioneel: standaard vergrendeling
                 };
 
@@ -173,10 +189,11 @@ namespace Aetherworks_Victuz.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    _context.User.Add(new User() { CredentialId = user.Id });
+                    await _context.SaveChangesAsync();
                     // Voeg de gebruiker toe aan de rol die uit het formulier komt
                     var role = string.IsNullOrEmpty(model.Role) ? "Guest" : model.Role; // Als geen rol is opgegeven, standaard naar Guest
                     await _userManager.AddToRoleAsync(user, role);
-
                     return Json(new { success = true });
                 }
 
