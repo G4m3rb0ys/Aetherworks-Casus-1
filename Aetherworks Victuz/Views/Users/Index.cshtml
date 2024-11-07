@@ -8,9 +8,6 @@
 
 <h1>User Management</h1>   <!-- Main header for the page -->
 
-<p>
-    <a asp-action="Create">Create New</a>  <!-- Link to navigate to the Create action for adding a new user -->
-</p>
 
 <table class="users">
     <!-- Table to display the list of users -->
@@ -31,7 +28,6 @@
                 </td>
                 <td>
                     <!-- Action links to Edit, View Details, and Delete for each user item -->
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
