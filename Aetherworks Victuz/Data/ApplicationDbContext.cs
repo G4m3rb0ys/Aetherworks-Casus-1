@@ -124,12 +124,13 @@ namespace Aetherworks_Victuz.Data
             var UserMemberId = Guid.NewGuid().ToString();
             var RoleGuestId = Guid.NewGuid().ToString();
             var UserGuestId = Guid.NewGuid().ToString();
+            var UserLockId = Guid.NewGuid().ToString();
 
             // AspNetRoles
             modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole { Id = RoleOrganizerId, Name = "Organizer" },
-                new IdentityRole { Id = RoleMemberId, Name = "Member" },
-                new IdentityRole { Id = RoleGuestId, Name = "Guest" }
+                new IdentityRole { Id = RoleOrganizerId, Name = "Organizer", NormalizedName = "ORGANIZER" },
+                new IdentityRole { Id = RoleMemberId, Name = "Member", NormalizedName = "MEMBER" },
+                new IdentityRole { Id = RoleGuestId, Name = "Guest", NormalizedName = "GUEST" }
                 );
 
             // AspNetUsers
@@ -137,8 +138,8 @@ namespace Aetherworks_Victuz.Data
                 new IdentityUser
                 {
                     Id = UserOrganizerId,
-                    UserName = "organizer@gmail.com",
-                    NormalizedUserName = "ORGANIZER@GMAIL.COM",
+                    UserName = "Organizer",
+                    NormalizedUserName = "ORGANIZER",
                     Email = "organizer@gmail.com",
                     NormalizedEmail = "ORGANIZER@GMAIL.COM",
                     EmailConfirmed = true,
@@ -153,8 +154,8 @@ namespace Aetherworks_Victuz.Data
                 new IdentityUser
                 {
                     Id = UserMemberId,
-                    UserName = "member@gmail.com",
-                    NormalizedUserName = "MEMBER@GMAIL.COM",
+                    UserName = "Member",
+                    NormalizedUserName = "MEMBER",
                     Email = "member@gmail.com",
                     NormalizedEmail = "MEMBER@GMAIL.COM",
                     EmailConfirmed = true,
@@ -169,8 +170,8 @@ namespace Aetherworks_Victuz.Data
                 new IdentityUser
                 {
                     Id = UserGuestId,
-                    UserName = "guest@gmail.com",
-                    NormalizedUserName = "GUEST@GMAIL.COM",
+                    UserName = "Guest",
+                    NormalizedUserName = "GUEST",
                     Email = "guest@gmail.com",
                     NormalizedEmail = "GUEST@GMAIL.COM",
                     EmailConfirmed = true,
@@ -179,6 +180,24 @@ namespace Aetherworks_Victuz.Data
                     ConcurrencyStamp = "bf636d49-9342-4af5-aa7b-b1e9dd4a3a10",
                     PhoneNumberConfirmed = false,
                     TwoFactorEnabled = false,
+                    LockoutEnabled = true,
+                    AccessFailedCount = 0
+                },
+                new IdentityUser
+                {
+                    Id = UserLockId,
+                    UserName = "Lock",
+                    NormalizedUserName = "LOCK",
+                    Email = "lock@gmail.com",
+                    NormalizedEmail = "LOCK@GMAIL.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = "AQAAAAIAAYagAAAAEBfVTJQI47BIH3mpec90MDkrbH8RxtAFRnFQ6UFD2pY5hY3ABSze9cDHDd88b5E2Pg==",
+                    SecurityStamp = "6IS3TH2BMU4QPOKYPZNBUE3WJFM6R5MO",
+                    ConcurrencyStamp = "cf94f079-f33c-42fb-be66-f15601fdb549",
+                    PhoneNumber = null,
+                    PhoneNumberConfirmed = false,
+                    TwoFactorEnabled = false,
+                    LockoutEnd = DateTime.Parse("2124-12-12T00:00:00.0000000+01:00"),
                     LockoutEnabled = true,
                     AccessFailedCount = 0
                 }
@@ -199,6 +218,11 @@ namespace Aetherworks_Victuz.Data
                 new IdentityUserRole<string>
                 {
                     UserId = UserGuestId,
+                    RoleId = RoleGuestId
+                },
+                new IdentityUserRole<string>
+                {
+                    UserId = UserLockId,
                     RoleId = RoleGuestId
                 }
                 );
@@ -272,7 +296,8 @@ namespace Aetherworks_Victuz.Data
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, CredentialId = UserOrganizerId },
                 new User { Id = 2, CredentialId = UserMemberId },
-                new User { Id = 3, CredentialId = UserGuestId }
+                new User { Id = 3, CredentialId = UserGuestId },
+                new User { Id = 4, CredentialId = UserLockId }
                 );
 
             // Suggestions
