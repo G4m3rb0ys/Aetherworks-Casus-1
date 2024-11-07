@@ -146,10 +146,22 @@ namespace Aetherworks_Victuz.Controllers
         }
 
         // GET: VictuzActivities/Create
-        public IActionResult Create()
+        public IActionResult Create(VictuzActivityViewModel model)
         {
+
+            if (TempData.ContainsKey("Name") && TempData.ContainsKey("Description"))
+            {
+                model.VictuzActivity = new VictuzActivity
+                {
+                    Name = TempData["Name"] as string,
+                    Description = TempData["Description"] as string
+                };
+            }
+
+            // Ensure dropdowns are populated
             ViewData["HostId"] = new SelectList(_context.User.Include(u => u.Credential), "Id", "Credential.UserName");
             ViewData["LocationId"] = new SelectList(_context.Set<Location>(), "Id", "Name");
+
             var enumCategories = Enum.GetValues(typeof(VictuzActivity.ActivityCategories))
                 .Cast<VictuzActivity.ActivityCategories>()
                 .ToDictionary(
@@ -157,14 +169,14 @@ namespace Aetherworks_Victuz.Controllers
                     category => GetDisplayNameForCategory(category)
                 );
             ViewData["Category"] = new SelectList(enumCategories, "Key", "Value");
-            var viewModel = new VictuzActivityViewModel
-            {
-                Locations = _context.Locations.ToList(),
-                Hosts = _context.User.Include(u => u.Credential).Where(u => u.Credential != null).ToList()
 
-            };
+            // Populate the model with Locations and Hosts if they are not already set
+            model.Locations = model.Locations ?? _context.Locations.ToList();
+            model.Hosts = model.Hosts ?? _context.User.Include(u => u.Credential)
+                .Where(u => u.Credential != null)
+                .ToList();
 
-            return View(viewModel);
+            return View(model);
         }
 
         // POST: VictuzActivities/Create
@@ -427,6 +439,20 @@ namespace Aetherworks_Victuz.Controllers
             TempData["SuccessMessage"] = "Je bent succesvol uitgeschreven voor de activiteit.";
             return RedirectToAction("Index");
         }
-    }
 
+        public IActionResult CreateFromSuggestion()
+        {
+            var Activity = new VictuzActivity
+            {
+                Name = TempData["Name"] as string,
+                Description = TempData["Description"] as string
+            };
+            var model = new VictuzActivityViewModel
+            {
+                VictuzActivity = Activity
+            };
+
+            return RedirectToAction("Create", model);
+        }
+    }
 }

@@ -46,7 +46,6 @@ namespace Aetherworks_Victuz.Controllers
                 .Include(s => s.SuggestionLikeds)
                 .OrderByDescending(s => s.Id)
                 .Take(3)
-                .Take(3)
                 .Select(s => new SuggestionViewModel
                 {
                     Suggestion = s,

@@ -143,6 +143,7 @@ namespace Aetherworks_Victuz.Controllers
                 return NotFound();
             }
 
+
             if (ModelState.IsValid)
             {
                 try
@@ -256,5 +257,17 @@ namespace Aetherworks_Victuz.Controllers
                 return Json(new { success = true, liked = true });
             }
         }
+
+        public IActionResult ExecuteSuggestion(int id)
+        {
+            var suggestion = _context.Suggestions.FirstOrDefault(s => s.Id == id);
+
+            // Store data in TempData to pass to the next controller
+            TempData["Name"] = suggestion.Title;
+            TempData["Description"] = suggestion.Description;
+
+            return RedirectToAction("CreateFromSuggestion", "VictuzActivities");
+        }
+
     }
 }
