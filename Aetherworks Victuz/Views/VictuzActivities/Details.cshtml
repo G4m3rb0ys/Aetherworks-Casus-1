@@ -61,8 +61,16 @@
                         @foreach (var attendee in Model.Attendees)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
-                                <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
+                                @if (attendee.User == null)
+                                {
+                                    <td>@Html.DisplayFor(modelItem => attendee.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => attendee.Email)</td>
+                                }
+                                else
+                                {
+                                    <td>@Html.DisplayFor(modelItem => attendee.User.Credential.UserName)</td>
+                                    <td>@Html.DisplayFor(modelItem => attendee.User.Credential.Email)</td>
+                                })
                                 <td>
                                     <!-- Form to toggle attendance status -->
                                     <form asp-action="ToggleAttendance" asp-controller="VictuzActivities" method="post" class="d-inline">
