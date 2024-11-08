@@ -12,6 +12,7 @@ using Aetherworks_Victuz.Data;
 using Aetherworks_Victuz.Models;
 using System.Diagnostics;
 using static Aetherworks_Victuz.Models.VictuzActivity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Aetherworks_Victuz.Controllers
 {
@@ -335,6 +336,8 @@ namespace Aetherworks_Victuz.Controllers
             return View(viewModel);
         }
 
+        
+
         // Additional methods (Delete, Reservations, etc.) remain unchanged
 
         private bool VictuzActivityExists(int id)
@@ -440,6 +443,52 @@ namespace Aetherworks_Victuz.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: Delete Button
+        [HttpPost]
+        [Authorize(Roles = "Organizer")]
+        public async Task<IActionResult> Delete(int activityId)
+        {
+            var activity = await _context.VictuzActivities.FindAsync(activityId);
+            if (activity != null)
+            {
+                _context.VictuzActivities.Remove(activity);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult RegisterOrUnregister(int activityId, string? name, string? email)
+        {
+            var activity = _context.VictuzActivities.Find(activityId);
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            // Handle user registration
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
+            {
+                ModelState.AddModelError(string.Empty, "Name and email are required for non-registered users.");
+                return RedirectToAction("Index"); // Or wherever you need to redirect
+            }
+
+            var participation = new Participation
+            {
+                Name = name,
+                Email = email,
+                ActivityId = activityId,
+                Attended = false // Or any other default setting
+            };
+
+            _context.Participation.Add(participation);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index"); // Or wherever your flow continues
+        }
+
         public IActionResult CreateFromSuggestion()
         {
             var Activity = new VictuzActivity
@@ -454,5 +503,6 @@ namespace Aetherworks_Victuz.Controllers
 
             return RedirectToAction("Create", model);
         }
+
     }
 }

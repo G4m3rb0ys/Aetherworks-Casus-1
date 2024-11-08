@@ -90,6 +90,10 @@
                             <input type="submit" value="Opslaan" class="btn btn-primary btn-lg" />
                         </div>
                     </form>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('Weet je zeker dat je deze activiteit wilt verwijderen?');">
+                        <input type="hidden" name="activityId" value="@Model.VictuzActivity.Id" />
+                        <button type="submit" class="btn btn-danger">Verwijderen</button>
+                    </form>
                 </div>
             </div>
 

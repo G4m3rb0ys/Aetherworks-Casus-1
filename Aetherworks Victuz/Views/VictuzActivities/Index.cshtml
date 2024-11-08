@@ -83,7 +83,6 @@
             }
         </div>
 
-        <!-- Main Content Area with Activities Grid -->
         <div class="col-md-9 activities-grid">
             @* Display Success or Error Messages *@
             @if (TempData["SuccessMessage"] != null)
@@ -125,13 +124,29 @@
                                 }
                                 else
                                 {
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <form asp-action="Register" asp-controller="VictuzActivities" method="post">
-                                            <input type="hidden" name="ActivityId" value="@activity.Id" />
+                                    <form asp-action="RegisterOrUnregister" asp-controller="VictuzActivities" method="post">
+                                        <input type="hidden" name="ActivityId" value="@activity.Id" />
+
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <!-- Form for Anonymous Users -->
+                                            <div class="form-group">
+                                                <label for="Name">Name</label>
+                                                <input type="text" id="Name" name="Name" class="form-control" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Email">Email</label>
+                                                <input type="email" id="Email" name="Email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@@zuyd\.nl$" title="Email must end with @@zuyd.nl" />
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Register</button>
+                                        }
+                                        else
+                                        {
+                                            <!-- Button for Authenticated Users -->
                                             <button type="submit" class="btn btn-secondary">Inschrijven</button>
-                                        </form>
-                                    }
+                                        }
+                                    </form>
                                 }
                             </div>
                         </div>
