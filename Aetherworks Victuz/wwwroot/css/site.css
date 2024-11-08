@@ -220,6 +220,7 @@ body {
     display: flex;
     flex-direction: column; /* Ensure content stacks vertically */
     padding: 15px; /* Add padding for internal content */
+    min-width: fit-content;
 }
 
     .activity-card img {
@@ -625,4 +626,47 @@ body {
     max-width: 125px; /* Set your desired max width */
     display: inline-block; /* Ensure the max-width constraint is respected */
     font-family: Arial, sans-serif;
+}
+
+#activityList {
+    min-width: 100%;
+}
+
+.search-container {
+    margin-left: 20px;
+}
+
+#searchInput {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: 1px solid black;
+}
+
+.search-container button {
+    padding: 7px 11px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+}
+
+@media screen and (max-width: 600px) {
+    .topnav .search-container {
+        float: none;
+    }
+
+    #searchInput, .search-container button {
+        float: none;
+        display: block;
+        text-align: left;
+        width: 100%;
+        margin: 0;
+        padding: 14px;
+    }
+
+    #searchInput {
+        border: 1px solid black;
+    }
 }
