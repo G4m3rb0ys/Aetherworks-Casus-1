@@ -122,11 +122,12 @@
                     if (editButton) editButton.style.display = "block";
                 }
 
-                if (likeCount <= 3) {
+                if (likeCount < 3) {
                     if (executeButton) executeButton.style.display = "none";
-                } else {
-                    if (executeButton) executeButton.style.display = "block";
+                } else if (likeCount >= 3) {
+                    if (executeButton) executeButton.style.display = "block"; 
                 }
+
             });
         }
     </script>
