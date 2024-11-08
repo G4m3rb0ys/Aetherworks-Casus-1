@@ -28,8 +28,4 @@
 	  <None Include="wwwroot\img\Photography.png" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
-	</ItemGroup>
-
 </Project>
