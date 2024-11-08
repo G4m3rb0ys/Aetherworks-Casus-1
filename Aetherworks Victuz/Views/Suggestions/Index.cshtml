@@ -4,56 +4,63 @@
     ViewData["Title"] = "Suggestions";
 }
 
-<div class="container my-5">
-    <!-- Page Header -->
-    <div class="text-center mb-4">
-        <h1 class="text-primary">Suggestions</h1>
-    </div>
+<body onload="buttonCheckers()">
+    <div class="container my-5">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h1 class="text-primary">Suggestions</h1>
+        </div>
 
-    <div class="mb-4 text-end">
-        <a asp-action="Create" class="btn btn-primary">Create New</a>
-    </div>
+        <div class="mb-4 text-end">
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </div>
 
-    <!-- Suggestions Grid -->
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-12 col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Title)</h5>
-                        <p class="card-text text-muted text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Description)</p>
-                        <p class="card-text">
-                            <small class="text-muted">Posted by: @Html.DisplayFor(modelItem => item.Suggestion.User.Credential.UserName)</small>
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="d-flex align-items-center">
-                                <img id="like-icon-@item.Suggestion.Id"
-                                     src="@(item.IsLiked ? "/img/Liked.png" : "/img/UnLiked.png")"
-                                     alt="Like"
-                                     class="like-icon"
-                                     onclick="toggleLike(@item.Suggestion.Id)" />
-                                <span id="like-count-@item.Suggestion.Id" class="ms-2 like-count">@item.LikeCount</span>
-                            </div>
-                            <div class="suggestion-buttons">
-                                <!-- Details button is always visible -->
-                                <a asp-action="Details" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-info btn-sm">Details</a>
+        <!-- Suggestions Grid -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Title)</h5>
+                            <p class="card-text text-muted text-truncate">@Html.DisplayFor(modelItem => item.Suggestion.Description)</p>
+                            <p class="card-text">
+                                <small class="text-muted">Posted by: @Html.DisplayFor(modelItem => item.Suggestion.User.Credential.UserName)</small>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div class="d-flex align-items-center">
+                                    <img id="like-icon-@item.Suggestion.Id"
+                                         src="@(item.IsLiked ? "/img/Liked.png" : "/img/UnLiked.png")"
+                                         alt="Like"
+                                         class="like-icon"
+                                         onclick="toggleLike(@item.Suggestion.Id)" />
+                                    <span id="like-count-@item.Suggestion.Id" class="ms-2 like-count" data-like-count="@item.LikeCount">@item.LikeCount</span>
+                                </div>
+                                <div class="suggestion-buttons">
+                                    <!-- Details button is always visible -->
+                                    <a asp-action="Details" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-info btn-sm">Details</a>
 
-                                <!-- Edit and Delete buttons are restricted to authenticated users -->
-                                @if (User.Identity.IsAuthenticated &&
-                               (User.IsInRole("Organizer") || User.Identity.Name == item.Suggestion.User.Credential.UserName))
-                                {
-                                    <a asp-action="Edit" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-secondary btn-sm">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-danger btn-sm">Delete</a>
-                                }
+                                    <!-- Edit and Delete buttons are restricted to authenticated users -->
+                                    @if (User.Identity.IsAuthenticated &&
+                                    (User.IsInRole("Organizer") || User.Identity.Name == item.Suggestion.User.Credential.UserName))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-secondary btn-sm" id="editButton-@item.Suggestion.Id">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Suggestion.Id" class="btn btn-outline-danger btn-sm">Delete</a>
+
+                                        <!-- Render "Voer uit" button only if there are 3 or more likes -->
+                                        <form asp-action="ExecuteSuggestion" method="post" asp-route-id="@item.Suggestion.Id">
+                                            <button type="submit" class="btn btn-success" id="executeButton-@item.Suggestion.Id">Voer uit</button>
+                                        </form>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+</body>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -64,16 +71,63 @@
                     const likeCountElement = document.getElementById(`like-count-${suggestionId}`);
                     const likeIcon = document.getElementById(`like-icon-${suggestionId}`);
 
+                    // Update the like count and icon based on the response
+                    let currentLikeCount = parseInt(likeCountElement.innerText);
                     if (response.liked) {
-                        likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+                        currentLikeCount += 1;
                         likeIcon.src = "/img/Liked.png";
                     } else {
-                        likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1;
+                        currentLikeCount -= 1;
                         likeIcon.src = "/img/UnLiked.png";
+                    }
+                    likeCountElement.innerText = currentLikeCount;
+
+                    // Check if the LikeCount is greater than 0, then change "Edit" button text
+                    const editButton = document.getElementById(`editButton-${suggestionId}`);
+                    const executeButton = document.getElementById(`executeButton-${suggestionId}`);
+
+                    if (currentLikeCount > 0) {
+                        editButton.style.display = "none"
+                    } else if (currentLikeCount === 0) {
+                        editButton.style.display = "block"
+                    }
+
+                    if (currentLikeCount < 3 ) {
+                        executeButton.style.display = "none"
+                    } else if (currentLikeCount >= 3) {
+                        executeButton.style.display = "block"
                     }
                 }
             }).fail(function () {
                 alert('An unexpected error occurred. Please try again.');
+            });
+        }
+
+        function buttonCheckers() {
+
+            document.querySelectorAll("[id^='like-count-']").forEach((likeElement) => {
+                const suggestionId = likeElement.id.split("-")[2];
+                const likeCount = parseInt(likeElement.innerText);
+
+                const editButton = document.getElementById(`editButton-${suggestionId}`);
+                const executeButton = document.getElementById(`executeButton-${suggestionId}`);
+
+                //alert(`Like count for suggestion ${suggestionId}: ${likeCount}`);
+                //alert(editButton ? `Edit button found for suggestion ${suggestionId}` : `Edit button not found for suggestion ${suggestionId}`);
+                //alert(executeButton ? `Execute button found for suggestion ${suggestionId}` : `Execute button not found for suggestion ${suggestionId}`);
+
+                if (likeCount > 0) {
+                    if (editButton) editButton.style.display = "none";
+                } else if (likeCount === 0) {
+                    if (editButton) editButton.style.display = "block";
+                }
+
+                if (likeCount < 3) {
+                    if (executeButton) executeButton.style.display = "none";
+                } else if (likeCount >= 3) {
+                    if (executeButton) executeButton.style.display = "block"; 
+                }
+
             });
         }
     </script>
