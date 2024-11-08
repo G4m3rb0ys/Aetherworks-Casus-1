@@ -461,17 +461,23 @@ namespace Aetherworks_Victuz.Controllers
         [HttpPost]
         public IActionResult RegisterOrUnregister(int activityId, string? name, string? email)
         {
-            var activity = _context.VictuzActivities.Find(activityId);
+            var activity = _context.VictuzActivities.Include(a => a.ParticipantsList).First(a => a.Id == activityId);
 
             if (activity == null)
             {
                 return NotFound();
             }
 
+            if (activity.ParticipantsList.Any(p => p.Email == email))
+            {
+                TempData["ErrorMessage"] = "Je bent al ingeschreven voor deze activiteit.";
+                return RedirectToAction("Index");
+            }
+
             // Handle user registration
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
             {
-                ModelState.AddModelError(string.Empty, "Name and email are required for non-registered users.");
+                TempData["ErrorMessage"] = "Name and email are required for non-registered users.";
                 return RedirectToAction("Index"); // Or wherever you need to redirect
             }
 
@@ -486,6 +492,8 @@ namespace Aetherworks_Victuz.Controllers
             _context.Participation.Add(participation);
             _context.SaveChanges();
 
+
+            TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor de activiteit.";
             return RedirectToAction("Index"); // Or wherever your flow continues
         }
 

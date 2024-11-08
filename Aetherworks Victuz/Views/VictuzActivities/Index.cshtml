@@ -124,11 +124,12 @@
                                 }
                                 else
                                 {
-                                    <form asp-action="RegisterOrUnregister" asp-controller="VictuzActivities" method="post">
-                                        <input type="hidden" name="ActivityId" value="@activity.Id" />
+                                    @if (!User.Identity.IsAuthenticated && (Math.Abs((activity.ActivityDate - DateTime.Now).TotalDays) <= 2))
+                                    {
+                                        <form asp-action="RegisterOrUnregister" asp-controller="VictuzActivities" method="post">
+                                            <input type="hidden" name="ActivityId" value="@activity.Id" />
 
-                                        @if (!User.Identity.IsAuthenticated)
-                                        {
+
                                             <!-- Form for Anonymous Users -->
                                             <div class="form-group">
                                                 <label for="Name">Name</label>
@@ -140,13 +141,23 @@
                                             </div>
 
                                             <button type="submit" class="btn btn-success">Register</button>
-                                        }
-                                        else
-                                        {
-                                            <!-- Button for Authenticated Users -->
-                                            <button type="submit" class="btn btn-secondary">Inschrijven</button>
-                                        }
-                                    </form>
+
+                                        </form>
+                                    }
+                                    else if ((User.IsInRole("Guest") || !User.Identity.IsAuthenticated) && (Math.Abs((activity.ActivityDate - DateTime.Now).TotalDays) > 2))
+                                    {
+                                        <div class="row">
+                                            <a href="/Home/Voordelen">Je kan je pas inschrijven op:</a>
+                                            <h6>@activity.ActivityDate.AddDays(-2).ToString("dd-MM-yyyy")</h6>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <form asp-action="Register" asp-controller="VictuzActivities" method="post">
+                                            <input type="hidden" name="ActivityId" value="@activity.Id" />
+                                            <button type="submit" class="btn btn-success">Inschrijven</button>
+                                        </form>
+                                    }
                                 }
                             </div>
                         </div>
