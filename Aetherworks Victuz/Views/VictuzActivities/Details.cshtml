@@ -14,7 +14,7 @@
     <div class="row">
         <!-- Activity Details Section -->
         <div class="col-md-6 mb-4">
-            <h4 class="text-primary">Activity Details</h4>
+            <h4 class="text-primary">Activiteit Details</h4>
             <hr />
             <dl class="row">
                 <dt class="col-sm-5">Category</dt>
@@ -47,14 +47,14 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
         {
             <div class="col-md-6">
-                <h4 class="text-primary">Attendees</h4>
+                <h4 class="text-primary">Aanmeldingen</h4>
                 <hr />
                 <table class="table table-striped">
                     <thead class="table-dark">
                         <tr>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Attended</th>
+                            <th>Aanwezig</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,13 +90,13 @@
 
     <!-- Navigation Links -->
     <div class="mt-4">
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="Index" class="btn btn-secondary">Terug naar de lijst</a>
     </div>
         @if (User.IsInRole("Organizer"))
         {
             <div class="mb-3">
                 <a asp-action="Edit" asp-route-id="@Model.VictuzActivity.Id" asp-controller="VictuzActivities" class="btn btn-primary">
-                    Edit Activity
+                    Bewerk Activity
                 </a>
             </div>
         }

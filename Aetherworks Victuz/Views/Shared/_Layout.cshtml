@@ -27,7 +27,7 @@
                             <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activities</a>
+                            <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="VictuzActivities" asp-action="Index">Activiteiten</a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Organizer"))
@@ -36,13 +36,13 @@
                                 <a class="btn btn-outline-primary nav-link text-dark mx-1" asp-area="" asp-controller="Home" asp-action="ManageAccounts">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Locations" asp-action="Index">Locations</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Locations" asp-action="Index">Locaties</a>
                             </li>
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggestions</a>
+                                <a class="btn btn-outline-primary nav-link text-dark mx-1 max-width-button" asp-area="" asp-controller="Suggestions" asp-action="Index">Suggesties</a>
                             </li>
                         }
 
