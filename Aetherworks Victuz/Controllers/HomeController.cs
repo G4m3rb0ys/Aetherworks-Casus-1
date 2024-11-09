@@ -295,5 +295,10 @@ namespace Aetherworks_Victuz.Controllers
 
             return RedirectToAction("ManageAccounts");
         }
+        public IActionResult ApiDocs()
+        {
+            return Redirect("~/swagger");
+        }
+
     }
 }
